@@ -11,7 +11,7 @@ C4Container
     Container(lms_fe, "LMS SPA", "React", "Back-office UI. <code>.e-learning.com/lms")
   }
 
-  Container(gateway, "API Gateway", "Kong / custom", "Auth token validation, routing, rate limiting.")
+  Container(gateway, "API Gateway", "Traefik", "Auth token validation, routing, rate limiting.")
 
   System_Boundary(identity, "Identity & Access") {
     ContainerDb(portal_db, "Portal DB", "PostgreSQL", "Portals, LMS configs.")
