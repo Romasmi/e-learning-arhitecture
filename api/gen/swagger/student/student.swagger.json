@@ -202,7 +202,7 @@
         ]
       }
     },
-    "/students/groups/{groupId}/students": {
+    "/students/groups/{groupId}/members": {
       "post": {
         "operationId": "StudentService_AddStudentToGroup",
         "responses": {

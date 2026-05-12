@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"time"
 
+	"log/slog"
+
 	authapi "github.com/Romasmi/e-learning-arhitecture/gen/go/auth"
 	"github.com/elearning/student-service/internal/domain"
 	"github.com/elearning/student-service/pkg/kafka"
@@ -28,6 +30,7 @@ func NewStudentUsecase(repo domain.StudentRepository, producer *kafka.Producer, 
 
 func (u *StudentUsecase) CreateStudent(ctx context.Context, accountID, email, password string) (*domain.Student, error) {
 	// 1. Call auth-service to create credentials
+	slog.Info("calling auth-service register", "email", email, "portal_id", accountID)
 	resp, err := u.authClient.Register(ctx, &authapi.RegisterRequest{
 		Email:    email,
 		Password: password,
@@ -35,8 +38,11 @@ func (u *StudentUsecase) CreateStudent(ctx context.Context, accountID, email, pa
 		Role:     "student",
 	})
 	if err != nil {
+		slog.Error("auth register failed", "error", err)
 		return nil, fmt.Errorf("auth register: %w", err)
 	}
+
+	slog.Info("auth register success", "user_id", resp.UserId)
 
 	// 2. Create student in DB
 	student := &domain.Student{
@@ -48,6 +54,7 @@ func (u *StudentUsecase) CreateStudent(ctx context.Context, accountID, email, pa
 	}
 
 	if err := u.repo.CreateStudent(ctx, student); err != nil {
+		slog.Error("repo create student failed", "error", err)
 		return nil, fmt.Errorf("repo create student: %w", err)
 	}
 

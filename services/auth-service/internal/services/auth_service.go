@@ -31,6 +31,7 @@ type AuthService interface {
 	Login(ctx context.Context, email, password, portalID, ip string) (*LoginResult, error)
 	Validate(ctx context.Context, token string) (*JWTClaims, error)
 	Register(ctx context.Context, userID uuid.UUID, login, password, portalID, role string) (uuid.UUID, error)
+	Upsert(ctx context.Context, userID uuid.UUID, login, password, portalID, role string) (uuid.UUID, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*LoginResult, error)
 	ResetPassword(ctx context.Context, email, portalID string) (bool, error)
 }
@@ -79,6 +80,19 @@ func (s *authService) Login(ctx context.Context, email, password, portalID, ip s
 		return nil, err
 	}
 
+	refreshExpiration := 24 * time.Hour
+	refreshToken, err := GenerateToken(
+		a.UserID.String(),
+		a.Login,
+		a.PortalID,
+		a.Role,
+		s.cfg.Jwt.Secret,
+		refreshExpiration,
+	)
+	if err != nil {
+		return nil, err
+	}
+
 	s.repo.LogAction(ctx, &auth.AuthLog{
 		UserID:    a.UserID,
 		Login:     email,
@@ -88,7 +102,7 @@ func (s *authService) Login(ctx context.Context, email, password, portalID, ip s
 
 	return &LoginResult{
 		AccessToken:  token,
-		RefreshToken: "stub-refresh-token-" + uuid.New().String(),
+		RefreshToken: refreshToken,
 		ExpiresAt:    time.Now().Add(expiration),
 		User: UserInfo{
 			UserID:   a.UserID.String(),
@@ -123,10 +137,74 @@ func (s *authService) Register(ctx context.Context, userID uuid.UUID, login, pas
 	return userID, s.repo.Create(ctx, a)
 }
 
+func (s *authService) Upsert(ctx context.Context, userID uuid.UUID, login, password, portalID, role string) (uuid.UUID, error) {
+	if userID == uuid.Nil {
+		userID = uuid.New()
+	}
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	a := &auth.Auth{
+		UserID:       userID,
+		Login:        login,
+		PasswordHash: string(hashedPassword),
+		PortalID:     portalID,
+		Role:         role,
+	}
+
+	if err := s.repo.Upsert(ctx, a); err != nil {
+		return uuid.Nil, err
+	}
+	return a.UserID, nil
+}
+
 func (s *authService) RefreshToken(ctx context.Context, refreshToken string) (*LoginResult, error) {
-	// Simple stub implementation as requested by contract
-	// In a real system, you would validate the refresh token against a database or similar
-	return nil, fmt.Errorf("not implemented")
+	claims, err := ValidateToken(refreshToken, s.cfg.Jwt.Secret)
+	if err != nil {
+		return nil, fmt.Errorf("invalid refresh token: %w", err)
+	}
+
+	expiration := time_utils.MinutesToDuration(s.cfg.Jwt.Expiration)
+	accessToken, err := GenerateToken(
+		claims.UserID,
+		claims.Login,
+		claims.PortalID,
+		claims.Role,
+		s.cfg.Jwt.Secret,
+		expiration,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// For simplicity, reuse the same refresh token or issue a new one
+	// Here we issue a new one
+	refreshExpiration := 24 * time.Hour
+	newRefreshToken, err := GenerateToken(
+		claims.UserID,
+		claims.Login,
+		claims.PortalID,
+		claims.Role,
+		s.cfg.Jwt.Secret,
+		refreshExpiration,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &LoginResult{
+		AccessToken:  accessToken,
+		RefreshToken: newRefreshToken,
+		ExpiresAt:    time.Now().Add(expiration),
+		User: UserInfo{
+			UserID:   claims.UserID,
+			Email:    claims.Login,
+			PortalID: claims.PortalID,
+			Role:     claims.Role,
+		},
+	}, nil
 }
 
 func (s *authService) ResetPassword(ctx context.Context, email, portalID string) (bool, error) {

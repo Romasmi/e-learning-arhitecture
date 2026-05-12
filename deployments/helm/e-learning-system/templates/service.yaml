@@ -13,7 +13,7 @@ metadata:
     component: {{ $componentName }}
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: {{ $.Values.global.serverPort | quote }}
+    prometheus.io/port: "9090"
     prometheus.io/path: "/metrics"
 spec:
   type: ClusterIP
@@ -27,6 +27,9 @@ spec:
     - name: grpc
       port: {{ $.Values.global.grpcPort }}
       targetPort: grpc
+    - name: metrics
+      port: 9090
+      targetPort: metrics
 ---
 {{- end }}
 {{- end }}
@@ -40,7 +43,7 @@ metadata:
     app: {{ $serviceName }}
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: {{ $.Values.global.serverPort | quote }}
+    prometheus.io/port: "9090"
     prometheus.io/path: "/metrics"
 spec:
   type: ClusterIP
@@ -53,6 +56,9 @@ spec:
     - name: grpc
       port: {{ $.Values.global.grpcPort }}
       targetPort: grpc
+    - name: metrics
+      port: 9090
+      targetPort: metrics
 ---
 {{- end }}
 {{- end }}

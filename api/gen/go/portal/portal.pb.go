@@ -378,7 +378,8 @@ func (x *GetPortalResponse) GetPortal() *Portal {
 type UpdatePortalConfigRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	LmsConfig     *LMSConfig             `protobuf:"bytes,2,opt,name=lms_config,json=lmsConfig,proto3" json:"lms_config,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	LmsConfig     *LMSConfig             `protobuf:"bytes,3,opt,name=lms_config,json=lmsConfig,proto3" json:"lms_config,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -416,6 +417,13 @@ func (*UpdatePortalConfigRequest) Descriptor() ([]byte, []int) {
 func (x *UpdatePortalConfigRequest) GetId() string {
 	if x != nil {
 		return x.Id
+	}
+	return ""
+}
+
+func (x *UpdatePortalConfigRequest) GetName() string {
+	if x != nil {
+		return x.Name
 	}
 	return ""
 }
@@ -672,11 +680,12 @@ const file_portal_portal_proto_rawDesc = "" +
 	"\x10GetPortalRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\";\n" +
 	"\x11GetPortalResponse\x12&\n" +
-	"\x06portal\x18\x01 \x01(\v2\x0e.portal.PortalR\x06portal\"]\n" +
+	"\x06portal\x18\x01 \x01(\v2\x0e.portal.PortalR\x06portal\"q\n" +
 	"\x19UpdatePortalConfigRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x120\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x120\n" +
 	"\n" +
-	"lms_config\x18\x02 \x01(\v2\x11.portal.LMSConfigR\tlmsConfig\"D\n" +
+	"lms_config\x18\x03 \x01(\v2\x11.portal.LMSConfigR\tlmsConfig\"D\n" +
 	"\x1aUpdatePortalConfigResponse\x12&\n" +
 	"\x06portal\x18\x01 \x01(\v2\x0e.portal.PortalR\x06portal\"&\n" +
 	"\x14ArchivePortalRequest\x12\x0e\n" +
@@ -689,7 +698,7 @@ const file_portal_portal_proto_rawDesc = "" +
 	"\rPortalService\x12^\n" +
 	"\fCreatePortal\x12\x1b.portal.CreatePortalRequest\x1a\x1c.portal.CreatePortalResponse\"\x13\x82\xd3\xe4\x93\x02\r:\x01*\"\b/portals\x12W\n" +
 	"\tGetPortal\x12\x18.portal.GetPortalRequest\x1a\x19.portal.GetPortalResponse\"\x15\x82\xd3\xe4\x93\x02\x0f\x12\r/portals/{id}\x12|\n" +
-	"\x12UpdatePortalConfig\x12!.portal.UpdatePortalConfigRequest\x1a\".portal.UpdatePortalConfigResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\x1a\x14/portals/{id}/config\x12c\n" +
+	"\x12UpdatePortalConfig\x12!.portal.UpdatePortalConfigRequest\x1a\".portal.UpdatePortalConfigResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*2\x14/portals/{id}/config\x12c\n" +
 	"\rArchivePortal\x12\x1c.portal.ArchivePortalRequest\x1a\x1d.portal.ArchivePortalResponse\"\x15\x82\xd3\xe4\x93\x02\x0f*\r/portals/{id}\x12X\n" +
 	"\vListPortals\x12\x1a.portal.ListPortalsRequest\x1a\x1b.portal.ListPortalsResponse\"\x10\x82\xd3\xe4\x93\x02\n" +
 	"\x12\b/portalsB\x91\x01\n" +

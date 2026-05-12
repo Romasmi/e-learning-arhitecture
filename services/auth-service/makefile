@@ -1,4 +1,4 @@
-DOCKER_IMG := auth-service:latest
+DOCKER_IMG := auth-service:v11
 GIT_HASH := $(shell git log --format="%h" -n 1)
 LDFLAGS := -X main.release="develop" -X main.buildDate=$(shell date -u +%Y-%m-%dT%H:%M:%S) -X main.gitHash=$(GIT_HASH)
 K8S_NAMESPACE := e-learning-system
@@ -25,3 +25,13 @@ kube-status:
 
 kube-logs:
 	kubectl logs deployment/auth-service -n $(K8S_NAMESPACE)
+
+EMAIL ?= supervisor@test.com
+PASSWORD ?= Supervisor123!
+PORTAL_ID ?= default
+
+seed:
+	go run ./cmd/seed/main.go --email $(EMAIL) --password $(PASSWORD) --portal_id $(PORTAL_ID)
+
+kube-seed:
+	kubectl exec deployment/auth-service -n $(K8S_NAMESPACE) -- ./seed --email $(EMAIL) --password $(PASSWORD) --portal_id $(PORTAL_ID)

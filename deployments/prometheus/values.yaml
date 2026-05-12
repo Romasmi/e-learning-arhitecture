@@ -1,0 +1,37 @@
+extraScrapeConfigs: |
+  - job_name: auth-service
+    static_configs:
+      - targets: ['auth-service:9090']
+        labels:
+          app: auth-service
+          namespace: e-learning-system
+  - job_name: account-service
+    static_configs:
+      - targets: ['account-service:9090']
+        labels:
+          app: account-service
+          namespace: e-learning-system
+  - job_name: course-service
+    static_configs:
+      - targets: ['course-service:9090']
+        labels:
+          app: course-service
+          namespace: e-learning-system
+  - job_name: media-service
+    static_configs:
+      - targets: ['media-service:9090']
+        labels:
+          app: media-service
+          namespace: e-learning-system
+  - job_name: portal-service
+    static_configs:
+      - targets: ['portal-service:9090']
+        labels:
+          app: portal-service
+          namespace: e-learning-system
+  - job_name: student-service
+    static_configs:
+      - targets: ['student-service:9090']
+        labels:
+          app: student-service
+          namespace: e-learning-system

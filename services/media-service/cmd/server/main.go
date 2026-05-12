@@ -14,6 +14,7 @@ import (
 
 	mediapb "github.com/Romasmi/e-learning-arhitecture/gen/go/media"
 	"github.com/elearning/media-service/internal/handler"
+	"github.com/elearning/media-service/internal/metrics"
 	"github.com/elearning/media-service/internal/repository/postgres"
 	"github.com/elearning/media-service/internal/usecase"
 	"github.com/elearning/media-service/pkg/kafka"
@@ -24,10 +25,12 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/joho/godotenv"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 func main() {
@@ -93,8 +96,27 @@ func main() {
 	uc := usecase.NewMediaUsecase(repo, producer, transcoderURL, s3Bucket)
 	h := handler.NewGRPCHandler(uc)
 
+	// Metrics
+	metricsPort := os.Getenv("METRICS_PORT")
+	if metricsPort == "" {
+		metricsPort = "9090"
+	}
+	metricsServer := &http.Server{
+		Addr:    ":" + metricsPort,
+		Handler: promhttp.Handler(),
+	}
+
+	go func() {
+		log.Info("Starting metrics server", zap.String("addr", metricsServer.Addr))
+		if err := metricsServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Error("metrics server failed", zap.Error(err))
+		}
+	}()
+
 	// gRPC
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(
+		grpc.UnaryInterceptor(metrics.GrpcUnaryInterceptor),
+	)
 	mediapb.RegisterMediaServiceServer(grpcServer, h)
 	reflection.Register(grpcServer)
 
@@ -112,7 +134,17 @@ func main() {
 	}()
 
 	// Gateway
-	mux := runtime.NewServeMux()
+	mux := runtime.NewServeMux(
+		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
+			MarshalOptions: protojson.MarshalOptions{
+				UseProtoNames:   true,
+				EmitUnpopulated: true,
+			},
+			UnmarshalOptions: protojson.UnmarshalOptions{
+				DiscardUnknown: true,
+			},
+		}),
+	)
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 	err = mediapb.RegisterMediaServiceHandlerFromEndpoint(ctx, mux, grpcAddr, opts)
 	if err != nil {
@@ -122,7 +154,7 @@ func main() {
 	gwAddr := ":" + gwPort
 	gwServer := &http.Server{
 		Addr:    gwAddr,
-		Handler: mux,
+		Handler: metrics.HttpMiddleware(mux),
 	}
 
 	go func() {
@@ -140,5 +172,8 @@ func main() {
 	defer cancel()
 	if err := gwServer.Shutdown(shutdownCtx); err != nil {
 		log.Error("Gateway shutdown failed", zap.Error(err))
+	}
+	if err := metricsServer.Shutdown(shutdownCtx); err != nil {
+		log.Error("Metrics shutdown failed", zap.Error(err))
 	}
 }

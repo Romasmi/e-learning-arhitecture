@@ -583,7 +583,7 @@ func RegisterStudentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/AddStudentToGroup", runtime.WithHTTPPathPattern("/students/groups/{group_id}/students"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/AddStudentToGroup", runtime.WithHTTPPathPattern("/students/groups/{group_id}/members"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -797,7 +797,7 @@ func RegisterStudentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/AddStudentToGroup", runtime.WithHTTPPathPattern("/students/groups/{group_id}/students"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/AddStudentToGroup", runtime.WithHTTPPathPattern("/students/groups/{group_id}/members"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -839,7 +839,7 @@ var (
 	pattern_StudentService_AddGroup_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"students", "groups"}, ""))
 	pattern_StudentService_UpdateGroup_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"students", "groups", "group_id"}, ""))
 	pattern_StudentService_DeleteGroup_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"students", "groups", "group_id"}, ""))
-	pattern_StudentService_AddStudentToGroup_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 0}, []string{"students", "groups", "group_id"}, ""))
+	pattern_StudentService_AddStudentToGroup_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"students", "groups", "group_id", "members"}, ""))
 	pattern_StudentService_ListGroups_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"students", "groups"}, ""))
 )
 

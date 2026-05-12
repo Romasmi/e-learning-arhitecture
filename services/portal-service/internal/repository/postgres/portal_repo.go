@@ -79,7 +79,7 @@ func (r *portalRepository) GetByCode(ctx context.Context, code string) (*domain.
 	return &p, nil
 }
 
-func (r *portalRepository) UpdateConfig(ctx context.Context, id string, config domain.LMSConfig) (*domain.Portal, error) {
+func (r *portalRepository) Update(ctx context.Context, id string, name string, config domain.LMSConfig) (*domain.Portal, error) {
 	lmsConfigJSON, err := json.Marshal(config)
 	if err != nil {
 		return nil, fmt.Errorf("marshal lms config: %w", err)
@@ -87,13 +87,13 @@ func (r *portalRepository) UpdateConfig(ctx context.Context, id string, config d
 
 	query := `
 		UPDATE portals 
-		SET lms_config = $1, updated_at = NOW() 
-		WHERE id = $2 
+		SET name = $1, lms_config = $2, updated_at = NOW() 
+		WHERE id = $3 
 		RETURNING id, code, name, status, lms_config, created_at, updated_at
 	`
 	var p domain.Portal
 	var resLmsConfigJSON []byte
-	err = r.pool.QueryRow(ctx, query, lmsConfigJSON, id).Scan(&p.ID, &p.Code, &p.Name, &p.Status, &resLmsConfigJSON, &p.CreatedAt, &p.UpdatedAt)
+	err = r.pool.QueryRow(ctx, query, name, lmsConfigJSON, id).Scan(&p.ID, &p.Code, &p.Name, &p.Status, &resLmsConfigJSON, &p.CreatedAt, &p.UpdatedAt)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, domain.ErrPortalNotFound

@@ -21,10 +21,11 @@ func NewGRPCHandler(u *usecase.PortalUsecase) *GRPCHandler {
 }
 
 func (h *GRPCHandler) CreatePortal(ctx context.Context, req *portalpb.CreatePortalRequest) (*portalpb.CreatePortalResponse, error) {
-	config := domain.LMSConfig{
-		ThemeColor:        req.LmsConfig.ThemeColor,
-		LogoURL:           req.LmsConfig.LogoUrl,
-		EnableSocialLogin: req.LmsConfig.EnableSocialLogin,
+	config := domain.LMSConfig{}
+	if req.LmsConfig != nil {
+		config.ThemeColor = req.LmsConfig.ThemeColor
+		config.LogoURL = req.LmsConfig.LogoUrl
+		config.EnableSocialLogin = req.LmsConfig.EnableSocialLogin
 	}
 
 	portal, err := h.usecase.CreatePortal(ctx, req.Code, req.Name, config)
@@ -55,13 +56,14 @@ func (h *GRPCHandler) GetPortal(ctx context.Context, req *portalpb.GetPortalRequ
 }
 
 func (h *GRPCHandler) UpdatePortalConfig(ctx context.Context, req *portalpb.UpdatePortalConfigRequest) (*portalpb.UpdatePortalConfigResponse, error) {
-	config := domain.LMSConfig{
-		ThemeColor:        req.LmsConfig.ThemeColor,
-		LogoURL:           req.LmsConfig.LogoUrl,
-		EnableSocialLogin: req.LmsConfig.EnableSocialLogin,
+	config := domain.LMSConfig{}
+	if req.LmsConfig != nil {
+		config.ThemeColor = req.LmsConfig.ThemeColor
+		config.LogoURL = req.LmsConfig.LogoUrl
+		config.EnableSocialLogin = req.LmsConfig.EnableSocialLogin
 	}
 
-	portal, err := h.usecase.UpdatePortalConfig(ctx, req.Id, config)
+	portal, err := h.usecase.UpdatePortalConfig(ctx, req.Id, req.Name, config)
 	if err != nil {
 		if err == domain.ErrPortalNotFound {
 			return nil, status.Error(codes.NotFound, "portal not found")

@@ -1,4 +1,8 @@
-.PHONY: up build deploy restart install-traefik install-db install-kafka install-grafana hosts run wait-db wait-kafka wait-api clean redeploy status help prometheus-run grafana-run forward-kafka forward-db forward-traefik proto-gen
+.PHONY: minikube-start up build deploy restart install-traefik install-db install-kafka install-grafana hosts run wait-db wait-kafka wait-api clean redeploy status help prometheus-run grafana-run forward-kafka forward-db forward-traefik proto-gen
+
+# Minikube management
+minikube-start:
+	minikube start --memory 8192 --cpus 4 --driver docker
 
 # Main target to start everything from scratch
 up: proto-gen build deploy wait-db wait-kafka wait-api
@@ -71,7 +75,8 @@ install-prometheus:
 	helm repo update prometheus-community
 	helm upgrade --install prometheus prometheus-community/prometheus \
 		--namespace e-learning-system \
-		--create-namespace
+		--create-namespace \
+		-f deployments/prometheus/values.yaml
 
 install-grafana:
 	helm repo add grafana https://grafana.github.io/helm-charts || true
@@ -152,9 +157,11 @@ status:
 	@kubectl get ingressroute -n e-learning-system
 
 prometheus-run:
+	@kubectl get svc prometheus-server -n e-learning-system > /dev/null 2>&1 || $(MAKE) install-prometheus
 	kubectl port-forward service/prometheus-server 9090:80 -n e-learning-system
 
 grafana-run:
+	@kubectl get svc grafana -n e-learning-system > /dev/null 2>&1 || $(MAKE) install-grafana
 	kubectl port-forward service/grafana 3000:80 -n e-learning-system
 
 grafana-pass:
@@ -164,6 +171,7 @@ redeploy: build docker-push restart
 
 help:
 	@echo "Usage:"
+	@echo "  make minikube-start - Start minikube with recommended resources (8GB RAM)"
 	@echo "  make up          - Build images and deploy everything (from scratch)"
 	@echo "  make redeploy    - Build, push and restart all services"
 	@echo "  make run         - Start minikube tunnel (required for access)"
@@ -182,5 +190,11 @@ help:
 draw-puml:
 	plantuml -tsvg ./docs/puml/*.puml
 
-test-postman:
+test-postman: seed-supervisor
 	bash tests/postman/run.sh
+
+test-load: seed-supervisor
+	k6 run tests/load/load_test.js
+
+seed-supervisor:
+	$(MAKE) -C services/auth-service kube-seed

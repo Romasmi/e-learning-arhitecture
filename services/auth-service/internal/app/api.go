@@ -7,20 +7,24 @@ import (
 	"log/slog"
 	"net"
 	"net/http"
+	"os"
 
+	"github.com/Romasmi/e-learning-arhitecture/auth-service/internal/metrics"
 	"github.com/Romasmi/e-learning-arhitecture/auth-service/internal/repository"
 	"github.com/Romasmi/e-learning-arhitecture/auth-service/internal/services"
 	grpcint "github.com/Romasmi/e-learning-arhitecture/auth-service/internal/transport/grpc"
 	"github.com/Romasmi/e-learning-arhitecture/auth-service/internal/transport/gw"
 	authapi "github.com/Romasmi/e-learning-arhitecture/gen/go/auth"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 type Api struct {
-	App        *App
-	grpcServer *grpc.Server
-	gwServer   *http.Server
+	App           *App
+	grpcServer    *grpc.Server
+	gwServer      *http.Server
+	metricsServer *http.Server
 }
 
 func NewApi(app *App) *Api {
@@ -34,7 +38,9 @@ func (a *Api) Run() error {
 		return fmt.Errorf("failed to listen: %w", err)
 	}
 
-	a.grpcServer = grpc.NewServer()
+	a.grpcServer = grpc.NewServer(
+		grpc.UnaryInterceptor(metrics.GrpcUnaryInterceptor),
+	)
 
 	authRepo := repository.CreateAuthRepository(a.App.DbConn.DB)
 	authService := services.CreateAuthService(authRepo, a.App.Config)
@@ -63,6 +69,22 @@ func (a *Api) Run() error {
 		}
 	}()
 
+	metricsPort := os.Getenv("METRICS_PORT")
+	if metricsPort == "" {
+		metricsPort = "9090"
+	}
+	a.metricsServer = &http.Server{
+		Addr:    ":" + metricsPort,
+		Handler: promhttp.Handler(),
+	}
+
+	go func() {
+		slog.Info("Starting metrics server", "addr", a.metricsServer.Addr)
+		if err := a.metricsServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			slog.Error("metrics server error", "error", err)
+		}
+	}()
+
 	return nil
 }
 
@@ -75,6 +97,12 @@ func (a *Api) Shutdown(ctx context.Context) error {
 		slog.Info("Shutting down HTTP gateway...")
 		if err := a.gwServer.Shutdown(ctx); err != nil {
 			slog.Error("HTTP gateway shutdown error", "error", err)
+		}
+	}
+	if a.metricsServer != nil {
+		slog.Info("Shutting down metrics server...")
+		if err := a.metricsServer.Shutdown(ctx); err != nil {
+			slog.Error("metrics server shutdown error", "error", err)
 		}
 	}
 	return a.App.Shutdown(ctx)

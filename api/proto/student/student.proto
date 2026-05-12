@@ -53,7 +53,7 @@ service StudentService {
   }
   rpc AddStudentToGroup(AddStudentToGroupRequest) returns (AddStudentToGroupResponse) {
     option (google.api.http) = {
-      post: "/students/groups/{group_id}/students"
+      post: "/students/groups/{group_id}/members"
       body: "*"
     };
   }

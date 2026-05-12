@@ -127,7 +127,7 @@
       }
     },
     "/portals/{id}/config": {
-      "put": {
+      "patch": {
         "operationId": "PortalService_UpdatePortalConfig",
         "responses": {
           "200": {
@@ -169,6 +169,9 @@
     "PortalServiceUpdatePortalConfigBody": {
       "type": "object",
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "lmsConfig": {
           "$ref": "#/definitions/portalLMSConfig"
         }
