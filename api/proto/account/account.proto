@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package account;
+
+option go_package = "github.com/Romasmi/e-learning-arhitecture/gen/go/account;account";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service AccountService {
+  rpc CreateAccount(CreateAccountRequest)   returns (CreateAccountResponse) {
+    option (google.api.http) = {
+      post: "/v1/accounts"
+      body: "*"
+    };
+  }
+  rpc ArchiveAccount(ArchiveAccountRequest) returns (ArchiveAccountResponse) {
+    option (google.api.http) = {
+      delete: "/v1/accounts/{account_id}"
+    };
+  }
+  rpc CreateAdmin(CreateAdminRequest)       returns (CreateAdminResponse) {
+    option (google.api.http) = {
+      post: "/v1/accounts/{account_id}/admins"
+      body: "*"
+    };
+  }
+  rpc GetAccount(GetAccountRequest)         returns (GetAccountResponse) {
+    option (google.api.http) = {
+      get: "/v1/accounts/{account_id}"
+    };
+  }
+  rpc ListAccounts(ListAccountsRequest)     returns (ListAccountsResponse) {
+    option (google.api.http) = {
+      get: "/v1/accounts"
+    };
+  }
+}
+
+enum AccountStatus { 
+  ACCOUNT_STATUS_UNSPECIFIED = 0; 
+  ACTIVE = 1; 
+  ARCHIVED = 2; 
+}
+
+message Account {
+  string id        = 1;
+  string portal_id = 2;
+  string name      = 3;
+  AccountStatus status = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+message Admin {
+  string id         = 1;
+  string account_id = 2;
+  string email      = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message CreateAccountRequest  { string portal_id = 1; string name = 2; }
+message CreateAccountResponse { Account account = 1; }
+
+message ArchiveAccountRequest  { string account_id = 1; }
+message ArchiveAccountResponse { bool archived = 1; }
+
+message CreateAdminRequest  { string account_id = 1; string email = 2; string password = 3; }
+message CreateAdminResponse { Admin admin = 1; }
+
+message GetAccountRequest  { string account_id = 1; }
+message GetAccountResponse { Account account = 1; }
+
+message ListAccountsRequest  { string portal_id = 1; }
+message ListAccountsResponse { repeated Account accounts = 1; }

@@ -66,6 +66,14 @@ services:
     config:
       DB_NAME: "portal_service"
 
+  account-service:
+    enabled: true
+    image: account-service
+    replicas: 1
+    config:
+      DB_NAME: "account_service"
+      AUTH_SERVICE_ADDR: "auth-service:9000"
+
 # Shared resources
 sharedConfig:
   enabled: true
