@@ -11,12 +11,13 @@ proto-gen:
 build:
 	$(MAKE) -j7 -C ./services/auth-service docker-build & \
 	$(MAKE) -j7 -C ./services/portal-service docker-build & \
+	$(MAKE) -j7 -C ./services/account-service docker-build & \
 	wait
 
 deploy: install-traefik install-db install-kafka install-prometheus install-grafana install-app
 
 install-app:
-	helm upgrade --install e-learning-system ./deployment/helm/e-learning-system \
+	helm upgrade --install e-learning-system ./deployments/helm/e-learning-system \
 		--namespace e-learning-system \
 		--create-namespace
 
@@ -31,7 +32,7 @@ install-traefik:
 	helm upgrade --install traefik traefik/traefik \
 	  --namespace traefik \
 	  --create-namespace \
-	  -f ./deployment/helm/traefik-values.yaml
+	  -f ./deployments/helm/traefik-values.yaml
 
 forward-traefik:
 	kubectl port-forward -n traefik $$(kubectl get pods -n traefik -o name) 9000:9000
@@ -42,7 +43,7 @@ install-db:
 	helm upgrade --install postgresql bitnami/postgresql \
 		--namespace e-learning-system \
 		--create-namespace \
-		--values deployment/helm/postgresql-values.yaml
+		--values deployments/helm/postgresql-values.yaml
 
 db-connect:
 	kubectl exec -it postgresql-0 -n e-learning-system -- \
@@ -57,7 +58,7 @@ install-kafka:
 	helm upgrade --install redpanda redpanda/redpanda \
 		--namespace e-learning-system \
 		--create-namespace \
-		--values deployment/helm/redpanda-values.yaml
+		--values deployments/helm/redpanda-values.yaml
 
 forward-kafka:
 	kubectl port-forward svc/kafka 9092:9092 -n e-learning-system
@@ -75,7 +76,7 @@ install-grafana:
 	helm upgrade --install grafana grafana/grafana \
 		--namespace e-learning-system \
 		--create-namespace \
-		--values deployment/helm/grafana-values.yaml
+		--values deployments/helm/grafana-values.yaml
 
 # Utility targets
 hosts:
@@ -102,10 +103,12 @@ wait-api:
 	@echo "Waiting for API deployments to be ready..."
 	kubectl rollout status deployment/auth-service -n e-learning-system --timeout=120s
 	kubectl rollout status deployment/portal-service -n e-learning-system --timeout=120s
+	kubectl rollout status deployment/account-service -n e-learning-system --timeout=120s
 
 restart:
 	kubectl rollout restart deployment/auth-service -n e-learning-system
 	kubectl rollout restart deployment/portal-service -n e-learning-system
+	kubectl rollout restart deployment/account-service -n e-learning-system
 	$(MAKE) wait-api
 
 clean:
@@ -129,6 +132,7 @@ status:
 	@echo "\n--- Application ---"
 	@kubectl get pods -n e-learning-system -l app=auth-service
 	@kubectl get pods -n e-learning-system -l app=portal-service
+	@kubectl get pods -n e-learning-system -l app=account-service
 	@echo "\n--- Services ---"
 	@kubectl get svc -n e-learning-system
 	@kubectl get svc -n traefik
@@ -160,7 +164,7 @@ help:
 	@echo "Quick Start:"
 	@echo "  1. make up"
 	@echo "  2. make run (in another terminal)"
-	@echo "  3. Access API: http://arch.homework:8080/user"
+	@echo "  3. Access API: http://arch.homework:8080/v1/accounts"
 	@echo "  4. Access Dashboard: http://arch.homework:8080/dashboard/"
 
 draw-puml:
