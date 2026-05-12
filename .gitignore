@@ -1,2 +1,3 @@
 .idea
 tmp
+tests/postman/results.json
