@@ -1,4 +1,8 @@
-.PHONY: up build deploy restart install-traefik install-db install-kafka install-grafana hosts run wait-db wait-kafka wait-api clean redeploy status help prometheus-run grafana-run forward-kafka forward-db forward-traefik proto-gen
+.PHONY: minikube-start up build deploy restart install-traefik install-db install-kafka install-grafana hosts run wait-db wait-kafka wait-api clean redeploy status help prometheus-run grafana-run forward-kafka forward-db forward-traefik proto-gen
+
+# Minikube management
+minikube-start:
+	minikube start --memory 8192 --cpus 4 --driver docker
 
 # Main target to start everything from scratch
 up: proto-gen build deploy wait-db wait-kafka wait-api
@@ -167,6 +171,7 @@ redeploy: build docker-push restart
 
 help:
 	@echo "Usage:"
+	@echo "  make minikube-start - Start minikube with recommended resources (8GB RAM)"
 	@echo "  make up          - Build images and deploy everything (from scratch)"
 	@echo "  make redeploy    - Build, push and restart all services"
 	@echo "  make run         - Start minikube tunnel (required for access)"

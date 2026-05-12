@@ -21,6 +21,13 @@ services:
     replicas: 1
     config:
       DB_NAME: "auth_service"
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 200m
 
   portal-service:
     enabled: true
@@ -28,6 +35,13 @@ services:
     replicas: 1
     config:
       DB_NAME: "portal_service"
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 200m
 
   account-service:
     enabled: true
@@ -36,6 +50,13 @@ services:
     config:
       DB_NAME: "account_service"
       AUTH_SERVICE_ADDR: "auth-service:9000"
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 200m
       
   media-service:
     enabled: true
@@ -48,6 +69,13 @@ services:
       AWS_ACCESS_KEY_ID: "minikube"
       AWS_SECRET_ACCESS_KEY: "minikube"
       TRANSCODER_URL: "http://transcoder-service"
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 200m
 
   course-service:
     enabled: true
@@ -55,6 +83,13 @@ services:
     replicas: 1
     config:
       DB_NAME: "course_service"
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 200m
 
   student-service:
     enabled: true
@@ -63,6 +98,13 @@ services:
     config:
       DB_NAME: "student_service"
       AUTH_SERVICE_ADDR: "auth-service:9000"
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 200m
 
 # Shared resources
 sharedConfig:
