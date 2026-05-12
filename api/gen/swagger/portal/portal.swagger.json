@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/portals": {
+    "/portals": {
       "get": {
         "operationId": "PortalService_ListPortals",
         "responses": {
@@ -68,7 +68,7 @@
         ]
       }
     },
-    "/v1/portals/{id}": {
+    "/portals/{id}": {
       "get": {
         "operationId": "PortalService_GetPortal",
         "responses": {
@@ -126,7 +126,7 @@
         ]
       }
     },
-    "/v1/portals/{id}/config": {
+    "/portals/{id}/config": {
       "put": {
         "operationId": "PortalService_UpdatePortalConfig",
         "responses": {

@@ -6,4 +6,5 @@ use (
 	./services/auth-service
 	./services/portal-service
 	./services/media-service
+	./services/course-service
 )

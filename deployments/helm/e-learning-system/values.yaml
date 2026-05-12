@@ -49,6 +49,13 @@ services:
       AWS_SECRET_ACCESS_KEY: "minikube"
       TRANSCODER_URL: "http://transcoder-service"
 
+  course-service:
+    enabled: true
+    image: course-service
+    replicas: 1
+    config:
+      DB_NAME: "course_service"
+
 # Shared resources
 sharedConfig:
   enabled: true

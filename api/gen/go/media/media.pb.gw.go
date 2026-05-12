@@ -194,7 +194,7 @@ func RegisterMediaServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/media.MediaService/UploadVideo", runtime.WithHTTPPathPattern("/v1/media/upload-video"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/media.MediaService/UploadVideo", runtime.WithHTTPPathPattern("/media/upload-video"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -214,7 +214,7 @@ func RegisterMediaServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/media.MediaService/UploadPDF", runtime.WithHTTPPathPattern("/v1/media/upload-pdf"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/media.MediaService/UploadPDF", runtime.WithHTTPPathPattern("/media/upload-pdf"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -234,7 +234,7 @@ func RegisterMediaServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/media.MediaService/UploadImage", runtime.WithHTTPPathPattern("/v1/media/upload-image"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/media.MediaService/UploadImage", runtime.WithHTTPPathPattern("/media/upload-image"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -254,7 +254,7 @@ func RegisterMediaServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/media.MediaService/GetAsset", runtime.WithHTTPPathPattern("/v1/media/assets/{asset_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/media.MediaService/GetAsset", runtime.WithHTTPPathPattern("/media/assets/{asset_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -332,7 +332,7 @@ func RegisterMediaServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/media.MediaService/UploadVideo", runtime.WithHTTPPathPattern("/v1/media/upload-video"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/media.MediaService/UploadVideo", runtime.WithHTTPPathPattern("/media/upload-video"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -349,7 +349,7 @@ func RegisterMediaServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/media.MediaService/UploadPDF", runtime.WithHTTPPathPattern("/v1/media/upload-pdf"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/media.MediaService/UploadPDF", runtime.WithHTTPPathPattern("/media/upload-pdf"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -366,7 +366,7 @@ func RegisterMediaServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/media.MediaService/UploadImage", runtime.WithHTTPPathPattern("/v1/media/upload-image"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/media.MediaService/UploadImage", runtime.WithHTTPPathPattern("/media/upload-image"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -383,7 +383,7 @@ func RegisterMediaServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/media.MediaService/GetAsset", runtime.WithHTTPPathPattern("/v1/media/assets/{asset_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/media.MediaService/GetAsset", runtime.WithHTTPPathPattern("/media/assets/{asset_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -417,10 +417,10 @@ func RegisterMediaServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 }
 
 var (
-	pattern_MediaService_UploadVideo_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "media", "upload-video"}, ""))
-	pattern_MediaService_UploadPDF_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "media", "upload-pdf"}, ""))
-	pattern_MediaService_UploadImage_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "media", "upload-image"}, ""))
-	pattern_MediaService_GetAsset_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "media", "assets", "asset_id"}, ""))
+	pattern_MediaService_UploadVideo_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"media", "upload-video"}, ""))
+	pattern_MediaService_UploadPDF_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"media", "upload-pdf"}, ""))
+	pattern_MediaService_UploadImage_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"media", "upload-image"}, ""))
+	pattern_MediaService_GetAsset_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"media", "assets", "asset_id"}, ""))
 	pattern_MediaService_TranscodeCallback_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"internal", "transcode-callback"}, ""))
 )
 

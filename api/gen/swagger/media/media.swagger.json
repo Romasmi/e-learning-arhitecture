@@ -48,7 +48,7 @@
         ]
       }
     },
-    "/v1/media/assets/{assetId}": {
+    "/media/assets/{assetId}": {
       "get": {
         "operationId": "MediaService_GetAsset",
         "responses": {
@@ -78,7 +78,7 @@
         ]
       }
     },
-    "/v1/media/upload-image": {
+    "/media/upload-image": {
       "post": {
         "operationId": "MediaService_UploadImage",
         "responses": {
@@ -110,7 +110,7 @@
         ]
       }
     },
-    "/v1/media/upload-pdf": {
+    "/media/upload-pdf": {
       "post": {
         "operationId": "MediaService_UploadPDF",
         "responses": {
@@ -142,7 +142,7 @@
         ]
       }
     },
-    "/v1/media/upload-video": {
+    "/media/upload-video": {
       "post": {
         "operationId": "MediaService_UploadVideo",
         "responses": {

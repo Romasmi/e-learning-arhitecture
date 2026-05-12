@@ -16,11 +16,13 @@ primary:
         CREATE DATABASE portal_service;
         CREATE DATABASE account_service;
         CREATE DATABASE media_service;
+        CREATE DATABASE course_service;
         
         GRANT ALL PRIVILEGES ON DATABASE auth_service TO "user";
         GRANT ALL PRIVILEGES ON DATABASE portal_service TO "user";
         GRANT ALL PRIVILEGES ON DATABASE account_service TO "user";
         GRANT ALL PRIVILEGES ON DATABASE media_service TO "user";
+        GRANT ALL PRIVILEGES ON DATABASE course_service TO "user";
 
 readReplicas:
   replicaCount: 2

@@ -13,6 +13,7 @@ build:
 	$(MAKE) -j7 -C ./services/portal-service docker-build & \
 	$(MAKE) -j7 -C ./services/account-service docker-build & \
 	$(MAKE) -j7 -C ./services/media-service docker-build & \
+	$(MAKE) -j7 -C ./services/course-service docker-build & \
 	wait
 
 deploy: install-traefik install-db install-kafka install-prometheus install-grafana install-app
@@ -106,12 +107,14 @@ wait-api:
 	kubectl rollout status deployment/portal-service -n e-learning-system --timeout=120s
 	kubectl rollout status deployment/account-service -n e-learning-system --timeout=120s
 	kubectl rollout status deployment/media-service -n e-learning-system --timeout=120s
+	kubectl rollout status deployment/course-service -n e-learning-system --timeout=120s
 
 restart:
 	kubectl rollout restart deployment/auth-service -n e-learning-system
 	kubectl rollout restart deployment/portal-service -n e-learning-system
 	kubectl rollout restart deployment/account-service -n e-learning-system
 	kubectl rollout restart deployment/media-service -n e-learning-system
+	kubectl rollout restart deployment/course-service -n e-learning-system
 	$(MAKE) wait-api
 
 clean:
@@ -137,6 +140,7 @@ status:
 	@kubectl get pods -n e-learning-system -l app=portal-service
 	@kubectl get pods -n e-learning-system -l app=account-service
 	@kubectl get pods -n e-learning-system -l app=media-service
+	@kubectl get pods -n e-learning-system -l app=course-service
 	@echo "\n--- Services ---"
 	@kubectl get svc -n e-learning-system
 	@kubectl get svc -n traefik
@@ -168,7 +172,7 @@ help:
 	@echo "Quick Start:"
 	@echo "  1. make up"
 	@echo "  2. make run (in another terminal)"
-	@echo "  3. Access API: http://arch.homework:8080/v1/accounts"
+	@echo "  3. Access API: http://arch.homework:8080/accounts"
 	@echo "  4. Access Dashboard: http://arch.homework:8080/dashboard/"
 
 draw-puml:

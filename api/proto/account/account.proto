@@ -10,29 +10,29 @@ import "google/protobuf/timestamp.proto";
 service AccountService {
   rpc CreateAccount(CreateAccountRequest)   returns (CreateAccountResponse) {
     option (google.api.http) = {
-      post: "/v1/accounts"
+      post: "/accounts"
       body: "*"
     };
   }
   rpc ArchiveAccount(ArchiveAccountRequest) returns (ArchiveAccountResponse) {
     option (google.api.http) = {
-      delete: "/v1/accounts/{account_id}"
+      delete: "/accounts/{account_id}"
     };
   }
   rpc CreateAdmin(CreateAdminRequest)       returns (CreateAdminResponse) {
     option (google.api.http) = {
-      post: "/v1/accounts/{account_id}/admins"
+      post: "/accounts/{account_id}/admins"
       body: "*"
     };
   }
   rpc GetAccount(GetAccountRequest)         returns (GetAccountResponse) {
     option (google.api.http) = {
-      get: "/v1/accounts/{account_id}"
+      get: "/accounts/{account_id}"
     };
   }
   rpc ListAccounts(ListAccountsRequest)     returns (ListAccountsResponse) {
     option (google.api.http) = {
-      get: "/v1/accounts"
+      get: "/accounts"
     };
   }
 }

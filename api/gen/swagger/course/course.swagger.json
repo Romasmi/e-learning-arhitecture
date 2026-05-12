@@ -1,0 +1,610 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "course/course.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "CourseService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/chapters/{chapterId}/lessons": {
+      "post": {
+        "operationId": "CourseService_AddLesson",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/courseAddLessonResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "chapterId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CourseServiceAddLessonBody"
+            }
+          }
+        ],
+        "tags": [
+          "CourseService"
+        ]
+      }
+    },
+    "/courses": {
+      "get": {
+        "operationId": "CourseService_ListCourses",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/courseListCoursesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "portalId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "CourseService"
+        ]
+      },
+      "post": {
+        "operationId": "CourseService_CreateCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/courseCreateCourseResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/courseCreateCourseRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CourseService"
+        ]
+      }
+    },
+    "/courses/{courseId}": {
+      "get": {
+        "operationId": "CourseService_GetCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/courseGetCourseResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "CourseService"
+        ]
+      },
+      "delete": {
+        "operationId": "CourseService_ArchiveCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/courseArchiveCourseResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "CourseService"
+        ]
+      },
+      "put": {
+        "operationId": "CourseService_UpdateCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/courseUpdateCourseResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CourseServiceUpdateCourseBody"
+            }
+          }
+        ],
+        "tags": [
+          "CourseService"
+        ]
+      }
+    },
+    "/courses/{courseId}/cert-test": {
+      "post": {
+        "operationId": "CourseService_AttachCertTest",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/courseAttachCertTestResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CourseServiceAttachCertTestBody"
+            }
+          }
+        ],
+        "tags": [
+          "CourseService"
+        ]
+      }
+    },
+    "/courses/{courseId}/chapters": {
+      "post": {
+        "operationId": "CourseService_AddChapter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/courseAddChapterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CourseServiceAddChapterBody"
+            }
+          }
+        ],
+        "tags": [
+          "CourseService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CourseServiceAddChapterBody": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "position": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CourseServiceAddLessonBody": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/courseLessonType"
+        },
+        "assetId": {
+          "type": "string"
+        },
+        "position": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CourseServiceAttachCertTestBody": {
+      "type": "object",
+      "properties": {
+        "passScore": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/courseQuestion"
+          }
+        }
+      }
+    },
+    "CourseServiceUpdateCourseBody": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "courseAddChapterResponse": {
+      "type": "object",
+      "properties": {
+        "chapter": {
+          "$ref": "#/definitions/courseChapter"
+        }
+      }
+    },
+    "courseAddLessonResponse": {
+      "type": "object",
+      "properties": {
+        "lesson": {
+          "$ref": "#/definitions/courseLesson"
+        }
+      }
+    },
+    "courseArchiveCourseResponse": {
+      "type": "object",
+      "properties": {
+        "archived": {
+          "type": "boolean"
+        }
+      }
+    },
+    "courseAttachCertTestResponse": {
+      "type": "object",
+      "properties": {
+        "certTest": {
+          "$ref": "#/definitions/courseCertTest"
+        }
+      }
+    },
+    "courseCertTest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "courseId": {
+          "type": "string"
+        },
+        "passScore": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/courseQuestion"
+          }
+        }
+      }
+    },
+    "courseChapter": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "courseId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "position": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "lessons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/courseLesson"
+          }
+        }
+      }
+    },
+    "courseCourse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "portalId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/courseCourseStatus"
+        },
+        "chapters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/courseChapter"
+          }
+        },
+        "certTest": {
+          "$ref": "#/definitions/courseCertTest"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "courseCourseStatus": {
+      "type": "string",
+      "enum": [
+        "COURSE_STATUS_UNSPECIFIED",
+        "DRAFT",
+        "ARCHIVED"
+      ],
+      "default": "COURSE_STATUS_UNSPECIFIED"
+    },
+    "courseCreateCourseRequest": {
+      "type": "object",
+      "properties": {
+        "portalId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "courseCreateCourseResponse": {
+      "type": "object",
+      "properties": {
+        "course": {
+          "$ref": "#/definitions/courseCourse"
+        }
+      }
+    },
+    "courseGetCourseResponse": {
+      "type": "object",
+      "properties": {
+        "course": {
+          "$ref": "#/definitions/courseCourse"
+        }
+      }
+    },
+    "courseLesson": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "chapterId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/courseLessonType"
+        },
+        "assetId": {
+          "type": "string"
+        },
+        "position": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "assetStatus": {
+          "type": "string"
+        }
+      }
+    },
+    "courseLessonType": {
+      "type": "string",
+      "enum": [
+        "LESSON_TYPE_UNSPECIFIED",
+        "VIDEO",
+        "PDF",
+        "IMAGE",
+        "QUIZ"
+      ],
+      "default": "LESSON_TYPE_UNSPECIFIED"
+    },
+    "courseListCoursesResponse": {
+      "type": "object",
+      "properties": {
+        "courses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/courseCourse"
+          }
+        }
+      }
+    },
+    "courseQuestion": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "correctIndex": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "courseUpdateCourseResponse": {
+      "type": "object",
+      "properties": {
+        "course": {
+          "$ref": "#/definitions/courseCourse"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

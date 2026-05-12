@@ -218,7 +218,7 @@ func RegisterPortalServiceHandlerServer(ctx context.Context, mux *runtime.ServeM
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/portal.PortalService/CreatePortal", runtime.WithHTTPPathPattern("/v1/portals"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/portal.PortalService/CreatePortal", runtime.WithHTTPPathPattern("/portals"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -238,7 +238,7 @@ func RegisterPortalServiceHandlerServer(ctx context.Context, mux *runtime.ServeM
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/portal.PortalService/GetPortal", runtime.WithHTTPPathPattern("/v1/portals/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/portal.PortalService/GetPortal", runtime.WithHTTPPathPattern("/portals/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -258,7 +258,7 @@ func RegisterPortalServiceHandlerServer(ctx context.Context, mux *runtime.ServeM
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/portal.PortalService/UpdatePortalConfig", runtime.WithHTTPPathPattern("/v1/portals/{id}/config"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/portal.PortalService/UpdatePortalConfig", runtime.WithHTTPPathPattern("/portals/{id}/config"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -278,7 +278,7 @@ func RegisterPortalServiceHandlerServer(ctx context.Context, mux *runtime.ServeM
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/portal.PortalService/ArchivePortal", runtime.WithHTTPPathPattern("/v1/portals/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/portal.PortalService/ArchivePortal", runtime.WithHTTPPathPattern("/portals/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -298,7 +298,7 @@ func RegisterPortalServiceHandlerServer(ctx context.Context, mux *runtime.ServeM
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/portal.PortalService/ListPortals", runtime.WithHTTPPathPattern("/v1/portals"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/portal.PortalService/ListPortals", runtime.WithHTTPPathPattern("/portals"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -356,7 +356,7 @@ func RegisterPortalServiceHandlerClient(ctx context.Context, mux *runtime.ServeM
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/portal.PortalService/CreatePortal", runtime.WithHTTPPathPattern("/v1/portals"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/portal.PortalService/CreatePortal", runtime.WithHTTPPathPattern("/portals"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -373,7 +373,7 @@ func RegisterPortalServiceHandlerClient(ctx context.Context, mux *runtime.ServeM
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/portal.PortalService/GetPortal", runtime.WithHTTPPathPattern("/v1/portals/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/portal.PortalService/GetPortal", runtime.WithHTTPPathPattern("/portals/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -390,7 +390,7 @@ func RegisterPortalServiceHandlerClient(ctx context.Context, mux *runtime.ServeM
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/portal.PortalService/UpdatePortalConfig", runtime.WithHTTPPathPattern("/v1/portals/{id}/config"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/portal.PortalService/UpdatePortalConfig", runtime.WithHTTPPathPattern("/portals/{id}/config"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -407,7 +407,7 @@ func RegisterPortalServiceHandlerClient(ctx context.Context, mux *runtime.ServeM
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/portal.PortalService/ArchivePortal", runtime.WithHTTPPathPattern("/v1/portals/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/portal.PortalService/ArchivePortal", runtime.WithHTTPPathPattern("/portals/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -424,7 +424,7 @@ func RegisterPortalServiceHandlerClient(ctx context.Context, mux *runtime.ServeM
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/portal.PortalService/ListPortals", runtime.WithHTTPPathPattern("/v1/portals"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/portal.PortalService/ListPortals", runtime.WithHTTPPathPattern("/portals"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -441,11 +441,11 @@ func RegisterPortalServiceHandlerClient(ctx context.Context, mux *runtime.ServeM
 }
 
 var (
-	pattern_PortalService_CreatePortal_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "portals"}, ""))
-	pattern_PortalService_GetPortal_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "portals", "id"}, ""))
-	pattern_PortalService_UpdatePortalConfig_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"v1", "portals", "id", "config"}, ""))
-	pattern_PortalService_ArchivePortal_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "portals", "id"}, ""))
-	pattern_PortalService_ListPortals_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "portals"}, ""))
+	pattern_PortalService_CreatePortal_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"portals"}, ""))
+	pattern_PortalService_GetPortal_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"portals", "id"}, ""))
+	pattern_PortalService_UpdatePortalConfig_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1, 2, 2}, []string{"portals", "id", "config"}, ""))
+	pattern_PortalService_ArchivePortal_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"portals", "id"}, ""))
+	pattern_PortalService_ListPortals_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"portals"}, ""))
 )
 
 var (

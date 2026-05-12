@@ -10,29 +10,29 @@ import "google/protobuf/timestamp.proto";
 service PortalService {
   rpc CreatePortal(CreatePortalRequest) returns (CreatePortalResponse) {
     option (google.api.http) = {
-      post: "/v1/portals"
+      post: "/portals"
       body: "*"
     };
   }
   rpc GetPortal(GetPortalRequest) returns (GetPortalResponse) {
     option (google.api.http) = {
-      get: "/v1/portals/{id}"
+      get: "/portals/{id}"
     };
   }
   rpc UpdatePortalConfig(UpdatePortalConfigRequest) returns (UpdatePortalConfigResponse) {
     option (google.api.http) = {
-      put: "/v1/portals/{id}/config"
+      put: "/portals/{id}/config"
       body: "*"
     };
   }
   rpc ArchivePortal(ArchivePortalRequest) returns (ArchivePortalResponse) {
     option (google.api.http) = {
-      delete: "/v1/portals/{id}"
+      delete: "/portals/{id}"
     };
   }
   rpc ListPortals(ListPortalsRequest) returns (ListPortalsResponse) {
     option (google.api.http) = {
-      get: "/v1/portals"
+      get: "/portals"
     };
   }
 }

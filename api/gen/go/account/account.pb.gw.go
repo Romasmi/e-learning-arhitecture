@@ -232,7 +232,7 @@ func RegisterAccountServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/account.AccountService/CreateAccount", runtime.WithHTTPPathPattern("/v1/accounts"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/account.AccountService/CreateAccount", runtime.WithHTTPPathPattern("/accounts"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -252,7 +252,7 @@ func RegisterAccountServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/account.AccountService/ArchiveAccount", runtime.WithHTTPPathPattern("/v1/accounts/{account_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/account.AccountService/ArchiveAccount", runtime.WithHTTPPathPattern("/accounts/{account_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -272,7 +272,7 @@ func RegisterAccountServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/account.AccountService/CreateAdmin", runtime.WithHTTPPathPattern("/v1/accounts/{account_id}/admins"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/account.AccountService/CreateAdmin", runtime.WithHTTPPathPattern("/accounts/{account_id}/admins"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -292,7 +292,7 @@ func RegisterAccountServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/account.AccountService/GetAccount", runtime.WithHTTPPathPattern("/v1/accounts/{account_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/account.AccountService/GetAccount", runtime.WithHTTPPathPattern("/accounts/{account_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -312,7 +312,7 @@ func RegisterAccountServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/account.AccountService/ListAccounts", runtime.WithHTTPPathPattern("/v1/accounts"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/account.AccountService/ListAccounts", runtime.WithHTTPPathPattern("/accounts"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -370,7 +370,7 @@ func RegisterAccountServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/account.AccountService/CreateAccount", runtime.WithHTTPPathPattern("/v1/accounts"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/account.AccountService/CreateAccount", runtime.WithHTTPPathPattern("/accounts"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -387,7 +387,7 @@ func RegisterAccountServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/account.AccountService/ArchiveAccount", runtime.WithHTTPPathPattern("/v1/accounts/{account_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/account.AccountService/ArchiveAccount", runtime.WithHTTPPathPattern("/accounts/{account_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -404,7 +404,7 @@ func RegisterAccountServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/account.AccountService/CreateAdmin", runtime.WithHTTPPathPattern("/v1/accounts/{account_id}/admins"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/account.AccountService/CreateAdmin", runtime.WithHTTPPathPattern("/accounts/{account_id}/admins"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -421,7 +421,7 @@ func RegisterAccountServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/account.AccountService/GetAccount", runtime.WithHTTPPathPattern("/v1/accounts/{account_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/account.AccountService/GetAccount", runtime.WithHTTPPathPattern("/accounts/{account_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -438,7 +438,7 @@ func RegisterAccountServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/account.AccountService/ListAccounts", runtime.WithHTTPPathPattern("/v1/accounts"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/account.AccountService/ListAccounts", runtime.WithHTTPPathPattern("/accounts"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -455,11 +455,11 @@ func RegisterAccountServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 }
 
 var (
-	pattern_AccountService_CreateAccount_0  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "accounts"}, ""))
-	pattern_AccountService_ArchiveAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "accounts", "account_id"}, ""))
-	pattern_AccountService_CreateAdmin_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"v1", "accounts", "account_id", "admins"}, ""))
-	pattern_AccountService_GetAccount_0     = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "accounts", "account_id"}, ""))
-	pattern_AccountService_ListAccounts_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "accounts"}, ""))
+	pattern_AccountService_CreateAccount_0  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"accounts"}, ""))
+	pattern_AccountService_ArchiveAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"accounts", "account_id"}, ""))
+	pattern_AccountService_CreateAdmin_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1, 2, 2}, []string{"accounts", "account_id", "admins"}, ""))
+	pattern_AccountService_GetAccount_0     = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"accounts", "account_id"}, ""))
+	pattern_AccountService_ListAccounts_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"accounts"}, ""))
 )
 
 var (

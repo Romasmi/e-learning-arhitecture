@@ -10,25 +10,25 @@ import "google/protobuf/timestamp.proto";
 service MediaService {
   rpc UploadVideo(UploadVideoRequest)   returns (UploadVideoResponse) {
     option (google.api.http) = {
-      post: "/v1/media/upload-video"
+      post: "/media/upload-video"
       body: "*"
     };
   }
   rpc UploadPDF(UploadPDFRequest)       returns (UploadPDFResponse) {
     option (google.api.http) = {
-      post: "/v1/media/upload-pdf"
+      post: "/media/upload-pdf"
       body: "*"
     };
   }
   rpc UploadImage(UploadImageRequest)   returns (UploadImageResponse) {
     option (google.api.http) = {
-      post: "/v1/media/upload-image"
+      post: "/media/upload-image"
       body: "*"
     };
   }
   rpc GetAsset(GetAssetRequest)         returns (GetAssetResponse) {
     option (google.api.http) = {
-      get: "/v1/media/assets/{asset_id}"
+      get: "/media/assets/{asset_id}"
     };
   }
   rpc TranscodeCallback(TranscodeCallbackRequest) returns (TranscodeCallbackResponse) {

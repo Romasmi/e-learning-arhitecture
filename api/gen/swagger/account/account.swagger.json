@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/accounts": {
+    "/accounts": {
       "get": {
         "operationId": "AccountService_ListAccounts",
         "responses": {
@@ -76,7 +76,7 @@
         ]
       }
     },
-    "/v1/accounts/{accountId}": {
+    "/accounts/{accountId}": {
       "get": {
         "operationId": "AccountService_GetAccount",
         "responses": {
@@ -134,7 +134,7 @@
         ]
       }
     },
-    "/v1/accounts/{accountId}/admins": {
+    "/accounts/{accountId}/admins": {
       "post": {
         "operationId": "AccountService_CreateAdmin",
         "responses": {

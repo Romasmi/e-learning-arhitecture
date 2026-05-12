@@ -685,13 +685,14 @@ const file_portal_portal_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\"\x14\n" +
 	"\x12ListPortalsRequest\"?\n" +
 	"\x13ListPortalsResponse\x12(\n" +
-	"\aportals\x18\x01 \x03(\v2\x0e.portal.PortalR\aportals2\x94\x04\n" +
-	"\rPortalService\x12a\n" +
-	"\fCreatePortal\x12\x1b.portal.CreatePortalRequest\x1a\x1c.portal.CreatePortalResponse\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/v1/portals\x12Z\n" +
-	"\tGetPortal\x12\x18.portal.GetPortalRequest\x1a\x19.portal.GetPortalResponse\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/portals/{id}\x12\x7f\n" +
-	"\x12UpdatePortalConfig\x12!.portal.UpdatePortalConfigRequest\x1a\".portal.UpdatePortalConfigResponse\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\x1a\x17/v1/portals/{id}/config\x12f\n" +
-	"\rArchivePortal\x12\x1c.portal.ArchivePortalRequest\x1a\x1d.portal.ArchivePortalResponse\"\x18\x82\xd3\xe4\x93\x02\x12*\x10/v1/portals/{id}\x12[\n" +
-	"\vListPortals\x12\x1a.portal.ListPortalsRequest\x1a\x1b.portal.ListPortalsResponse\"\x13\x82\xd3\xe4\x93\x02\r\x12\v/v1/portalsB\x91\x01\n" +
+	"\aportals\x18\x01 \x03(\v2\x0e.portal.PortalR\aportals2\x85\x04\n" +
+	"\rPortalService\x12^\n" +
+	"\fCreatePortal\x12\x1b.portal.CreatePortalRequest\x1a\x1c.portal.CreatePortalResponse\"\x13\x82\xd3\xe4\x93\x02\r:\x01*\"\b/portals\x12W\n" +
+	"\tGetPortal\x12\x18.portal.GetPortalRequest\x1a\x19.portal.GetPortalResponse\"\x15\x82\xd3\xe4\x93\x02\x0f\x12\r/portals/{id}\x12|\n" +
+	"\x12UpdatePortalConfig\x12!.portal.UpdatePortalConfigRequest\x1a\".portal.UpdatePortalConfigResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\x1a\x14/portals/{id}/config\x12c\n" +
+	"\rArchivePortal\x12\x1c.portal.ArchivePortalRequest\x1a\x1d.portal.ArchivePortalResponse\"\x15\x82\xd3\xe4\x93\x02\x0f*\r/portals/{id}\x12X\n" +
+	"\vListPortals\x12\x1a.portal.ListPortalsRequest\x1a\x1b.portal.ListPortalsResponse\"\x10\x82\xd3\xe4\x93\x02\n" +
+	"\x12\b/portalsB\x91\x01\n" +
 	"\n" +
 	"com.portalB\vPortalProtoP\x01Z>github.com/Romasmi/e-learning-arhitecture/gen/go/portal;portal\xa2\x02\x03PXX\xaa\x02\x06Portal\xca\x02\x06Portal\xe2\x02\x12Portal\\GPBMetadata\xea\x02\x06Portalb\x06proto3"
 

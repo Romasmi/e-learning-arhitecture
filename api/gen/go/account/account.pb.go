@@ -738,14 +738,14 @@ const file_account_account_proto_rawDesc = "" +
 	"\x1aACCOUNT_STATUS_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
 	"\x06ACTIVE\x10\x01\x12\f\n" +
-	"\bARCHIVED\x10\x022\xb3\x04\n" +
-	"\x0eAccountService\x12g\n" +
-	"\rCreateAccount\x12\x1d.account.CreateAccountRequest\x1a\x1e.account.CreateAccountResponse\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/v1/accounts\x12t\n" +
-	"\x0eArchiveAccount\x12\x1e.account.ArchiveAccountRequest\x1a\x1f.account.ArchiveAccountResponse\"!\x82\xd3\xe4\x93\x02\x1b*\x19/v1/accounts/{account_id}\x12u\n" +
-	"\vCreateAdmin\x12\x1b.account.CreateAdminRequest\x1a\x1c.account.CreateAdminResponse\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/accounts/{account_id}/admins\x12h\n" +
+	"\bARCHIVED\x10\x022\xa4\x04\n" +
+	"\x0eAccountService\x12d\n" +
+	"\rCreateAccount\x12\x1d.account.CreateAccountRequest\x1a\x1e.account.CreateAccountResponse\"\x14\x82\xd3\xe4\x93\x02\x0e:\x01*\"\t/accounts\x12q\n" +
+	"\x0eArchiveAccount\x12\x1e.account.ArchiveAccountRequest\x1a\x1f.account.ArchiveAccountResponse\"\x1e\x82\xd3\xe4\x93\x02\x18*\x16/accounts/{account_id}\x12r\n" +
+	"\vCreateAdmin\x12\x1b.account.CreateAdminRequest\x1a\x1c.account.CreateAdminResponse\"(\x82\xd3\xe4\x93\x02\":\x01*\"\x1d/accounts/{account_id}/admins\x12e\n" +
 	"\n" +
-	"GetAccount\x12\x1a.account.GetAccountRequest\x1a\x1b.account.GetAccountResponse\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/v1/accounts/{account_id}\x12a\n" +
-	"\fListAccounts\x12\x1c.account.ListAccountsRequest\x1a\x1d.account.ListAccountsResponse\"\x14\x82\xd3\xe4\x93\x02\x0e\x12\f/v1/accountsB\x99\x01\n" +
+	"GetAccount\x12\x1a.account.GetAccountRequest\x1a\x1b.account.GetAccountResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/accounts/{account_id}\x12^\n" +
+	"\fListAccounts\x12\x1c.account.ListAccountsRequest\x1a\x1d.account.ListAccountsResponse\"\x11\x82\xd3\xe4\x93\x02\v\x12\t/accountsB\x99\x01\n" +
 	"\vcom.accountB\fAccountProtoP\x01Z@github.com/Romasmi/e-learning-arhitecture/gen/go/account;account\xa2\x02\x03AXX\xaa\x02\aAccount\xca\x02\aAccount\xe2\x02\x13Account\\GPBMetadata\xea\x02\aAccountb\x06proto3"
 
 var (

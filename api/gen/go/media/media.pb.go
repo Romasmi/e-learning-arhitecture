@@ -775,12 +775,12 @@ const file_media_media_proto_rawDesc = "" +
 	"\x16ASSET_TYPE_UNSPECIFIED\x10\x00\x12\t\n" +
 	"\x05VIDEO\x10\x01\x12\a\n" +
 	"\x03PDF\x10\x02\x12\t\n" +
-	"\x05IMAGE\x10\x032\xa4\x04\n" +
-	"\fMediaService\x12g\n" +
-	"\vUploadVideo\x12\x19.media.UploadVideoRequest\x1a\x1a.media.UploadVideoResponse\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/media/upload-video\x12_\n" +
-	"\tUploadPDF\x12\x17.media.UploadPDFRequest\x1a\x18.media.UploadPDFResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/v1/media/upload-pdf\x12g\n" +
-	"\vUploadImage\x12\x19.media.UploadImageRequest\x1a\x1a.media.UploadImageResponse\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/media/upload-image\x12`\n" +
-	"\bGetAsset\x12\x16.media.GetAssetRequest\x1a\x17.media.GetAssetResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/v1/media/assets/{asset_id}\x12\x7f\n" +
+	"\x05IMAGE\x10\x032\x98\x04\n" +
+	"\fMediaService\x12d\n" +
+	"\vUploadVideo\x12\x19.media.UploadVideoRequest\x1a\x1a.media.UploadVideoResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/media/upload-video\x12\\\n" +
+	"\tUploadPDF\x12\x17.media.UploadPDFRequest\x1a\x18.media.UploadPDFResponse\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/media/upload-pdf\x12d\n" +
+	"\vUploadImage\x12\x19.media.UploadImageRequest\x1a\x1a.media.UploadImageResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/media/upload-image\x12]\n" +
+	"\bGetAsset\x12\x16.media.GetAssetRequest\x1a\x17.media.GetAssetResponse\" \x82\xd3\xe4\x93\x02\x1a\x12\x18/media/assets/{asset_id}\x12\x7f\n" +
 	"\x11TranscodeCallback\x12\x1f.media.TranscodeCallbackRequest\x1a .media.TranscodeCallbackResponse\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/internal/transcode-callbackB\x89\x01\n" +
 	"\tcom.mediaB\n" +
 	"MediaProtoP\x01Z<github.com/Romasmi/e-learning-arhitecture/gen/go/media;media\xa2\x02\x03MXX\xaa\x02\x05Media\xca\x02\x05Media\xe2\x02\x11Media\\GPBMetadata\xea\x02\x05Mediab\x06proto3"
