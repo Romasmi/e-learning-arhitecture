@@ -212,7 +212,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"code\": \"testportal\",\n    \"name\": \"Test Portal\",\n    \"lms_config\": {\n        \"default_language\": \"en\"\n    }\n}",
+							"raw": "{\n    \"code\": \"{{portal_code}}\",\n    \"name\": \"Test Portal {{portal_code}}\",\n    \"lms_config\": {\n        \"default_language\": \"en\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -232,6 +232,16 @@
 					"response": [],
 					"event": [
 						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const suffix = pm.variables.replaceIn('{{$randomAlphaNumeric}}');",
+									"pm.environment.set(\"portal_code\", \"testportal_\" + suffix);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -240,11 +250,11 @@
 									"});",
 									"",
 									"var jsonData = pm.response.json();",
-									"pm.test(\"Portal code is testportal\", function () {",
-									"    pm.expect(jsonData.portal.code).to.eql(\"testportal\");",
+									"pm.test(\"Portal code is correct\", function () {",
+									"    pm.expect(jsonData.portal.code).to.eql(pm.environment.get(\"portal_code\"));",
 									"});",
-									"pm.test(\"Domain URL contains testportal.e-learning.com\", function () {",
-									"    pm.expect(jsonData.portal.domain_url).to.include(\"testportal.e-learning.com\");",
+									"pm.test(\"Domain URL contains portal code\", function () {",
+									"    pm.expect(jsonData.portal.domain_url).to.include(pm.environment.get(\"portal_code\") + \".e-learning.com\");",
 									"});",
 									"pm.environment.set(\"portal_id\", jsonData.portal.id);"
 								],
@@ -413,7 +423,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"admin@test.com\",\n    \"password\": \"Admin1234!\"\n}",
+							"raw": "{\n    \"email\": \"{{admin_email}}\",\n    \"password\": \"Admin1234!\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -435,6 +445,16 @@
 					"response": [],
 					"event": [
 						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const suffix = pm.variables.replaceIn('{{$randomAlphaNumeric}}');",
+									"pm.environment.set(\"admin_email\", \"admin_\" + suffix + \"@test.com\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -444,7 +464,7 @@
 									"",
 									"var jsonData = pm.response.json();",
 									"pm.test(\"Admin email is correct\", function () {",
-									"    pm.expect(jsonData.admin.email).to.eql(\"admin@test.com\");",
+									"    pm.expect(jsonData.admin.email).to.eql(pm.environment.get(\"admin_email\"));",
 									"});"
 								],
 								"type": "text/javascript"
@@ -459,7 +479,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"admin@test.com\",\n    \"password\": \"Admin1234!\",\n    \"portal_id\": \"{{portal_id}}\"\n}",
+							"raw": "{\n    \"email\": \"{{admin_email}}\",\n    \"password\": \"Admin1234!\",\n    \"portal_id\": \"{{portal_id}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -708,7 +728,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"account_id\": \"{{account_id}}\",\n    \"email\": \"student@test.com\",\n    \"password\": \"Student1234!\"\n}",
+							"raw": "{\n    \"account_id\": \"{{account_id}}\",\n    \"email\": \"{{student_email}}\",\n    \"password\": \"Student1234!\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -727,6 +747,16 @@
 					},
 					"response": [],
 					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const suffix = pm.variables.replaceIn('{{$randomAlphaNumeric}}');",
+									"pm.environment.set(\"student_email\", \"student_\" + suffix + \"@test.com\");"
+								],
+								"type": "text/javascript"
+							}
+						},
 						{
 							"listen": "test",
 							"script": {
