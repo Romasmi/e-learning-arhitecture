@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS portals (
+    id UUID PRIMARY KEY,
+    code TEXT NOT NULL UNIQUE,
+    name TEXT NOT NULL,
+    status VARCHAR(10) NOT NULL,
+    lms_config JSONB NOT NULL DEFAULT '{}',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_portals_code ON portals(code);

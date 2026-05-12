@@ -59,6 +59,13 @@ services:
         command: ["./worker"]
         hasService: false
 
+  portal-service:
+    enabled: true
+    image: portal-service
+    replicas: 1
+    config:
+      DB_NAME: "portal_service"
+
 # Shared resources
 sharedConfig:
   enabled: true

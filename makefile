@@ -13,6 +13,7 @@ build:
 	$(MAKE) -j7 -C ./services/user-service docker-build & \
 	$(MAKE) -j7 -C ./services/notification-service docker-build & \
 	$(MAKE) -j7 -C ./services/billing-service docker-build & \
+	$(MAKE) -j7 -C ./services/portal-service docker-build & \
 	wait
 
 deploy: install-traefik install-db install-kafka install-prometheus install-grafana install-app
@@ -108,6 +109,7 @@ wait-api:
 	kubectl rollout status deployment/notification-service-worker -n e-learning-system --timeout=120s
 	kubectl rollout status deployment/billing-service-api -n e-learning-system --timeout=120s
 	kubectl rollout status deployment/billing-service-worker -n e-learning-system --timeout=120s
+	kubectl rollout status deployment/portal-service -n e-learning-system --timeout=120s
 
 restart:
 	kubectl rollout restart deployment/user-service -n e-learning-system
@@ -116,6 +118,7 @@ restart:
 	kubectl rollout restart deployment/notification-service-worker -n e-learning-system
 	kubectl rollout restart deployment/billing-service-api -n e-learning-system
 	kubectl rollout restart deployment/billing-service-worker -n e-learning-system
+	kubectl rollout restart deployment/portal-service -n e-learning-system
 	$(MAKE) wait-api
 
 clean:
@@ -141,6 +144,7 @@ status:
 	@kubectl get pods -n e-learning-system -l app=auth-service
 	@kubectl get pods -n e-learning-system -l app=notification-service
 	@kubectl get pods -n e-learning-system -l app=billing-service
+	@kubectl get pods -n e-learning-system -l app=portal-service
 	@echo "\n--- Services ---"
 	@kubectl get svc -n e-learning-system
 	@kubectl get svc -n traefik
