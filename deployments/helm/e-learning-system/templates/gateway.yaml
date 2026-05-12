@@ -78,3 +78,37 @@ spec:
       services:
         - name: notification-service
           port: 8000
+
+    - kind: Rule
+      match: PathPrefix("/accounts")
+      priority: 200
+      middlewares:
+        - name: user-auth
+      services:
+        - name: account-service
+          port: 8000
+
+    - kind: Rule
+      match: PathPrefix("/portals")
+      priority: 200
+      middlewares:
+        - name: user-auth
+      services:
+        - name: portal-service
+          port: 8000
+
+    - kind: Rule
+      match: PathPrefix("/media")
+      priority: 200
+      middlewares:
+        - name: user-auth
+      services:
+        - name: media-service
+          port: 8000
+
+    - kind: Rule
+      match: PathPrefix("/internal/transcode-callback")
+      priority: 200
+      services:
+        - name: media-service
+          port: 8000

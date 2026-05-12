@@ -36,6 +36,18 @@ services:
     config:
       DB_NAME: "account_service"
       AUTH_SERVICE_ADDR: "auth-service:9000"
+      
+  media-service:
+    enabled: true
+    image: media-service
+    replicas: 1
+    config:
+      DB_NAME: "media_service"
+      S3_BUCKET: "elearning-media"
+      S3_REGION: "us-east-1"
+      AWS_ACCESS_KEY_ID: "minikube"
+      AWS_SECRET_ACCESS_KEY: "minikube"
+      TRANSCODER_URL: "http://transcoder-service"
 
 # Shared resources
 sharedConfig:

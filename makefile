@@ -12,6 +12,7 @@ build:
 	$(MAKE) -j7 -C ./services/auth-service docker-build & \
 	$(MAKE) -j7 -C ./services/portal-service docker-build & \
 	$(MAKE) -j7 -C ./services/account-service docker-build & \
+	$(MAKE) -j7 -C ./services/media-service docker-build & \
 	wait
 
 deploy: install-traefik install-db install-kafka install-prometheus install-grafana install-app
@@ -104,11 +105,13 @@ wait-api:
 	kubectl rollout status deployment/auth-service -n e-learning-system --timeout=120s
 	kubectl rollout status deployment/portal-service -n e-learning-system --timeout=120s
 	kubectl rollout status deployment/account-service -n e-learning-system --timeout=120s
+	kubectl rollout status deployment/media-service -n e-learning-system --timeout=120s
 
 restart:
 	kubectl rollout restart deployment/auth-service -n e-learning-system
 	kubectl rollout restart deployment/portal-service -n e-learning-system
 	kubectl rollout restart deployment/account-service -n e-learning-system
+	kubectl rollout restart deployment/media-service -n e-learning-system
 	$(MAKE) wait-api
 
 clean:
@@ -133,6 +136,7 @@ status:
 	@kubectl get pods -n e-learning-system -l app=auth-service
 	@kubectl get pods -n e-learning-system -l app=portal-service
 	@kubectl get pods -n e-learning-system -l app=account-service
+	@kubectl get pods -n e-learning-system -l app=media-service
 	@echo "\n--- Services ---"
 	@kubectl get svc -n e-learning-system
 	@kubectl get svc -n traefik

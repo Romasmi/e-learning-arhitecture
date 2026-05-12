@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package media;
+
+option go_package = "github.com/Romasmi/e-learning-arhitecture/gen/go/media;media";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service MediaService {
+  rpc UploadVideo(UploadVideoRequest)   returns (UploadVideoResponse) {
+    option (google.api.http) = {
+      post: "/v1/media/upload-video"
+      body: "*"
+    };
+  }
+  rpc UploadPDF(UploadPDFRequest)       returns (UploadPDFResponse) {
+    option (google.api.http) = {
+      post: "/v1/media/upload-pdf"
+      body: "*"
+    };
+  }
+  rpc UploadImage(UploadImageRequest)   returns (UploadImageResponse) {
+    option (google.api.http) = {
+      post: "/v1/media/upload-image"
+      body: "*"
+    };
+  }
+  rpc GetAsset(GetAssetRequest)         returns (GetAssetResponse) {
+    option (google.api.http) = {
+      get: "/v1/media/assets/{asset_id}"
+    };
+  }
+  rpc TranscodeCallback(TranscodeCallbackRequest) returns (TranscodeCallbackResponse) {
+    option (google.api.http) = {
+      post: "/internal/transcode-callback"
+      body: "*"
+    };
+  }
+}
+
+enum AssetStatus {
+  ASSET_STATUS_UNSPECIFIED = 0;
+  PENDING = 1;
+  READY = 2;
+  FAILED = 3;
+}
+
+enum AssetType {
+  ASSET_TYPE_UNSPECIFIED = 0;
+  VIDEO = 1;
+  PDF = 2;
+  IMAGE = 3;
+}
+
+message Asset {
+  string id        = 1;
+  string lesson_id = 2;
+  AssetType   type   = 3;
+  AssetStatus status = 4;
+  string raw_url    = 5;
+  repeated string cdn_urls = 6; // filled after transcode
+  google.protobuf.Timestamp created_at = 7;
+}
+
+message UploadVideoRequest  {
+  string lesson_id = 1;
+  bytes content = 2;
+  string filename = 3;
+}
+message UploadVideoResponse {
+  Asset asset = 1;
+}
+
+message UploadPDFRequest    {
+  string lesson_id = 1;
+  bytes content = 2;
+  string filename = 3;
+}
+message UploadPDFResponse   {
+  Asset asset = 1;
+}
+
+message UploadImageRequest  {
+  string lesson_id = 1;
+  bytes content = 2;
+  string filename = 3;
+}
+message UploadImageResponse {
+  Asset asset = 1;
+}
+
+message GetAssetRequest  {
+  string asset_id = 1;
+}
+message GetAssetResponse {
+  Asset asset = 1;
+}
+
+message TranscodeCallbackRequest  {
+  string job_id = 1;
+  string status = 2;
+  repeated string cdn_urls = 3;
+}
+message TranscodeCallbackResponse {
+  bool ok = 1;
+}
