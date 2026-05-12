@@ -10,6 +10,9 @@ proto-gen:
 # Build Docker images and load them into minikube
 build:
 	$(MAKE) -j7 -C ./services/auth-service docker-build & \
+	$(MAKE) -j7 -C ./services/user-service docker-build & \
+	$(MAKE) -j7 -C ./services/notification-service docker-build & \
+	$(MAKE) -j7 -C ./services/billing-service docker-build & \
 	wait
 
 deploy: install-traefik install-db install-kafka install-prometheus install-grafana install-app
