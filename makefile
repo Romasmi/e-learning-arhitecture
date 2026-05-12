@@ -10,9 +10,6 @@ proto-gen:
 # Build Docker images and load them into minikube
 build:
 	$(MAKE) -j7 -C ./services/auth-service docker-build & \
-	$(MAKE) -j7 -C ./services/user-service docker-build & \
-	$(MAKE) -j7 -C ./services/notification-service docker-build & \
-	$(MAKE) -j7 -C ./services/billing-service docker-build & \
 	$(MAKE) -j7 -C ./services/portal-service docker-build & \
 	wait
 
@@ -103,21 +100,11 @@ wait-kafka:
 
 wait-api:
 	@echo "Waiting for API deployments to be ready..."
-	kubectl rollout status deployment/user-service -n e-learning-system --timeout=120s
 	kubectl rollout status deployment/auth-service -n e-learning-system --timeout=120s
-	kubectl rollout status deployment/notification-service-api -n e-learning-system --timeout=120s
-	kubectl rollout status deployment/notification-service-worker -n e-learning-system --timeout=120s
-	kubectl rollout status deployment/billing-service-api -n e-learning-system --timeout=120s
-	kubectl rollout status deployment/billing-service-worker -n e-learning-system --timeout=120s
 	kubectl rollout status deployment/portal-service -n e-learning-system --timeout=120s
 
 restart:
-	kubectl rollout restart deployment/user-service -n e-learning-system
 	kubectl rollout restart deployment/auth-service -n e-learning-system
-	kubectl rollout restart deployment/notification-service-api -n e-learning-system
-	kubectl rollout restart deployment/notification-service-worker -n e-learning-system
-	kubectl rollout restart deployment/billing-service-api -n e-learning-system
-	kubectl rollout restart deployment/billing-service-worker -n e-learning-system
 	kubectl rollout restart deployment/portal-service -n e-learning-system
 	$(MAKE) wait-api
 
@@ -140,10 +127,7 @@ status:
 	@echo "Redpanda:"
 	@kubectl get pods -n e-learning-system -l app.kubernetes.io/name=redpanda
 	@echo "\n--- Application ---"
-	@kubectl get pods -n e-learning-system -l app=user-service
 	@kubectl get pods -n e-learning-system -l app=auth-service
-	@kubectl get pods -n e-learning-system -l app=notification-service
-	@kubectl get pods -n e-learning-system -l app=billing-service
 	@kubectl get pods -n e-learning-system -l app=portal-service
 	@echo "\n--- Services ---"
 	@kubectl get svc -n e-learning-system

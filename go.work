@@ -2,9 +2,6 @@ go 1.25.1
 
 use (
 	./services/auth-service
-	./services/user-service
-	./services/billing-service
-	./services/notification-service
 	./services/portal-service
 	./api
 	./services/account-service

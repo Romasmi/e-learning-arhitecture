@@ -74,35 +74,10 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: PathPrefix("/user") && Method("POST")
-      priority: 1000
-      services:
-        - name: user-service
-          port: 8000
-
-    - kind: Rule
       match: PathPrefix("/auth")
       priority: 200
       services:
         - name: auth-service
-          port: 8000
-
-    - kind: Rule
-      match: PathPrefix("/user")
-      priority: 200
-      middlewares:
-        - name: user-auth
-      services:
-        - name: user-service
-          port: 8000
-
-    - kind: Rule
-      match: PathPrefix("/billing")
-      priority: 200
-      middlewares:
-        - name: user-auth
-      services:
-        - name: billing-service
           port: 8000
 
     - kind: Rule
