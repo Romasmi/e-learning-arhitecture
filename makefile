@@ -183,4 +183,4 @@ draw-puml:
 	plantuml -tsvg ./docs/puml/*.puml
 
 test-postman:
-	newman run docs/postman.json --verbose
+	bash tests/postman/run.sh
