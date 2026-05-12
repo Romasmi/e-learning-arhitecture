@@ -1,9 +1,9 @@
 global:
   namespace: e-learning-system
   image:
-    repository: romasmi
-    tag: latest
-    pullPolicy: Always
+    repository: ""
+    tag: v1
+    pullPolicy: IfNotPresent
   db:
     host: postgresql
     port: "5432"

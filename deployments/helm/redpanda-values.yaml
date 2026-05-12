@@ -34,12 +34,12 @@ external:
 # Resources
 resources:
   cpu:
-    cores: "0.5"
+    cores: "0.2"
     overprovisioned: true
   memory:
     container:
-      max: 2Gi
-      min: 1.5Gi
+      max: 1.5Gi
+      min: 1.2Gi
 
 # Redpanda Console (UI) - useful but keeping disabled to save resources
 console:
