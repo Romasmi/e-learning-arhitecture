@@ -202,8 +202,8 @@ const file_notification_notification_proto_rawDesc = "" +
 	"\x14ListMessagesResponse\x121\n" +
 	"\bmessages\x18\x01 \x03(\v2\x15.notification.MessageR\bmessages2\x8c\x01\n" +
 	"\x13NotificationService\x12u\n" +
-	"\fListMessages\x12!.notification.ListMessagesRequest\x1a\".notification.ListMessagesResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/notification/messagesB\xb1\x01\n" +
-	"\x10com.notificationB\x11NotificationProtoP\x01Z:github.com/Romasmi/e-learning-arhitecture/gen/go/notification;notification\xa2\x02\x03NXX\xaa\x02\fNotification\xca\x02\fNotification\xe2\x02\x18Notification\\GPBMetadata\xea\x02\fNotificationb\x06proto3"
+	"\fListMessages\x12!.notification.ListMessagesRequest\x1a\".notification.ListMessagesResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/notification/messagesB\xc1\x01\n" +
+	"\x10com.notificationB\x11NotificationProtoP\x01ZJgithub.com/Romasmi/e-learning-arhitecture/gen/go/notification;notification\xa2\x02\x03NXX\xaa\x02\fNotification\xca\x02\fNotification\xe2\x02\x18Notification\\GPBMetadata\xea\x02\fNotificationb\x06proto3"
 
 var (
 	file_notification_notification_proto_rawDescOnce sync.Once

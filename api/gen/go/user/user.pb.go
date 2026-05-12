@@ -414,8 +414,8 @@ const file_user_user_proto_rawDesc = "" +
 	"UpdateUser\x12\x17.user.UpdateUserRequest\x1a\n" +
 	".user.User\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\x1a\x0e/user/{userId}\x12U\n" +
 	"\n" +
-	"DeleteUser\x12\x17.user.DeleteUserRequest\x1a\x16.google.protobuf.Empty\"\x16\x82\xd3\xe4\x93\x02\x10*\x0e/user/{userId}Bq\n" +
-	"\bcom.userB\tUserProtoP\x01Z*github.com/Romasmi/e-learning-arhitecture/gen/go/user;user\xa2\x02\x03UXX\xaa\x02\x04User\xca\x02\x04User\xe2\x02\x10User\\GPBMetadata\xea\x02\x04Userb\x06proto3"
+	"DeleteUser\x12\x17.user.DeleteUserRequest\x1a\x16.google.protobuf.Empty\"\x16\x82\xd3\xe4\x93\x02\x10*\x0e/user/{userId}B\x81\x01\n" +
+	"\bcom.userB\tUserProtoP\x01Z:github.com/Romasmi/e-learning-arhitecture/gen/go/user;user\xa2\x02\x03UXX\xaa\x02\x04User\xca\x02\x04User\xe2\x02\x10User\\GPBMetadata\xea\x02\x04Userb\x06proto3"
 
 var (
 	file_user_user_proto_rawDescOnce sync.Once

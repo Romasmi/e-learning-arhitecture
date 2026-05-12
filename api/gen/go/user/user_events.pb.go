@@ -92,8 +92,8 @@ const file_user_user_events_proto_rawDesc = "" +
 	"\voccurred_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"occurredAt\x12\x1e\n" +
 	"\x04user\x18\x03 \x01(\v2\n" +
-	".user.UserR\x04userBw\n" +
-	"\bcom.userB\x0fUserEventsProtoP\x01Z*github.com/Romasmi/e-learning-arhitecture/gen/go/user;user\xa2\x02\x03UXX\xaa\x02\x04User\xca\x02\x04User\xe2\x02\x10User\\GPBMetadata\xea\x02\x04Userb\x06proto3"
+	".user.UserR\x04userB\x87\x01\n" +
+	"\bcom.userB\x0fUserEventsProtoP\x01Z:github.com/Romasmi/e-learning-arhitecture/gen/go/user;user\xa2\x02\x03UXX\xaa\x02\x04User\xca\x02\x04User\xe2\x02\x10User\\GPBMetadata\xea\x02\x04Userb\x06proto3"
 
 var (
 	file_user_user_events_proto_rawDescOnce sync.Once
