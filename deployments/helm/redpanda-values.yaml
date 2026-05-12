@@ -1,0 +1,57 @@
+fullnameOverride: kafka
+
+# Redpanda image configuration
+image:
+  repository: docker.redpanda.com/redpandadata/redpanda
+  tag: v24.3.4 # Use a stable version
+
+# Single node cluster for development
+statefulset:
+  replicas: 1
+  podAntiAffinity:
+    type: soft
+
+# Disable tuning for dev (requires root/privileged)
+tuning:
+  tune_aio_events: false
+
+# Disable persistence for dev
+storage:
+  persistentVolume:
+    enabled: false
+
+# Disable TLS and SASL for simplicity in dev
+tls:
+  enabled: false
+auth:
+  sasl:
+    enabled: false
+
+# External access not needed for internal k8s communication
+external:
+  enabled: false
+
+# Resources
+resources:
+  cpu:
+    cores: "0.5"
+    overprovisioned: true
+  memory:
+    container:
+      max: 2Gi
+      min: 1.5Gi
+
+# Redpanda Console (UI) - useful but keeping disabled to save resources
+console:
+  enabled: false
+
+# Configuration
+listeners:
+  kafka:
+    port: 9092
+config:
+  cluster:
+    auto_create_topics_enabled: true
+    group_initial_rebalance_delay_ms: 0
+  node:
+    developer_mode: true

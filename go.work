@@ -1,0 +1,11 @@
+go 1.25.1
+
+use (
+	./api
+	./services/account-service
+	./services/auth-service
+	./services/portal-service
+	./services/media-service
+	./services/course-service
+	./services/student-service
+)

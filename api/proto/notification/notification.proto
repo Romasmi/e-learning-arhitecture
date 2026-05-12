@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package notification;
+
+option go_package = "github.com/Romasmi/e-learning-arhitecture/gen/go/notification;notification";
+
+import "google/api/annotations.proto";
+
+service NotificationService {
+  rpc ListMessages(ListMessagesRequest) returns (ListMessagesResponse) {
+    option (google.api.http) = {
+      get: "/notification/messages"
+    };
+  }
+}
+
+message Message {
+  string id = 1;
+  string user_id = 2;
+  string order_id = 3;
+  string type = 4;
+  string timestamp = 5;
+}
+
+message ListMessagesRequest {
+  string user_id = 1;
+}
+
+message ListMessagesResponse {
+  repeated Message messages = 1;
+}

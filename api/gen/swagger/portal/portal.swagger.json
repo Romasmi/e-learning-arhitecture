@@ -1,0 +1,309 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "portal/portal.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "PortalService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/portals": {
+      "get": {
+        "operationId": "PortalService_ListPortals",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/portalListPortalsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "PortalService"
+        ]
+      },
+      "post": {
+        "operationId": "PortalService_CreatePortal",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/portalCreatePortalResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/portalCreatePortalRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PortalService"
+        ]
+      }
+    },
+    "/portals/{id}": {
+      "get": {
+        "operationId": "PortalService_GetPortal",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/portalGetPortalResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "PortalService"
+        ]
+      },
+      "delete": {
+        "operationId": "PortalService_ArchivePortal",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/portalArchivePortalResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "PortalService"
+        ]
+      }
+    },
+    "/portals/{id}/config": {
+      "put": {
+        "operationId": "PortalService_UpdatePortalConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/portalUpdatePortalConfigResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PortalServiceUpdatePortalConfigBody"
+            }
+          }
+        ],
+        "tags": [
+          "PortalService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "PortalServiceUpdatePortalConfigBody": {
+      "type": "object",
+      "properties": {
+        "lmsConfig": {
+          "$ref": "#/definitions/portalLMSConfig"
+        }
+      }
+    },
+    "portalArchivePortalResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "portalCreatePortalRequest": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "lmsConfig": {
+          "$ref": "#/definitions/portalLMSConfig"
+        }
+      }
+    },
+    "portalCreatePortalResponse": {
+      "type": "object",
+      "properties": {
+        "portal": {
+          "$ref": "#/definitions/portalPortal"
+        }
+      }
+    },
+    "portalGetPortalResponse": {
+      "type": "object",
+      "properties": {
+        "portal": {
+          "$ref": "#/definitions/portalPortal"
+        }
+      }
+    },
+    "portalLMSConfig": {
+      "type": "object",
+      "properties": {
+        "themeColor": {
+          "type": "string"
+        },
+        "logoUrl": {
+          "type": "string"
+        },
+        "enableSocialLogin": {
+          "type": "boolean"
+        }
+      }
+    },
+    "portalListPortalsResponse": {
+      "type": "object",
+      "properties": {
+        "portals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/portalPortal"
+          }
+        }
+      }
+    },
+    "portalPortal": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "domainUrl": {
+          "type": "string"
+        },
+        "lmsConfig": {
+          "$ref": "#/definitions/portalLMSConfig"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "portalUpdatePortalConfigResponse": {
+      "type": "object",
+      "properties": {
+        "portal": {
+          "$ref": "#/definitions/portalPortal"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

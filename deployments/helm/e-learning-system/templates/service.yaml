@@ -1,0 +1,59 @@
+{{- range $serviceName, $service := .Values.services }}
+{{- if $service.enabled }}
+{{- if $service.components }}
+{{- range $componentName, $component := $service.components }}
+{{- if $component.hasService }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $serviceName }}
+  namespace: {{ $.Values.global.namespace }}
+  labels:
+    app: {{ $serviceName }}
+    component: {{ $componentName }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: {{ $.Values.global.serverPort | quote }}
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ $serviceName }}
+    component: {{ $componentName }}
+  ports:
+    - name: web
+      port: {{ $.Values.global.serverPort }}
+      targetPort: web
+    - name: grpc
+      port: {{ $.Values.global.grpcPort }}
+      targetPort: grpc
+---
+{{- end }}
+{{- end }}
+{{- else }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $serviceName }}
+  namespace: {{ $.Values.global.namespace }}
+  labels:
+    app: {{ $serviceName }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: {{ $.Values.global.serverPort | quote }}
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ $serviceName }}
+  ports:
+    - name: web
+      port: {{ $.Values.global.serverPort }}
+      targetPort: web
+    - name: grpc
+      port: {{ $.Values.global.grpcPort }}
+      targetPort: grpc
+---
+{{- end }}
+{{- end }}
+{{- end }}

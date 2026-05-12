@@ -1,0 +1,132 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: user-auth
+  namespace: {{ .Values.global.namespace }}
+spec:
+  forwardAuth:
+    address: http://auth-service.{{ .Values.global.namespace }}.svc.cluster.local:8000/auth
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-Auth-User-ID
+      - X-Auth-User-Login
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: internal-auth
+  namespace: {{ .Values.global.namespace }}
+spec:
+  basicAuth:
+    secret: {{ .Values.traefik.basicAuth.name }}
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-auth-prefix
+  namespace: {{ .Values.global.namespace }}
+spec:
+  stripPrefix:
+    prefixes:
+      - /auth
+
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard
+  namespace: traefik
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
+      priority: 1000
+      middlewares:
+        - name: internal-auth
+          namespace: {{ .Values.global.namespace }}
+      services:
+        - name: api@internal
+          kind: TraefikService
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: public-api
+  namespace: {{ .Values.global.namespace }}
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: PathPrefix("/auth")
+      priority: 200
+      services:
+        - name: auth-service
+          port: 8000
+
+    - kind: Rule
+      match: PathPrefix("/notification")
+      priority: 200
+      middlewares:
+        - name: user-auth
+      services:
+        - name: notification-service
+          port: 8000
+
+    - kind: Rule
+      match: PathPrefix("/accounts")
+      priority: 200
+      middlewares:
+        - name: user-auth
+      services:
+        - name: account-service
+          port: 8000
+
+    - kind: Rule
+      match: PathPrefix("/portals")
+      priority: 200
+      middlewares:
+        - name: user-auth
+      services:
+        - name: portal-service
+          port: 8000
+
+    - kind: Rule
+      match: PathPrefix("/media")
+      priority: 200
+      middlewares:
+        - name: user-auth
+      services:
+        - name: media-service
+          port: 8000
+
+    - kind: Rule
+      match: PathPrefix("/courses") || PathPrefix("/chapters")
+      priority: 200
+      middlewares:
+        - name: user-auth
+      services:
+        - name: course-service
+          port: 8000
+
+    - kind: Rule
+      match: PathPrefix("/api/v1")
+      priority: 200
+      middlewares:
+        - name: user-auth
+      services:
+        - name: student-service
+          port: 8000
+
+    - kind: Rule
+      match: PathPrefix("/internal/transcode-callback")
+      priority: 200
+      services:
+        - name: media-service
+          port: 8000

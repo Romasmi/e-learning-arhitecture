@@ -1,0 +1,114 @@
+syntax = "proto3";
+package student;
+option go_package = "github.com/elearning/student-service/gen/student;student";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+service StudentService {
+  rpc CreateStudent(CreateStudentRequest)       returns (CreateStudentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/students"
+      body: "*"
+    };
+  }
+  rpc DeactivateStudent(DeactivateStudentRequest) returns (DeactivateStudentResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/students/{student_id}"
+    };
+  }
+  rpc GetStudent(GetStudentRequest)             returns (GetStudentResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/students/{student_id}"
+    };
+  }
+  rpc ListStudents(ListStudentsRequest)         returns (ListStudentsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/accounts/{account_id}/students"
+    };
+  }
+  rpc AssignLicense(AssignLicenseRequest)       returns (AssignLicenseResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/students/{student_id}/license"
+      body: "*"
+    };
+  }
+
+  rpc AddGroup(AddGroupRequest)                 returns (AddGroupResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/accounts/{account_id}/groups"
+      body: "*"
+    };
+  }
+  rpc UpdateGroup(UpdateGroupRequest)           returns (UpdateGroupResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/groups/{group_id}"
+      body: "*"
+    };
+  }
+  rpc DeleteGroup(DeleteGroupRequest)           returns (DeleteGroupResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/groups/{group_id}"
+    };
+  }
+  rpc AddStudentToGroup(AddStudentToGroupRequest) returns (AddStudentToGroupResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/groups/{group_id}/students"
+      body: "*"
+    };
+  }
+  rpc ListGroups(ListGroupsRequest)             returns (ListGroupsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/accounts/{account_id}/groups"
+    };
+  }
+}
+
+enum StudentStatus { STUDENT_STATUS_UNSPECIFIED = 0; ACTIVE = 1; INACTIVE = 2; }
+
+message Student {
+  string id         = 1;
+  string account_id = 2;
+  string email      = 3;
+  StudentStatus status = 4;
+  string license_id = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+message StudentGroup {
+  string id         = 1;
+  string account_id = 2;
+  string name       = 3;
+  string parent_id  = 4; // nullable — supports nested groups
+  google.protobuf.Timestamp created_at = 5;
+}
+
+message CreateStudentRequest  { string account_id = 1; string email = 2; string password = 3; }
+message CreateStudentResponse { Student student = 1; }
+
+message DeactivateStudentRequest  { string student_id = 1; }
+message DeactivateStudentResponse { bool deactivated = 1; }
+
+message GetStudentRequest  { string student_id = 1; }
+message GetStudentResponse { Student student = 1; }
+
+message ListStudentsRequest  { string account_id = 1; }
+message ListStudentsResponse { repeated Student students = 1; }
+
+message AssignLicenseRequest  { string student_id = 1; string license_id = 2; }
+message AssignLicenseResponse { bool assigned = 1; }
+
+message AddGroupRequest    { string account_id = 1; string name = 2; string parent_id = 3; }
+message AddGroupResponse   { StudentGroup group = 1; }
+
+message UpdateGroupRequest { string group_id = 1; string name = 2; string parent_id = 3; }
+message UpdateGroupResponse { StudentGroup group = 1; }
+
+message DeleteGroupRequest  { string group_id = 1; }
+message DeleteGroupResponse { bool deleted = 1; }
+
+message AddStudentToGroupRequest  { string student_id = 1; string group_id = 2; }
+message AddStudentToGroupResponse { bool added = 1; }
+
+message ListGroupsRequest  { string account_id = 1; }
+message ListGroupsResponse { repeated StudentGroup groups = 1; }

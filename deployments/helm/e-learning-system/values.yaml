@@ -1,0 +1,76 @@
+global:
+  namespace: e-learning-system
+  image:
+    repository: romasmi
+    tag: latest
+    pullPolicy: Always
+  db:
+    host: postgresql
+    port: "5432"
+    user: user
+    password: password
+  serverPort: "8000"
+  grpcPort: "9000"
+  kafkaBrokers: "kafka:9092"
+
+services:
+
+  auth-service:
+    enabled: true
+    image: auth-service
+    replicas: 1
+    config:
+      DB_NAME: "auth_service"
+
+  portal-service:
+    enabled: true
+    image: portal-service
+    replicas: 1
+    config:
+      DB_NAME: "portal_service"
+
+  account-service:
+    enabled: true
+    image: account-service
+    replicas: 1
+    config:
+      DB_NAME: "account_service"
+      AUTH_SERVICE_ADDR: "auth-service:9000"
+      
+  media-service:
+    enabled: true
+    image: media-service
+    replicas: 1
+    config:
+      DB_NAME: "media_service"
+      S3_BUCKET: "elearning-media"
+      S3_REGION: "us-east-1"
+      AWS_ACCESS_KEY_ID: "minikube"
+      AWS_SECRET_ACCESS_KEY: "minikube"
+      TRANSCODER_URL: "http://transcoder-service"
+
+  course-service:
+    enabled: true
+    image: course-service
+    replicas: 1
+    config:
+      DB_NAME: "course_service"
+
+  student-service:
+    enabled: true
+    image: student-service
+    replicas: 1
+    config:
+      DB_NAME: "student_service"
+      AUTH_SERVICE_ADDR: "auth-service:9000"
+
+# Shared resources
+sharedConfig:
+  enabled: true
+  name: shared-config
+
+traefik:
+  basicAuth:
+    enabled: true
+    name: internal-auth-basic-access
+    users: "admin:$apr1$2Nk5zF3M$2Pfuqf7Yeq4mRKTV32aC7."

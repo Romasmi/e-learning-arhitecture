@@ -1,0 +1,2 @@
+ALTER TABLE auth DROP COLUMN portal_id;
+ALTER TABLE auth DROP COLUMN role;

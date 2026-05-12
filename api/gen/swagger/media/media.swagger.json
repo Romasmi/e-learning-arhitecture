@@ -1,0 +1,361 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "media/media.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "MediaService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/internal/transcode-callback": {
+      "post": {
+        "operationId": "MediaService_TranscodeCallback",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/mediaTranscodeCallbackResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/mediaTranscodeCallbackRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MediaService"
+        ]
+      }
+    },
+    "/media/assets/{assetId}": {
+      "get": {
+        "operationId": "MediaService_GetAsset",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/mediaGetAssetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "MediaService"
+        ]
+      }
+    },
+    "/media/upload-image": {
+      "post": {
+        "operationId": "MediaService_UploadImage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/mediaUploadImageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/mediaUploadImageRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MediaService"
+        ]
+      }
+    },
+    "/media/upload-pdf": {
+      "post": {
+        "operationId": "MediaService_UploadPDF",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/mediaUploadPDFResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/mediaUploadPDFRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MediaService"
+        ]
+      }
+    },
+    "/media/upload-video": {
+      "post": {
+        "operationId": "MediaService_UploadVideo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/mediaUploadVideoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/mediaUploadVideoRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MediaService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "mediaAsset": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "lessonId": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/mediaAssetType"
+        },
+        "status": {
+          "$ref": "#/definitions/mediaAssetStatus"
+        },
+        "rawUrl": {
+          "type": "string"
+        },
+        "cdnUrls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "filled after transcode"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "mediaAssetStatus": {
+      "type": "string",
+      "enum": [
+        "ASSET_STATUS_UNSPECIFIED",
+        "PENDING",
+        "READY",
+        "FAILED"
+      ],
+      "default": "ASSET_STATUS_UNSPECIFIED"
+    },
+    "mediaAssetType": {
+      "type": "string",
+      "enum": [
+        "ASSET_TYPE_UNSPECIFIED",
+        "VIDEO",
+        "PDF",
+        "IMAGE"
+      ],
+      "default": "ASSET_TYPE_UNSPECIFIED"
+    },
+    "mediaGetAssetResponse": {
+      "type": "object",
+      "properties": {
+        "asset": {
+          "$ref": "#/definitions/mediaAsset"
+        }
+      }
+    },
+    "mediaTranscodeCallbackRequest": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "cdnUrls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "mediaTranscodeCallbackResponse": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "mediaUploadImageRequest": {
+      "type": "object",
+      "properties": {
+        "lessonId": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string",
+          "format": "byte"
+        },
+        "filename": {
+          "type": "string"
+        }
+      }
+    },
+    "mediaUploadImageResponse": {
+      "type": "object",
+      "properties": {
+        "asset": {
+          "$ref": "#/definitions/mediaAsset"
+        }
+      }
+    },
+    "mediaUploadPDFRequest": {
+      "type": "object",
+      "properties": {
+        "lessonId": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string",
+          "format": "byte"
+        },
+        "filename": {
+          "type": "string"
+        }
+      }
+    },
+    "mediaUploadPDFResponse": {
+      "type": "object",
+      "properties": {
+        "asset": {
+          "$ref": "#/definitions/mediaAsset"
+        }
+      }
+    },
+    "mediaUploadVideoRequest": {
+      "type": "object",
+      "properties": {
+        "lessonId": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string",
+          "format": "byte"
+        },
+        "filename": {
+          "type": "string"
+        }
+      }
+    },
+    "mediaUploadVideoResponse": {
+      "type": "object",
+      "properties": {
+        "asset": {
+          "$ref": "#/definitions/mediaAsset"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

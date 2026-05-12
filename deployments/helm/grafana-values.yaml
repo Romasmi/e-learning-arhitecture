@@ -1,0 +1,21 @@
+persistence:
+  enabled: false # true for prod
+  size: 5Gi
+
+adminPassword: admin
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server.e-learning-system.svc.cluster.local
+        access: proxy
+        isDefault: true
+
+sidecar:
+  dashboards:
+    enabled: true
+    label: grafana_dashboard
+    searchNamespace: ALL

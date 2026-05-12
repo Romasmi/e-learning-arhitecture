@@ -1,0 +1,40 @@
+fullnameOverride: postgresql
+auth:
+  username: user
+  password: password
+  database: postgres
+primary:
+  persistence:
+    enabled: true
+    size: 5Gi
+  service:
+    type: ClusterIP
+  initdb:
+    scripts:
+      init.sql: |
+        CREATE DATABASE auth_service;
+        CREATE DATABASE portal_service;
+        CREATE DATABASE account_service;
+        CREATE DATABASE media_service;
+        CREATE DATABASE course_service;
+        
+        GRANT ALL PRIVILEGES ON DATABASE auth_service TO "user";
+        GRANT ALL PRIVILEGES ON DATABASE portal_service TO "user";
+        GRANT ALL PRIVILEGES ON DATABASE account_service TO "user";
+        GRANT ALL PRIVILEGES ON DATABASE media_service TO "user";
+        GRANT ALL PRIVILEGES ON DATABASE course_service TO "user";
+
+readReplicas:
+  replicaCount: 2
+  persistence:
+    enabled: true
+    size: 5Gi
+  service:
+    type: ClusterIP
+
+metrics:
+  enabled: true
+  service:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9187"

@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "github.com/Romasmi/e-learning-arhitecture/gen/go/auth;auth";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+service AuthService {
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/auth/login"
+      body: "*"
+    };
+  }
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
+    option (google.api.http) = {
+      post: "/auth/refresh"
+      body: "*"
+    };
+  }
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse) {
+    option (google.api.http) = {
+      post: "/auth/validate"
+      body: "*"
+      additional_bindings {
+        get: "/auth"
+      }
+    };
+  }
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
+    option (google.api.http) = {
+      post: "/auth/reset-password"
+      body: "*"
+    };
+  }
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/auth/register"
+      body: "*"
+    };
+  }
+}
+
+message RegisterRequest {
+  string user_id = 1;
+  string email = 2;
+  string password = 3;
+  string portal_id = 4;
+  string role = 5;
+}
+
+message RegisterResponse {
+  bool success = 1;
+  string user_id = 2;
+}
+
+message LoginRequest  { string email = 1; string password = 2; string portal_id = 3; }
+message LoginResponse { string access_token = 1; string refresh_token = 2; google.protobuf.Timestamp expires_at = 3; UserInfo user = 4; }
+
+message RefreshTokenRequest  { string refresh_token = 1; }
+message RefreshTokenResponse { string access_token = 1; string refresh_token = 2; google.protobuf.Timestamp expires_at = 3; }
+
+message ValidateTokenRequest  { string access_token = 1; }
+message ValidateTokenResponse { bool valid = 1; string user_id = 2; string portal_id = 3; string role = 4; google.protobuf.Timestamp expires_at = 5; }
+
+message ResetPasswordRequest  { string email = 1; string portal_id = 2; }
+message ResetPasswordResponse { bool sent = 1; } // always true — avoids email enumeration
+
+message UserInfo { string user_id = 1; string email = 2; string portal_id = 3; string role = 4; }

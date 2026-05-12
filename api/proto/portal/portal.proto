@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package portal;
+
+option go_package = "github.com/Romasmi/e-learning-arhitecture/gen/go/portal;portal";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service PortalService {
+  rpc CreatePortal(CreatePortalRequest) returns (CreatePortalResponse) {
+    option (google.api.http) = {
+      post: "/portals"
+      body: "*"
+    };
+  }
+  rpc GetPortal(GetPortalRequest) returns (GetPortalResponse) {
+    option (google.api.http) = {
+      get: "/portals/{id}"
+    };
+  }
+  rpc UpdatePortalConfig(UpdatePortalConfigRequest) returns (UpdatePortalConfigResponse) {
+    option (google.api.http) = {
+      put: "/portals/{id}/config"
+      body: "*"
+    };
+  }
+  rpc ArchivePortal(ArchivePortalRequest) returns (ArchivePortalResponse) {
+    option (google.api.http) = {
+      delete: "/portals/{id}"
+    };
+  }
+  rpc ListPortals(ListPortalsRequest) returns (ListPortalsResponse) {
+    option (google.api.http) = {
+      get: "/portals"
+    };
+  }
+}
+
+message LMSConfig {
+  string theme_color = 1;
+  string logo_url = 2;
+  bool enable_social_login = 3;
+}
+
+message Portal {
+  string id = 1;
+  string code = 2;
+  string name = 3;
+  string status = 4;
+  string domain_url = 5;
+  LMSConfig lms_config = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+message CreatePortalRequest {
+  string code = 1;
+  string name = 2;
+  LMSConfig lms_config = 3;
+}
+
+message CreatePortalResponse {
+  Portal portal = 1;
+}
+
+message GetPortalRequest {
+  string id = 1;
+}
+
+message GetPortalResponse {
+  Portal portal = 1;
+}
+
+message UpdatePortalConfigRequest {
+  string id = 1;
+  LMSConfig lms_config = 2;
+}
+
+message UpdatePortalConfigResponse {
+  Portal portal = 1;
+}
+
+message ArchivePortalRequest {
+  string id = 1;
+}
+
+message ArchivePortalResponse {
+  bool success = 1;
+}
+
+message ListPortalsRequest {}
+
+message ListPortalsResponse {
+  repeated Portal portals = 1;
+}
