@@ -8,15 +8,19 @@ import (
 )
 
 type JWTClaims struct {
-	UserID string `json:"user_id"`
-	Login  string `json:"login"`
+	UserID   string `json:"user_id"`
+	Login    string `json:"login"`
+	PortalID string `json:"portal_id"`
+	Role     string `json:"role"`
 	jwt.RegisteredClaims
 }
 
-func GenerateToken(userID, login, secret string, expiration time.Duration) (string, error) {
+func GenerateToken(userID, login, portalID, role, secret string, expiration time.Duration) (string, error) {
 	claims := &JWTClaims{
-		UserID: userID,
-		Login:  login,
+		UserID:   userID,
+		Login:    login,
+		PortalID: portalID,
+		Role:     role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expiration)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),

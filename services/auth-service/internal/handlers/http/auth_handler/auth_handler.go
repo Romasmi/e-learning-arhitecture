@@ -19,12 +19,14 @@ func NewAuthHandler(authService services.AuthService) *AuthHandler {
 }
 
 type loginRequest struct {
-	Login    string `json:"login"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
+	PortalID string `json:"portal_id"`
 }
 
 type loginResponse struct {
-	Token string `json:"token"`
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
 }
 
 func (h *AuthHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -39,13 +41,16 @@ func (h *AuthHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		ip = forwarded
 	}
 
-	token, err := h.authService.Login(r.Context(), req.Login, req.Password, ip)
+	result, err := h.authService.Login(r.Context(), req.Email, req.Password, req.PortalID, ip)
 	if err != nil {
 		http_utils.JsonUnauthorized(w)
 		return
 	}
 
-	http_utils.SuccessJsonResponse(w, loginResponse{Token: token})
+	http_utils.SuccessJsonResponse(w, loginResponse{
+		AccessToken:  result.AccessToken,
+		RefreshToken: result.RefreshToken,
+	})
 }
 
 func (h *AuthHandler) ValidateHandler(w http.ResponseWriter, r *http.Request) {
@@ -76,6 +81,8 @@ type registerRequest struct {
 	UserID   string `json:"user_id"`
 	Login    string `json:"login"`
 	Password string `json:"password"`
+	PortalID string `json:"portal_id"`
+	Role     string `json:"role"`
 }
 
 func (h *AuthHandler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
@@ -91,7 +98,7 @@ func (h *AuthHandler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.authService.Register(r.Context(), userID, req.Login, req.Password)
+	err = h.authService.Register(r.Context(), userID, req.Login, req.Password, req.PortalID, req.Role)
 	if err != nil {
 		http_utils.JsonError(w, http.StatusInternalServerError, err)
 		return

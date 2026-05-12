@@ -22,10 +22,10 @@ func CreateAuthRepository(db *pgxpool.Pool) AuthRepository {
 }
 
 func (r *authRepository) GetByLogin(ctx context.Context, login string) (*auth.Auth, error) {
-	query := `SELECT id, user_id, login, password_hash, created_at, updated_at FROM auth WHERE login = $1`
+	query := `SELECT id, user_id, login, password_hash, portal_id, role, created_at, updated_at FROM auth WHERE login = $1`
 	var a auth.Auth
 	err := r.db.QueryRow(ctx, query, login).Scan(
-		&a.ID, &a.UserID, &a.Login, &a.PasswordHash, &a.CreatedAt, &a.UpdatedAt,
+		&a.ID, &a.UserID, &a.Login, &a.PasswordHash, &a.PortalID, &a.Role, &a.CreatedAt, &a.UpdatedAt,
 	)
 	if err != nil {
 		return nil, err
@@ -34,8 +34,8 @@ func (r *authRepository) GetByLogin(ctx context.Context, login string) (*auth.Au
 }
 
 func (r *authRepository) Create(ctx context.Context, a *auth.Auth) error {
-	query := `INSERT INTO auth (user_id, login, password_hash) VALUES ($1, $2, $3) RETURNING id, created_at, updated_at`
-	return r.db.QueryRow(ctx, query, a.UserID, a.Login, a.PasswordHash).Scan(&a.ID, &a.CreatedAt, &a.UpdatedAt)
+	query := `INSERT INTO auth (user_id, login, password_hash, portal_id, role) VALUES ($1, $2, $3, $4, $5) RETURNING id, created_at, updated_at`
+	return r.db.QueryRow(ctx, query, a.UserID, a.Login, a.PasswordHash, a.PortalID, a.Role).Scan(&a.ID, &a.CreatedAt, &a.UpdatedAt)
 }
 
 func (r *authRepository) LogAction(ctx context.Context, log *auth.AuthLog) error {

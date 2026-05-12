@@ -24,7 +24,8 @@ type Database struct {
 }
 
 type Server struct {
-	Port uint
+	Port     uint
+	GRPCPort uint `mapstructure:"grpc_port"`
 }
 
 type Jwt struct {

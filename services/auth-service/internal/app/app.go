@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"net/http"
 
 	"github.com/Romasmi/e-learning-arhitecture/auth-service/internal/config"
 	"github.com/Romasmi/e-learning-arhitecture/auth-service/internal/infra/database"
@@ -13,7 +12,6 @@ import (
 type App struct {
 	DbConn *database.Connection
 	Config *config.Config
-	server *http.Server
 }
 
 func (a *App) GetDB() *database.Connection {
@@ -46,21 +44,11 @@ func (a *App) init(configPath string) error {
 }
 
 func (a *App) Shutdown(ctx context.Context) error {
-	var shutdownErr error
-
-	if a.server != nil {
-		slog.Info("Shutting down HTTP server...")
-		if err := a.server.Shutdown(ctx); err != nil {
-			shutdownErr = fmt.Errorf("server shutdown error: %w", err)
-			slog.Error("HTTP server shutdown error", "error", err)
-		}
-	}
-
 	if a.DbConn != nil {
 		slog.Info("Closing database connections...")
 		a.DbConn.Close()
 	}
 
 	slog.Info("Cleanup completed")
-	return shutdownErr
+	return nil
 }
