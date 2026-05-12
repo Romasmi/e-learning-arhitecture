@@ -13,7 +13,8 @@ RUN go mod download
 # Copy the rest of the service source
 COPY services/auth-service/ .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o auth ./cmd/api
+ARG LDFLAGS="-s -w"
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="${LDFLAGS}" -o auth ./cmd/api
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates

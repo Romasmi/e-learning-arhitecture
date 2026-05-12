@@ -13,7 +13,8 @@ RUN go mod download
 # Copy the rest of the service source
 COPY services/portal-service/ .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o portal ./cmd/server
+ARG LDFLAGS="-s -w"
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="${LDFLAGS}" -o portal ./cmd/server
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
