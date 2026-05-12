@@ -46,10 +46,10 @@ data:
           },
           "gridPos": { "h": 8, "w": 12, "x": 0, "y": 1 },
           "targets": [
-            { "expr": "histogram_quantile(0.50, sum by (le, method, path) (rate(http_request_duration_seconds_bucket{namespace=\"{{ .Values.global.namespace }}\"}[5m])))", "legendFormat": "{{ "{{" }}method{{ "}}" }} {{ "{{" }}path{{ "}}" }} (p50)" },
-            { "expr": "histogram_quantile(0.95, sum by (le, method, path) (rate(http_request_duration_seconds_bucket{namespace=\"{{ .Values.global.namespace }}\"}[5m])))", "legendFormat": "{{ "{{" }}method{{ "}}" }} {{ "{{" }}path{{ "}}" }} (p95)" },
-            { "expr": "histogram_quantile(0.99, sum by (le, method, path) (rate(http_request_duration_seconds_bucket{namespace=\"{{ .Values.global.namespace }}\"}[5m])))", "legendFormat": "{{ "{{" }}method{{ "}}" }} {{ "{{" }}path{{ "}}" }} (p99)" },
-            { "expr": "histogram_quantile(1.0, sum by (le, method, path) (rate(http_request_duration_seconds_bucket{namespace=\"{{ .Values.global.namespace }}\"}[5m])))", "legendFormat": "{{ "{{" }}method{{ "}}" }} {{ "{{" }}path{{ "}}" }} (max)" }
+            { "expr": "histogram_quantile(0.50, sum by (le, method, path, app) (rate(http_request_duration_seconds_bucket{namespace=\"{{ .Values.global.namespace }}\"}[5m])))", "legendFormat": "{{ "{{" }}app{{ "}}" }} {{ "{{" }}method{{ "}}" }} {{ "{{" }}path{{ "}}" }} (p50)" },
+            { "expr": "histogram_quantile(0.95, sum by (le, method, path, app) (rate(http_request_duration_seconds_bucket{namespace=\"{{ .Values.global.namespace }}\"}[5m])))", "legendFormat": "{{ "{{" }}app{{ "}}" }} {{ "{{" }}method{{ "}}" }} {{ "{{" }}path{{ "}}" }} (p95)" },
+            { "expr": "histogram_quantile(0.99, sum by (le, method, path, app) (rate(http_request_duration_seconds_bucket{namespace=\"{{ .Values.global.namespace }}\"}[5m])))", "legendFormat": "{{ "{{" }}app{{ "}}" }} {{ "{{" }}method{{ "}}" }} {{ "{{" }}path{{ "}}" }} (p99)" },
+            { "expr": "histogram_quantile(1.0, sum by (le, method, path, app) (rate(http_request_duration_seconds_bucket{namespace=\"{{ .Values.global.namespace }}\"}[5m])))", "legendFormat": "{{ "{{" }}app{{ "}}" }} {{ "{{" }}method{{ "}}" }} {{ "{{" }}path{{ "}}" }} (max)" }
           ]
         },
         {
@@ -61,7 +61,7 @@ data:
           },
           "gridPos": { "h": 8, "w": 12, "x": 12, "y": 1 },
           "targets": [
-            { "expr": "sum by (method, path) (rate(http_requests_total{namespace=\"{{ .Values.global.namespace }}\"}[5m]))", "legendFormat": "{{ "{{" }}method{{ "}}" }} {{ "{{" }}path{{ "}}" }}" }
+            { "expr": "sum by (method, path, app) (rate(http_requests_total{namespace=\"{{ .Values.global.namespace }}\"}[5m]))", "legendFormat": "{{ "{{" }}app{{ "}}" }} {{ "{{" }}method{{ "}}" }} {{ "{{" }}path{{ "}}" }}" }
           ]
         },
         {
@@ -73,7 +73,7 @@ data:
           },
           "gridPos": { "h": 8, "w": 24, "x": 0, "y": 9 },
           "targets": [
-            { "expr": "(sum by (method, path) (rate(http_requests_total{status_code=~\"5..\", namespace=\"{{ .Values.global.namespace }}\"}[5m])) or (sum by (method, path) (rate(http_requests_total{namespace=\"{{ .Values.global.namespace }}\"}[5m])) * 0)) / sum by (method, path) (rate(http_requests_total{namespace=\"{{ .Values.global.namespace }}\"}[5m]))", "legendFormat": "{{ "{{" }}method{{ "}}" }} {{ "{{" }}path{{ "}}" }}" }
+            { "expr": "(sum by (method, path, app) (rate(http_requests_total{status_code=~\"5..\", namespace=\"{{ .Values.global.namespace }}\"}[5m])) or (sum by (method, path, app) (rate(http_requests_total{namespace=\"{{ .Values.global.namespace }}\"}[5m])) * 0)) / sum by (method, path, app) (rate(http_requests_total{namespace=\"{{ .Values.global.namespace }}\"}[5m]))", "legendFormat": "{{ "{{" }}app{{ "}}" }} {{ "{{" }}method{{ "}}" }} {{ "{{" }}path{{ "}}" }}" }
           ]
         },
         {
@@ -128,7 +128,7 @@ data:
           "collapsed": false
         },
         {
-          "title": "Pod Memory Usage",
+          "title": "Service Memory Usage",
           "type": "timeseries",
           "datasource": {
             "type": "prometheus",
@@ -136,11 +136,11 @@ data:
           },
           "gridPos": { "h": 8, "w": 12, "x": 0, "y": 27 },
           "targets": [
-            { "expr": "sum(container_memory_working_set_bytes{pod=~\"(auth|portal|account|media|course|student)-service-.*\", namespace=\"{{ .Values.global.namespace }}\"}) by (pod)", "legendFormat": "{{ "{{" }}pod{{ "}}" }}" }
+            { "expr": "sum by (service) (label_replace(container_memory_working_set_bytes{pod=~\"(auth|portal|account|media|course|student)-service-.*\", namespace=\"{{ .Values.global.namespace }}\"}, \"service\", \"$1\", \"pod\", \"(.*-service)-.*\"))", "legendFormat": "{{ "{{" }}service{{ "}}" }}" }
           ]
         },
         {
-          "title": "Pod CPU Usage",
+          "title": "Service CPU Usage",
           "type": "timeseries",
           "datasource": {
             "type": "prometheus",
@@ -148,7 +148,7 @@ data:
           },
           "gridPos": { "h": 8, "w": 12, "x": 12, "y": 27 },
           "targets": [
-            { "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"(auth|portal|account|media|course|student)-service-.*\", namespace=\"{{ .Values.global.namespace }}\"}[5m])) by (pod)", "legendFormat": "{{ "{{" }}pod{{ "}}" }}" }
+            { "expr": "sum by (service) (label_replace(rate(container_cpu_usage_seconds_total{pod=~\"(auth|portal|account|media|course|student)-service-.*\", namespace=\"{{ .Values.global.namespace }}\"}[5m]), \"service\", \"$1\", \"pod\", \"(.*-service)-.*\"))", "legendFormat": "{{ "{{" }}service{{ "}}" }}" }
           ]
         },
         {
