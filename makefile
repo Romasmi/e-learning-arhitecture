@@ -32,13 +32,13 @@ install-traefik:
 	helm repo add traefik https://traefik.github.io/charts || true
 	helm repo update traefik
 
-	helm upgrade --install traefik traefik/traefik \
-	  --namespace traefik \
+	helm upgrade --install e-learning-traefik traefik/traefik \
+	  --namespace e-learning-traefik \
 	  --create-namespace \
 	  -f ./deployments/helm/traefik-values.yaml
 
 forward-traefik:
-	kubectl port-forward -n traefik $$(kubectl get pods -n traefik -o name) 9000:9000
+	kubectl port-forward -n e-learning-traefik $$(kubectl get pods -n e-learning-traefik -o name) 9000:9000
 
 install-db:
 	helm repo add bitnami https://repo.broadcom.com/bitnami-files/
@@ -92,7 +92,7 @@ run:
 	@echo "Access API: http://arch.homework:8080"
 	@echo "Access Traefik Dashboard: http://arch.homework:8080/dashboard/"
 	@echo "Access Grafana: http://localhost:3000 (after make grafana-run)"
-	kubectl port-forward service/traefik 8080:8080 -n traefik
+	kubectl port-forward service/e-learning-traefik 8080:8080 -n e-learning-traefik
 
 wait-db:
 	@echo "Waiting for PostgreSQL to be ready..."
@@ -122,18 +122,18 @@ restart:
 
 clean:
 	helm uninstall e-learning-system -n e-learning-system --ignore-not-found
-	helm uninstall traefik -n traefik --ignore-not-found
+	helm uninstall e-learning-traefik -n e-learning-traefik --ignore-not-found
 	helm uninstall postgresql -n e-learning-system --ignore-not-found
 	helm uninstall redpanda -n e-learning-system --ignore-not-found
 	helm uninstall prometheus -n e-learning-system --ignore-not-found
 	helm uninstall grafana -n e-learning-system --ignore-not-found
-	kubectl delete namespace traefik --ignore-not-found=true
+	kubectl delete namespace e-learning-traefik --ignore-not-found=true
 	kubectl delete namespace e-learning-system --ignore-not-found=true
 
 status:
 	@echo "\n--- Infrastructure ---"
-	@echo "Traefik:"
-	@kubectl get pods -n traefik
+	@echo "e-learning-traefik:"
+	@kubectl get pods -n e-learning-traefik
 	@echo "PostgreSQL:"
 	@kubectl get pods -n e-learning-system -l app.kubernetes.io/name=postgresql
 	@echo "Redpanda:"
@@ -147,7 +147,7 @@ status:
 	@kubectl get pods -n e-learning-system -l app=student-service
 	@echo "\n--- Services ---"
 	@kubectl get svc -n e-learning-system
-	@kubectl get svc -n traefik
+	@kubectl get svc -n e-learning-traefik
 	@echo "\n--- Routes ---"
 	@kubectl get ingressroute -n e-learning-system
 
