@@ -116,7 +116,7 @@ spec:
           port: 8000
 
     - kind: Rule
-      match: PathPrefix("/api/v1")
+      match: PathPrefix("/students")
       priority: 200
       middlewares:
         - name: user-auth
