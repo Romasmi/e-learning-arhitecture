@@ -16,7 +16,67 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1/accounts/{accountId}/groups": {
+    "/students": {
+      "get": {
+        "operationId": "StudentService_ListStudents",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/studentListStudentsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "StudentService"
+        ]
+      },
+      "post": {
+        "operationId": "StudentService_CreateStudent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/studentCreateStudentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/studentCreateStudentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "StudentService"
+        ]
+      }
+    },
+    "/students/groups": {
       "get": {
         "operationId": "StudentService_ListGroups",
         "responses": {
@@ -36,8 +96,8 @@
         "parameters": [
           {
             "name": "accountId",
-            "in": "path",
-            "required": true,
+            "in": "query",
+            "required": false,
             "type": "string"
           }
         ],
@@ -63,17 +123,11 @@
         },
         "parameters": [
           {
-            "name": "accountId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/StudentServiceAddGroupBody"
+              "$ref": "#/definitions/studentAddGroupRequest"
             }
           }
         ],
@@ -82,37 +136,7 @@
         ]
       }
     },
-    "/api/v1/accounts/{accountId}/students": {
-      "get": {
-        "operationId": "StudentService_ListStudents",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/studentListStudentsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "accountId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "StudentService"
-        ]
-      }
-    },
-    "/api/v1/groups/{groupId}": {
+    "/students/groups/{groupId}": {
       "delete": {
         "operationId": "StudentService_DeleteGroup",
         "responses": {
@@ -178,7 +202,7 @@
         ]
       }
     },
-    "/api/v1/groups/{groupId}/students": {
+    "/students/groups/{groupId}/students": {
       "post": {
         "operationId": "StudentService_AddStudentToGroup",
         "responses": {
@@ -216,39 +240,7 @@
         ]
       }
     },
-    "/api/v1/students": {
-      "post": {
-        "operationId": "StudentService_CreateStudent",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/studentCreateStudentResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/studentCreateStudentRequest"
-            }
-          }
-        ],
-        "tags": [
-          "StudentService"
-        ]
-      }
-    },
-    "/api/v1/students/{studentId}": {
+    "/students/{studentId}": {
       "get": {
         "operationId": "StudentService_GetStudent",
         "responses": {
@@ -306,7 +298,7 @@
         ]
       }
     },
-    "/api/v1/students/{studentId}/license": {
+    "/students/{studentId}/license": {
       "post": {
         "operationId": "StudentService_AssignLicense",
         "responses": {
@@ -346,17 +338,6 @@
     }
   },
   "definitions": {
-    "StudentServiceAddGroupBody": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "parentId": {
-          "type": "string"
-        }
-      }
-    },
     "StudentServiceAddStudentToGroupBody": {
       "type": "object",
       "properties": {
@@ -409,6 +390,20 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "studentAddGroupRequest": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parentId": {
+          "type": "string"
         }
       }
     },

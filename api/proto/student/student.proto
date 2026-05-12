@@ -8,58 +8,58 @@ import "google/api/annotations.proto";
 service StudentService {
   rpc CreateStudent(CreateStudentRequest)       returns (CreateStudentResponse) {
     option (google.api.http) = {
-      post: "/api/v1/students"
+      post: "/students"
       body: "*"
     };
   }
   rpc DeactivateStudent(DeactivateStudentRequest) returns (DeactivateStudentResponse) {
     option (google.api.http) = {
-      delete: "/api/v1/students/{student_id}"
+      delete: "/students/{student_id}"
     };
   }
   rpc GetStudent(GetStudentRequest)             returns (GetStudentResponse) {
     option (google.api.http) = {
-      get: "/api/v1/students/{student_id}"
+      get: "/students/{student_id}"
     };
   }
   rpc ListStudents(ListStudentsRequest)         returns (ListStudentsResponse) {
     option (google.api.http) = {
-      get: "/api/v1/accounts/{account_id}/students"
+      get: "/students"
     };
   }
   rpc AssignLicense(AssignLicenseRequest)       returns (AssignLicenseResponse) {
     option (google.api.http) = {
-      post: "/api/v1/students/{student_id}/license"
+      post: "/students/{student_id}/license"
       body: "*"
     };
   }
 
   rpc AddGroup(AddGroupRequest)                 returns (AddGroupResponse) {
     option (google.api.http) = {
-      post: "/api/v1/accounts/{account_id}/groups"
+      post: "/students/groups"
       body: "*"
     };
   }
   rpc UpdateGroup(UpdateGroupRequest)           returns (UpdateGroupResponse) {
     option (google.api.http) = {
-      put: "/api/v1/groups/{group_id}"
+      put: "/students/groups/{group_id}"
       body: "*"
     };
   }
   rpc DeleteGroup(DeleteGroupRequest)           returns (DeleteGroupResponse) {
     option (google.api.http) = {
-      delete: "/api/v1/groups/{group_id}"
+      delete: "/students/groups/{group_id}"
     };
   }
   rpc AddStudentToGroup(AddStudentToGroupRequest) returns (AddStudentToGroupResponse) {
     option (google.api.http) = {
-      post: "/api/v1/groups/{group_id}/students"
+      post: "/students/groups/{group_id}/students"
       body: "*"
     };
   }
   rpc ListGroups(ListGroupsRequest)             returns (ListGroupsResponse) {
     option (google.api.http) = {
-      get: "/api/v1/accounts/{account_id}/groups"
+      get: "/students/groups"
     };
   }
 }

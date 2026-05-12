@@ -43,6 +43,15 @@ func main() {
 		gwPort = "8000"
 	}
 	dbURL := os.Getenv("DATABASE_URL")
+	if dbURL == "" {
+		dbURL = fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
+			os.Getenv("DB_USER"),
+			os.Getenv("DB_PASSWORD"),
+			os.Getenv("DB_HOST"),
+			os.Getenv("DB_PORT"),
+			os.Getenv("DB_NAME"),
+		)
+	}
 	kafkaBrokersStr := os.Getenv("KAFKA_BROKERS")
 	kafkaBrokers := strings.Split(kafkaBrokersStr, ",")
 	authServiceAddr := os.Getenv("AUTH_SERVICE_ADDR")

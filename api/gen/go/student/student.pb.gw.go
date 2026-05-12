@@ -140,22 +140,21 @@ func local_request_StudentService_GetStudent_0(ctx context.Context, marshaler ru
 	return msg, metadata, err
 }
 
+var filter_StudentService_ListStudents_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+
 func request_StudentService_ListStudents_0(ctx context.Context, marshaler runtime.Marshaler, client StudentServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq ListStudentsRequest
 		metadata runtime.ServerMetadata
-		err      error
 	)
 	if req.Body != nil {
 		_, _ = io.Copy(io.Discard, req.Body)
 	}
-	val, ok := pathParams["account_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "account_id")
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	protoReq.AccountId, err = runtime.String(val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "account_id", err)
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_StudentService_ListStudents_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := client.ListStudents(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
@@ -165,15 +164,12 @@ func local_request_StudentService_ListStudents_0(ctx context.Context, marshaler 
 	var (
 		protoReq ListStudentsRequest
 		metadata runtime.ServerMetadata
-		err      error
 	)
-	val, ok := pathParams["account_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "account_id")
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	protoReq.AccountId, err = runtime.String(val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "account_id", err)
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_StudentService_ListStudents_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := server.ListStudents(ctx, &protoReq)
 	return msg, metadata, err
@@ -228,21 +224,12 @@ func request_StudentService_AddGroup_0(ctx context.Context, marshaler runtime.Ma
 	var (
 		protoReq AddGroupRequest
 		metadata runtime.ServerMetadata
-		err      error
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	if req.Body != nil {
 		_, _ = io.Copy(io.Discard, req.Body)
-	}
-	val, ok := pathParams["account_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "account_id")
-	}
-	protoReq.AccountId, err = runtime.String(val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "account_id", err)
 	}
 	msg, err := client.AddGroup(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
@@ -252,18 +239,9 @@ func local_request_StudentService_AddGroup_0(ctx context.Context, marshaler runt
 	var (
 		protoReq AddGroupRequest
 		metadata runtime.ServerMetadata
-		err      error
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	val, ok := pathParams["account_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "account_id")
-	}
-	protoReq.AccountId, err = runtime.String(val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "account_id", err)
 	}
 	msg, err := server.AddGroup(ctx, &protoReq)
 	return msg, metadata, err
@@ -398,22 +376,21 @@ func local_request_StudentService_AddStudentToGroup_0(ctx context.Context, marsh
 	return msg, metadata, err
 }
 
+var filter_StudentService_ListGroups_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+
 func request_StudentService_ListGroups_0(ctx context.Context, marshaler runtime.Marshaler, client StudentServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq ListGroupsRequest
 		metadata runtime.ServerMetadata
-		err      error
 	)
 	if req.Body != nil {
 		_, _ = io.Copy(io.Discard, req.Body)
 	}
-	val, ok := pathParams["account_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "account_id")
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	protoReq.AccountId, err = runtime.String(val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "account_id", err)
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_StudentService_ListGroups_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := client.ListGroups(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
@@ -423,15 +400,12 @@ func local_request_StudentService_ListGroups_0(ctx context.Context, marshaler ru
 	var (
 		protoReq ListGroupsRequest
 		metadata runtime.ServerMetadata
-		err      error
 	)
-	val, ok := pathParams["account_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "account_id")
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	protoReq.AccountId, err = runtime.String(val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "account_id", err)
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_StudentService_ListGroups_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := server.ListGroups(ctx, &protoReq)
 	return msg, metadata, err
@@ -449,7 +423,7 @@ func RegisterStudentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/CreateStudent", runtime.WithHTTPPathPattern("/api/v1/students"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/CreateStudent", runtime.WithHTTPPathPattern("/students"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -469,7 +443,7 @@ func RegisterStudentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/DeactivateStudent", runtime.WithHTTPPathPattern("/api/v1/students/{student_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/DeactivateStudent", runtime.WithHTTPPathPattern("/students/{student_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -489,7 +463,7 @@ func RegisterStudentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/GetStudent", runtime.WithHTTPPathPattern("/api/v1/students/{student_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/GetStudent", runtime.WithHTTPPathPattern("/students/{student_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -509,7 +483,7 @@ func RegisterStudentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/ListStudents", runtime.WithHTTPPathPattern("/api/v1/accounts/{account_id}/students"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/ListStudents", runtime.WithHTTPPathPattern("/students"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -529,7 +503,7 @@ func RegisterStudentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/AssignLicense", runtime.WithHTTPPathPattern("/api/v1/students/{student_id}/license"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/AssignLicense", runtime.WithHTTPPathPattern("/students/{student_id}/license"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -549,7 +523,7 @@ func RegisterStudentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/AddGroup", runtime.WithHTTPPathPattern("/api/v1/accounts/{account_id}/groups"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/AddGroup", runtime.WithHTTPPathPattern("/students/groups"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -569,7 +543,7 @@ func RegisterStudentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/UpdateGroup", runtime.WithHTTPPathPattern("/api/v1/groups/{group_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/UpdateGroup", runtime.WithHTTPPathPattern("/students/groups/{group_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -589,7 +563,7 @@ func RegisterStudentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/DeleteGroup", runtime.WithHTTPPathPattern("/api/v1/groups/{group_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/DeleteGroup", runtime.WithHTTPPathPattern("/students/groups/{group_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -609,7 +583,7 @@ func RegisterStudentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/AddStudentToGroup", runtime.WithHTTPPathPattern("/api/v1/groups/{group_id}/students"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/AddStudentToGroup", runtime.WithHTTPPathPattern("/students/groups/{group_id}/students"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -629,7 +603,7 @@ func RegisterStudentServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/ListGroups", runtime.WithHTTPPathPattern("/api/v1/accounts/{account_id}/groups"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/student.StudentService/ListGroups", runtime.WithHTTPPathPattern("/students/groups"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -687,7 +661,7 @@ func RegisterStudentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/CreateStudent", runtime.WithHTTPPathPattern("/api/v1/students"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/CreateStudent", runtime.WithHTTPPathPattern("/students"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -704,7 +678,7 @@ func RegisterStudentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/DeactivateStudent", runtime.WithHTTPPathPattern("/api/v1/students/{student_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/DeactivateStudent", runtime.WithHTTPPathPattern("/students/{student_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -721,7 +695,7 @@ func RegisterStudentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/GetStudent", runtime.WithHTTPPathPattern("/api/v1/students/{student_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/GetStudent", runtime.WithHTTPPathPattern("/students/{student_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -738,7 +712,7 @@ func RegisterStudentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/ListStudents", runtime.WithHTTPPathPattern("/api/v1/accounts/{account_id}/students"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/ListStudents", runtime.WithHTTPPathPattern("/students"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -755,7 +729,7 @@ func RegisterStudentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/AssignLicense", runtime.WithHTTPPathPattern("/api/v1/students/{student_id}/license"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/AssignLicense", runtime.WithHTTPPathPattern("/students/{student_id}/license"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -772,7 +746,7 @@ func RegisterStudentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/AddGroup", runtime.WithHTTPPathPattern("/api/v1/accounts/{account_id}/groups"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/AddGroup", runtime.WithHTTPPathPattern("/students/groups"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -789,7 +763,7 @@ func RegisterStudentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/UpdateGroup", runtime.WithHTTPPathPattern("/api/v1/groups/{group_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/UpdateGroup", runtime.WithHTTPPathPattern("/students/groups/{group_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -806,7 +780,7 @@ func RegisterStudentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/DeleteGroup", runtime.WithHTTPPathPattern("/api/v1/groups/{group_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/DeleteGroup", runtime.WithHTTPPathPattern("/students/groups/{group_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -823,7 +797,7 @@ func RegisterStudentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/AddStudentToGroup", runtime.WithHTTPPathPattern("/api/v1/groups/{group_id}/students"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/AddStudentToGroup", runtime.WithHTTPPathPattern("/students/groups/{group_id}/students"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -840,7 +814,7 @@ func RegisterStudentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/ListGroups", runtime.WithHTTPPathPattern("/api/v1/accounts/{account_id}/groups"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/student.StudentService/ListGroups", runtime.WithHTTPPathPattern("/students/groups"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -857,16 +831,16 @@ func RegisterStudentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 }
 
 var (
-	pattern_StudentService_CreateStudent_0     = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "students"}, ""))
-	pattern_StudentService_DeactivateStudent_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "students", "student_id"}, ""))
-	pattern_StudentService_GetStudent_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "students", "student_id"}, ""))
-	pattern_StudentService_ListStudents_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"api", "v1", "accounts", "account_id", "students"}, ""))
-	pattern_StudentService_AssignLicense_0     = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"api", "v1", "students", "student_id", "license"}, ""))
-	pattern_StudentService_AddGroup_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"api", "v1", "accounts", "account_id", "groups"}, ""))
-	pattern_StudentService_UpdateGroup_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "groups", "group_id"}, ""))
-	pattern_StudentService_DeleteGroup_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "groups", "group_id"}, ""))
-	pattern_StudentService_AddStudentToGroup_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"api", "v1", "groups", "group_id", "students"}, ""))
-	pattern_StudentService_ListGroups_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"api", "v1", "accounts", "account_id", "groups"}, ""))
+	pattern_StudentService_CreateStudent_0     = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"students"}, ""))
+	pattern_StudentService_DeactivateStudent_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"students", "student_id"}, ""))
+	pattern_StudentService_GetStudent_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"students", "student_id"}, ""))
+	pattern_StudentService_ListStudents_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"students"}, ""))
+	pattern_StudentService_AssignLicense_0     = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1, 2, 2}, []string{"students", "student_id", "license"}, ""))
+	pattern_StudentService_AddGroup_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"students", "groups"}, ""))
+	pattern_StudentService_UpdateGroup_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"students", "groups", "group_id"}, ""))
+	pattern_StudentService_DeleteGroup_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"students", "groups", "group_id"}, ""))
+	pattern_StudentService_AddStudentToGroup_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 0}, []string{"students", "groups", "group_id"}, ""))
+	pattern_StudentService_ListGroups_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"students", "groups"}, ""))
 )
 
 var (
