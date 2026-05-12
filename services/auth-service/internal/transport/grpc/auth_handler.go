@@ -5,6 +5,7 @@ import (
 
 	"github.com/Romasmi/e-learning-arhitecture/auth-service/internal/services"
 	authapi "github.com/Romasmi/e-learning-arhitecture/gen/go/auth"
+	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -73,4 +74,18 @@ func (h *AuthHandler) ResetPassword(ctx context.Context, req *authapi.ResetPassw
 	}
 
 	return &authapi.ResetPasswordResponse{Sent: sent}, nil
+}
+
+func (h *AuthHandler) Register(ctx context.Context, req *authapi.RegisterRequest) (*authapi.RegisterResponse, error) {
+	userID, err := uuid.Parse(req.UserId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid user_id")
+	}
+
+	err = h.authService.Register(ctx, userID, req.Email, req.Password, req.PortalId, req.Role)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &authapi.RegisterResponse{Success: true}, nil
 }

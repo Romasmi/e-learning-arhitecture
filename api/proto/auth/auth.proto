@@ -35,6 +35,24 @@ service AuthService {
       body: "*"
     };
   }
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/auth/register"
+      body: "*"
+    };
+  }
+}
+
+message RegisterRequest {
+  string user_id = 1;
+  string email = 2;
+  string password = 3;
+  string portal_id = 4;
+  string role = 5;
+}
+
+message RegisterResponse {
+  bool success = 1;
 }
 
 message LoginRequest  { string email = 1; string password = 2; string portal_id = 3; }
