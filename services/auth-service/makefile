@@ -5,13 +5,17 @@ K8S_NAMESPACE := e-learning-system
 
 docker-build:
 	docker build \
+		--platform linux/amd64 \
 		--build-arg=LDFLAGS="$(LDFLAGS)" \
 		-t $(DOCKER_IMG) \
-		-f deployments/calendar.Dockerfile .
+		-f Dockerfile ../..
 	@if minikube status >/dev/null 2>&1; then \
 		echo "Loading image into minikube..."; \
 		minikube image load $(DOCKER_IMG); \
 	fi
+
+docker-push:
+	docker push $(DOCKER_IMG)
 
 kube-restart:
 	kubectl rollout restart deployment/auth-service -n $(K8S_NAMESPACE)
