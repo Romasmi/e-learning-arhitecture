@@ -1,0 +1,71 @@
+global:
+  namespace: e-learning-system
+  image:
+    repository: romasmi
+    tag: latest
+    pullPolicy: Always
+  db:
+    host: postgresql
+    port: "5432"
+    user: user
+    password: password
+  serverPort: "8000"
+  grpcPort: "9000"
+  kafkaBrokers: "kafka:9092"
+
+services:
+  user-service:
+    enabled: true
+    image: user-service
+    replicas: 1
+    config:
+      DB_NAME: "user_service"
+      AUTH_SERVICE_URL: "http://auth-service:8000"
+  
+  auth-service:
+    enabled: true
+    image: auth-service
+    replicas: 1
+    config:
+      DB_NAME: "auth_service"
+
+  notification-service:
+    enabled: true
+    image: notification-service
+    replicas: 1
+    config:
+      DB_NAME: "notification_service"
+    components:
+      api:
+        command: ["./api"]
+        hasService: true
+      worker:
+        command: ["./worker"]
+        hasService: false
+
+
+  billing-service:
+    enabled: true
+    image: billing-service
+    replicas: 1
+    config:
+      DB_NAME: "billing_service"
+      AUTH_SERVICE_URL: "http://auth-service:8000"
+    components:
+      api:
+        command: ["./api"]
+        hasService: true
+      worker:
+        command: ["./worker"]
+        hasService: false
+
+# Shared resources
+sharedConfig:
+  enabled: true
+  name: shared-config
+
+traefik:
+  basicAuth:
+    enabled: true
+    name: internal-auth-basic-access
+    users: "admin:$apr1$2Nk5zF3M$2Pfuqf7Yeq4mRKTV32aC7."

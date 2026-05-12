@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "github.com/Romasmi/e-learning-arhitecture/gen/go/user;user";
+
+import "google/protobuf/timestamp.proto";
+import "user/user.proto";
+
+message UserCreated {
+  string event_id = 1;
+  google.protobuf.Timestamp occurred_at = 2;
+  User user = 3;
+}

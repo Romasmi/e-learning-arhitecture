@@ -1,0 +1,123 @@
+{{- range $serviceName, $service := .Values.services }}
+{{- if $service.enabled }}
+{{- if $service.components }}
+{{- range $componentName, $component := $service.components }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $serviceName }}-{{ $componentName }}
+  namespace: {{ $.Values.global.namespace }}
+  labels:
+    app: {{ $serviceName }}
+    component: {{ $componentName }}
+spec:
+  replicas: {{ $service.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $serviceName }}
+      component: {{ $componentName }}
+  template:
+    metadata:
+      labels:
+        app: {{ $serviceName }}
+        component: {{ $componentName }}
+    spec:
+      containers:
+        - name: app
+          image: "{{ $service.image }}:{{ $.Values.global.image.tag }}"
+          imagePullPolicy: {{ $.Values.global.image.pullPolicy }}
+          {{- if $component.command }}
+          command: {{ $component.command | toJson }}
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ $.Values.sharedConfig.name }}
+            - configMapRef:
+                name: {{ $serviceName }}-config
+            - secretRef:
+                name: {{ $serviceName }}-secret
+          {{- if eq $componentName "api" }}
+          ports:
+            - name: web
+              containerPort: {{ $.Values.global.serverPort }}
+            - name: grpc
+              containerPort: {{ $.Values.global.grpcPort }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ $.Values.global.serverPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ $.Values.global.serverPort }}
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          {{- end }}
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 100m
+            limits:
+              memory: 128Mi
+              cpu: 200m
+---
+{{- end }}
+{{- else }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $serviceName }}
+  namespace: {{ $.Values.global.namespace }}
+  labels:
+    app: {{ $serviceName }}
+spec:
+  replicas: {{ $service.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $serviceName }}
+  template:
+    metadata:
+      labels:
+        app: {{ $serviceName }}
+    spec:
+      containers:
+        - name: app
+          image: "{{ $.Values.global.image.repository }}/{{ $service.image }}:{{ $.Values.global.image.tag }}"
+          imagePullPolicy: {{ $.Values.global.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ $.Values.sharedConfig.name }}
+            - configMapRef:
+                name: {{ $serviceName }}-config
+            - secretRef:
+                name: {{ $serviceName }}-secret
+          ports:
+            - name: web
+              containerPort: {{ $.Values.global.serverPort }}
+            - name: grpc
+              containerPort: {{ $.Values.global.grpcPort }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ $.Values.global.serverPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ $.Values.global.serverPort }}
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 100m
+            limits:
+              memory: 128Mi
+              cpu: 200m
+---
+{{- end }}
+{{- end }}
+{{- end }}

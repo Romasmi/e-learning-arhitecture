@@ -1,0 +1,27 @@
+{{- if .Values.sharedConfig.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.sharedConfig.name }}
+  namespace: {{ .Values.global.namespace }}
+data:
+  DB_HOST: {{ .Values.global.db.host | quote }}
+  DB_PORT: {{ .Values.global.db.port | quote }}
+  SERVER_PORT: {{ .Values.global.serverPort | quote }}
+  KAFKA_BROKERS: {{ .Values.global.kafkaBrokers | quote }}
+---
+{{- end }}
+{{- range $serviceName, $service := .Values.services }}
+{{- if $service.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $serviceName }}-config
+  namespace: {{ $.Values.global.namespace }}
+data:
+{{- range $key, $value := $service.config }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+---
+{{- end }}
+{{- end }}

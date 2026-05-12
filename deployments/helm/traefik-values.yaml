@@ -1,0 +1,16 @@
+service:
+  type: LoadBalancer
+
+ports:
+  web:
+    exposedPort: 8080
+  websecure:
+    exposedPort: 8443
+  traefik:
+    port: 9000
+    expose:
+      default: false
+
+api:
+  dashboard: true
+  insecure: true

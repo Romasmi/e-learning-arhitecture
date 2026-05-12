@@ -1,0 +1,7 @@
+.git
+.gitignore
+.idea
+docker/api/Dockerfile
+*.log
+*.test
+tmp/

@@ -1,0 +1,11 @@
+server:
+  port: 8000
+database:
+  host: postgresql
+  port: "5432"
+  name: auth_service
+  user: user
+  password: password
+jwt:
+  secret: "my_super_secret_key"
+  expiration: 60 # 1 hour
