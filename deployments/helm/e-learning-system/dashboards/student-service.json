@@ -25,77 +25,150 @@
     {
       "title": "Response time distribution",
       "type": "heatmap",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
-      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
       "targets": [
         {
-          "expr": "sum(rate(http_request_duration_seconds_bucket{job=\"student-service\"}[$__rate_interval])) by (le)",
+          "expr": "sum(rate(http_request_duration_seconds_bucket{service=\"student-service\", instance=~\"$instance\"}[$__rate_interval])) by (le)",
           "format": "heatmap"
         }
       ]
     },
     {
-      "title": "Latency — p50 / p90 / p99",
+      "title": "Latency \u2014 p50 / p90 / p99",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
-      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
       "targets": [
-        { "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{job=\"student-service\"}[$__rate_interval])) by (le, path))", "legendFormat": "{{path}} p50" },
-        { "expr": "histogram_quantile(0.90, sum(rate(http_request_duration_seconds_bucket{job=\"student-service\"}[$__rate_interval])) by (le, path))", "legendFormat": "{{path}} p90" },
-        { "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{job=\"student-service\"}[$__rate_interval])) by (le, path))", "legendFormat": "{{path}} p99" }
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{service=\"student-service\", instance=~\"$instance\"}[$__rate_interval])) by (le, path))",
+          "legendFormat": "{{path}} p50"
+        },
+        {
+          "expr": "histogram_quantile(0.90, sum(rate(http_request_duration_seconds_bucket{service=\"student-service\", instance=~\"$instance\"}[$__rate_interval])) by (le, path))",
+          "legendFormat": "{{path}} p90"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{service=\"student-service\", instance=~\"$instance\"}[$__rate_interval])) by (le, path))",
+          "legendFormat": "{{path}} p99"
+        }
       ]
     },
     {
       "title": "RPS",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
-      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
       "targets": [
-        { "expr": "sum(rate(http_requests_total{job=\"student-service\"}[$__rate_interval])) by (path)", "legendFormat": "{{path}}" }
+        {
+          "expr": "sum(rate(http_requests_total{service=\"student-service\", instance=~\"$instance\"}[$__rate_interval])) by (path)",
+          "legendFormat": "{{path}}"
+        }
       ]
     },
     {
       "title": "Response code ratio",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 24 },
-      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "custom": {
             "drawStyle": "line",
             "fillOpacity": 20,
-            "stacking": { "group": "A", "mode": "normal" }
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            }
           },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 400 },
-              { "color": "red", "value": 500 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 400
+              },
+              {
+                "color": "red",
+                "value": 500
+              }
             ]
           }
         }
       },
       "targets": [
-        { "expr": "sum(rate(http_requests_total{job=\"student-service\"}[$__rate_interval])) by (status_code)", "legendFormat": "{{status_code}}" }
+        {
+          "expr": "sum(rate(http_requests_total{service=\"student-service\", instance=~\"$instance\"}[$__rate_interval])) by (status_code)",
+          "legendFormat": "{{status_code}}"
+        }
       ]
     },
     {
       "title": "RPS per endpoint",
       "type": "bargauge",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 32 },
-      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 32
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
       "options": {
         "orientation": "horizontal"
       },
       "targets": [
-        { "expr": "sum(rate(http_requests_total{job=\"student-service\"}[$__rate_interval])) by (path, method)", "legendFormat": "{{method}} {{path}}" }
+        {
+          "expr": "sum(rate(http_requests_total{service=\"student-service\", instance=~\"$instance\"}[$__rate_interval])) by (path, method)",
+          "legendFormat": "{{method}} {{path}}"
+        }
       ]
     }
   ],
   "schemaVersion": 36,
   "style": "dark",
-  "tags": ["student-service", "prometheus"],
+  "tags": [
+    "student-service",
+    "prometheus"
+  ],
   "templating": {
     "list": [
       {
@@ -109,20 +182,26 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": { "type": "prometheus", "uid": "${datasource}" },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "instance",
-        "multi": false,
+        "multi": true,
         "name": "instance",
-        "query": "label_values(up{job=\"student-service\"}, instance)",
+        "query": "label_values(up{service=\"student-service\"}, instance)",
         "refresh": 1,
         "regex": "",
         "type": "query"
       }
     ]
   },
-  "time": { "from": "now-1h", "to": "now" },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
   "title": "student-service dashboard",
   "uid": "student-service-dashboard"
 }
