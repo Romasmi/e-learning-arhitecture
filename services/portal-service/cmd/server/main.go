@@ -14,6 +14,7 @@ import (
 
 	portalpb "github.com/Romasmi/e-learning-arhitecture/gen/go/portal"
 	"github.com/elearning/portal-service/internal/handler"
+	"github.com/elearning/portal-service/internal/metrics"
 	"github.com/elearning/portal-service/internal/repository/postgres"
 	"github.com/elearning/portal-service/internal/usecase"
 	"github.com/elearning/portal-service/pkg/kafka"
@@ -24,6 +25,7 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/joho/godotenv"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -93,8 +95,27 @@ func main() {
 	uc := usecase.NewPortalUsecase(repo, producer)
 	h := handler.NewGRPCHandler(uc)
 
+	// Metrics
+	metricsPort := os.Getenv("METRICS_PORT")
+	if metricsPort == "" {
+		metricsPort = "9090"
+	}
+	metricsServer := &http.Server{
+		Addr:    ":" + metricsPort,
+		Handler: promhttp.Handler(),
+	}
+
+	go func() {
+		log.Info("Starting metrics server", zap.String("addr", metricsServer.Addr))
+		if err := metricsServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Error("metrics server failed", zap.Error(err))
+		}
+	}()
+
 	// gRPC
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(
+		grpc.UnaryInterceptor(metrics.GrpcUnaryInterceptor),
+	)
 	portalpb.RegisterPortalServiceServer(grpcServer, h)
 	reflection.Register(grpcServer)
 
@@ -132,7 +153,7 @@ func main() {
 	gwAddr := ":" + gwPort
 	gwServer := &http.Server{
 		Addr:    gwAddr,
-		Handler: mux,
+		Handler: metrics.HttpMiddleware(mux),
 	}
 
 	go func() {
@@ -150,5 +171,8 @@ func main() {
 	defer cancel()
 	if err := gwServer.Shutdown(shutdownCtx); err != nil {
 		log.Error("Gateway shutdown failed", zap.Error(err))
+	}
+	if err := metricsServer.Shutdown(shutdownCtx); err != nil {
+		log.Error("Metrics shutdown failed", zap.Error(err))
 	}
 }

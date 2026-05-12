@@ -10,6 +10,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.29.0
 	github.com/jackc/pgx/v5 v5.9.2
 	github.com/joho/godotenv v1.5.1
+	github.com/prometheus/client_golang v1.20.5
 	github.com/segmentio/kafka-go v0.4.51
 	go.uber.org/zap v1.28.0
 	google.golang.org/grpc v1.81.0

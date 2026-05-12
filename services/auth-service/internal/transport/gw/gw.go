@@ -6,11 +6,11 @@ import (
 	"net/http"
 
 	"github.com/Romasmi/e-learning-arhitecture/auth-service/internal/handlers/http/auth_handler"
+	"github.com/Romasmi/e-learning-arhitecture/auth-service/internal/metrics"
 	"github.com/Romasmi/e-learning-arhitecture/auth-service/internal/services"
 	authapi "github.com/Romasmi/e-learning-arhitecture/gen/go/auth"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -43,7 +43,6 @@ func NewGatewayServer(authService services.AuthService, grpcAddr string, httpPor
 	r.HandleFunc("/auth", h.ValidateHandler).Methods(http.MethodGet, http.MethodHead)
 
 	// Metrics and Health
-	r.Handle("/metrics", promhttp.Handler())
 	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte("OK"))
@@ -54,6 +53,6 @@ func NewGatewayServer(authService services.AuthService, grpcAddr string, httpPor
 
 	return &http.Server{
 		Addr:    fmt.Sprintf(":%d", httpPort),
-		Handler: r,
+		Handler: metrics.HttpMiddleware(r),
 	}, nil
 }

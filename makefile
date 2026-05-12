@@ -71,7 +71,8 @@ install-prometheus:
 	helm repo update prometheus-community
 	helm upgrade --install prometheus prometheus-community/prometheus \
 		--namespace e-learning-system \
-		--create-namespace
+		--create-namespace \
+		-f deployments/prometheus/values.yaml
 
 install-grafana:
 	helm repo add grafana https://grafana.github.io/helm-charts || true
@@ -152,9 +153,11 @@ status:
 	@kubectl get ingressroute -n e-learning-system
 
 prometheus-run:
+	@kubectl get svc prometheus-server -n e-learning-system > /dev/null 2>&1 || $(MAKE) install-prometheus
 	kubectl port-forward service/prometheus-server 9090:80 -n e-learning-system
 
 grafana-run:
+	@kubectl get svc grafana -n e-learning-system > /dev/null 2>&1 || $(MAKE) install-grafana
 	kubectl port-forward service/grafana 3000:80 -n e-learning-system
 
 grafana-pass:

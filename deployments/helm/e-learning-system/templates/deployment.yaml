@@ -42,6 +42,8 @@ spec:
               containerPort: {{ $.Values.global.serverPort }}
             - name: grpc
               containerPort: {{ $.Values.global.grpcPort }}
+            - name: metrics
+              containerPort: 9090
           livenessProbe:
             tcpSocket:
               port: web
@@ -96,6 +98,8 @@ spec:
               containerPort: {{ $.Values.global.serverPort }}
             - name: grpc
               containerPort: {{ $.Values.global.grpcPort }}
+            - name: metrics
+              containerPort: 9090
           livenessProbe:
             tcpSocket:
               port: web

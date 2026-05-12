@@ -1,0 +1,19 @@
+extraScrapeConfigs: |
+  - job_name: auth-service
+    static_configs:
+      - targets: ['auth-service:9090']
+  - job_name: account-service
+    static_configs:
+      - targets: ['account-service:9090']
+  - job_name: course-service
+    static_configs:
+      - targets: ['course-service:9090']
+  - job_name: media-service
+    static_configs:
+      - targets: ['media-service:9090']
+  - job_name: portal-service
+    static_configs:
+      - targets: ['portal-service:9090']
+  - job_name: student-service
+    static_configs:
+      - targets: ['student-service:9090']
