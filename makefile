@@ -193,5 +193,8 @@ draw-puml:
 test-postman: seed-supervisor
 	bash tests/postman/run.sh
 
+test-load: seed-supervisor
+	k6 run tests/load/load_test.js
+
 seed-supervisor:
 	$(MAKE) -C services/auth-service kube-seed
