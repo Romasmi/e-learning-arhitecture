@@ -37,7 +37,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(http_request_duration_seconds_bucket{service=\"auth-service\", instance=~\"$instance\"}[$__rate_interval])) by (le)",
+          "expr": "sum(rate(http_request_duration_seconds_bucket{pod=~\"auth-service-.*\", instance=~\"$instance\"}[$__rate_interval])) by (le)",
           "format": "heatmap"
         }
       ]
@@ -57,15 +57,15 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{service=\"auth-service\", instance=~\"$instance\"}[$__rate_interval])) by (le, path))",
+          "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{pod=~\"auth-service-.*\", instance=~\"$instance\"}[$__rate_interval])) by (le, path))",
           "legendFormat": "{{path}} p50"
         },
         {
-          "expr": "histogram_quantile(0.90, sum(rate(http_request_duration_seconds_bucket{service=\"auth-service\", instance=~\"$instance\"}[$__rate_interval])) by (le, path))",
+          "expr": "histogram_quantile(0.90, sum(rate(http_request_duration_seconds_bucket{pod=~\"auth-service-.*\", instance=~\"$instance\"}[$__rate_interval])) by (le, path))",
           "legendFormat": "{{path}} p90"
         },
         {
-          "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{service=\"auth-service\", instance=~\"$instance\"}[$__rate_interval])) by (le, path))",
+          "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{pod=~\"auth-service-.*\", instance=~\"$instance\"}[$__rate_interval])) by (le, path))",
           "legendFormat": "{{path}} p99"
         }
       ]
@@ -85,7 +85,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(http_requests_total{service=\"auth-service\", instance=~\"$instance\"}[$__rate_interval])) by (path)",
+          "expr": "sum(rate(http_requests_total{pod=~\"auth-service-.*\", instance=~\"$instance\"}[$__rate_interval])) by (path)",
           "legendFormat": "{{path}}"
         }
       ]
@@ -134,7 +134,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(http_requests_total{service=\"auth-service\", instance=~\"$instance\"}[$__rate_interval])) by (status_code)",
+          "expr": "sum(rate(http_requests_total{pod=~\"auth-service-.*\", instance=~\"$instance\"}[$__rate_interval])) by (status_code)",
           "legendFormat": "{{status_code}}"
         }
       ]
@@ -157,7 +157,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(http_requests_total{service=\"auth-service\", instance=~\"$instance\"}[$__rate_interval])) by (path, method)",
+          "expr": "sum(rate(http_requests_total{pod=~\"auth-service-.*\", instance=~\"$instance\"}[$__rate_interval])) by (path, method)",
           "legendFormat": "{{method}} {{path}}"
         }
       ]
@@ -191,7 +191,7 @@
         "label": "instance",
         "multi": true,
         "name": "instance",
-        "query": "label_values(up{service=\"auth-service\"}, instance)",
+        "query": "label_values(up{pod=~\"auth-service-.*\"}, instance)",
         "refresh": 1,
         "regex": "",
         "type": "query"
