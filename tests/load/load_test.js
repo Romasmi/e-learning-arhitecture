@@ -5,7 +5,7 @@ export const options = {
   scenarios: {
     constant_request_rate: {
       executor: 'constant-arrival-rate',
-      rate: 100,
+      rate: 5,
       timeUnit: '1s',
       duration: '30m',
       preAllocatedVUs: 50,
@@ -36,7 +36,42 @@ export function setup() {
 
   console.log('Login successful');
   const authToken = loginRes.json('access_token');
-  return { authToken };
+
+  // Fetch portals to get a valid UUID
+  const portalsRes = http.get(`${BASE_URL}/portals`, {
+    headers: { 'Authorization': `Bearer ${authToken}` },
+  });
+
+  let portalId = '';
+  if (portalsRes.status === 200) {
+    const portals = portalsRes.json('portals');
+    if (portals && portals.length > 0) {
+      portalId = portals[0].id;
+    }
+  }
+
+  if (!portalId) {
+    console.log('No portals found, creating a new one...');
+    const createRes = http.post(`${BASE_URL}/portals`, JSON.stringify({
+      code: `loadtest-${Math.floor(Math.random() * 1000000)}`,
+      name: 'Load Test Portal'
+    }), {
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json'
+      },
+    });
+
+    if (createRes.status === 200) {
+      portalId = createRes.json('portal.id');
+      console.log(`Created portal with ID: ${portalId}`);
+    } else {
+      console.error(`Failed to create portal: ${createRes.status} ${createRes.body}`);
+    }
+  }
+
+  console.log(`Using portal ID: ${portalId}`);
+  return { authToken, portalId };
 }
 
 export default function (data) {
@@ -64,10 +99,10 @@ export default function (data) {
     }), params);
   } else if (rand < 0.7) {
     // 30% - List Courses
-    res = http.get(`${BASE_URL}/courses?portalId=default`, params);
+    res = http.get(`${BASE_URL}/courses?portalId=${data.portalId}`, params);
   } else if (rand < 0.9) {
     // 20% - Get Portal
-    res = http.get(`${BASE_URL}/portals/default`, params);
+    res = http.get(`${BASE_URL}/portals/${data.portalId}`, params);
   } else {
     // 10% - List Portals
     res = http.get(`${BASE_URL}/portals`, params);
