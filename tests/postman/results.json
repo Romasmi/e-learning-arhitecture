@@ -1,0 +1,2836 @@
+{
+  "collection": {
+    "_": {
+      "postman_id": "a9d8c7b6-e5f4-4a3b-9c8d-7e6f5a4b3c2d"
+    },
+    "item": [
+      {
+        "id": "6889ad40-8269-4e56-b571-92d48dc7b907",
+        "name": "Auth",
+        "item": [
+          {
+            "id": "1f15e29e-3862-45ea-baf4-dab6afe41e8e",
+            "name": "Login (supervisor)",
+            "request": {
+              "url": {
+                "path": [
+                  "auth",
+                  "login"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"email\": \"supervisor@test.com\",\n    \"password\": \"Supervisor123!\",\n    \"portal_id\": \"default\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "de1637b6-985d-4641-b99a-b50ab1afa953",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set(\"access_token\", jsonData.access_token);",
+                    "pm.environment.set(\"refresh_token\", jsonData.refresh_token);"
+                  ],
+                  "_lastExecutionId": "4934cfde-e8bc-4b4f-bd54-1432a1de20fa"
+                }
+              }
+            ]
+          },
+          {
+            "id": "69a28caf-2450-407b-81f3-77d4df9190e3",
+            "name": "Refresh Token",
+            "request": {
+              "url": {
+                "path": [
+                  "auth",
+                  "refresh"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{access_token}}"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "b5893ed6-62c9-4caa-89ed-2294fb1dceee",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set(\"access_token\", jsonData.access_token);"
+                  ],
+                  "_lastExecutionId": "2ed61cec-6924-4bad-9086-4c330159521d"
+                }
+              }
+            ]
+          },
+          {
+            "id": "18a8275b-af04-4035-8d2b-f81abe0668d3",
+            "name": "Validate Token",
+            "request": {
+              "url": {
+                "path": [
+                  "auth",
+                  "validate"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"access_token\": \"{{access_token}}\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "c2547ebf-dba6-43ec-b870-7be0bce4d0ab",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.test(\"Token is valid\", function () {",
+                    "    pm.expect(jsonData.valid).to.be.true;",
+                    "});",
+                    "pm.test(\"User ID not empty\", function () {",
+                    "    pm.expect(jsonData.user_id).to.not.be.empty;",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "c7037232-c9df-4fe3-8147-b24bbf5d2ec7",
+            "name": "Reset Password",
+            "request": {
+              "url": {
+                "path": [
+                  "auth",
+                  "reset-password"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"email\": \"supervisor@test.com\",\n    \"portal_id\": \"default\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "25cee2e5-e72a-4c36-a3d1-247db548baef",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.test(\"Sent is true\", function () {",
+                    "    pm.expect(jsonData.sent).to.be.true;",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "event": []
+      },
+      {
+        "id": "642a9706-bbfc-49bb-b490-c12439d649e3",
+        "name": "Portal",
+        "item": [
+          {
+            "id": "d296f717-45fb-4500-90c1-5ca3e7755eda",
+            "name": "Create Portal",
+            "request": {
+              "url": {
+                "path": [
+                  "portals"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{access_token}}"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"code\": \"testportal\",\n    \"name\": \"Test Portal\",\n    \"lms_config\": {\n        \"default_language\": \"en\"\n    }\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "8cd29d38-b4dd-4daf-89d0-2f6fb4d92b79",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.test(\"Portal code is testportal\", function () {",
+                    "    pm.expect(jsonData.portal.code).to.eql(\"testportal\");",
+                    "});",
+                    "pm.test(\"Domain URL contains testportal.e-learning.com\", function () {",
+                    "    pm.expect(jsonData.portal.domain_url).to.include(\"testportal.e-learning.com\");",
+                    "});",
+                    "pm.environment.set(\"portal_id\", jsonData.portal.id);"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "e9e89e73-b1a7-4c3b-8a72-a1709f0a55d6",
+            "name": "Get Portal",
+            "request": {
+              "url": {
+                "path": [
+                  "portals",
+                  "{{portal_id}}"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{access_token}}"
+                }
+              ],
+              "method": "GET"
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "c5d9e544-5974-449d-a8fe-b26efe12e737",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.test(\"Portal ID matches\", function () {",
+                    "    pm.expect(jsonData.portal.id).to.eql(pm.environment.get(\"portal_id\"));",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "71ed1579-3998-4f6e-8ed3-eeebd5672846",
+            "name": "Update Portal Config",
+            "request": {
+              "url": {
+                "path": [
+                  "portals",
+                  "{{portal_id}}",
+                  "config"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{access_token}}"
+                }
+              ],
+              "method": "PATCH",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"name\": \"Test Portal Updated\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "8f8ced24-5e80-4cfa-8189-2cfdfff29502",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.test(\"Portal name is updated\", function () {",
+                    "    pm.expect(jsonData.portal.name).to.eql(\"Test Portal Updated\");",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "event": []
+      },
+      {
+        "id": "8f5a1de8-7b3d-43c0-8599-bcd5a943d3a7",
+        "name": "Account",
+        "item": [
+          {
+            "id": "21172f67-ccd0-4fdd-8681-13818c93949f",
+            "name": "Create Account",
+            "request": {
+              "url": {
+                "path": [
+                  "accounts"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{access_token}}"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"portal_id\": \"{{portal_id}}\",\n    \"name\": \"Test Account\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "a8285083-a9a5-4ae2-a4e8-226b5235b212",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set(\"account_id\", jsonData.account.id);"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "ed3e1e2b-a494-419c-8da0-f5a62cbc8c1f",
+            "name": "Create Admin",
+            "request": {
+              "url": {
+                "path": [
+                  "accounts",
+                  "{{account_id}}",
+                  "admins"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{access_token}}"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"email\": \"admin@test.com\",\n    \"password\": \"Admin1234!\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "27a37f2a-1808-41e7-9d65-e8e0576030ef",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.test(\"Admin email is correct\", function () {",
+                    "    pm.expect(jsonData.admin.email).to.eql(\"admin@test.com\");",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "ab46eced-d4c0-4704-9d77-c66b3cbe96ab",
+            "name": "Admin Login",
+            "request": {
+              "url": {
+                "path": [
+                  "auth",
+                  "login"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"email\": \"admin@test.com\",\n    \"password\": \"Admin1234!\",\n    \"portal_id\": \"{{portal_id}}\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "c08b3d65-7f36-472b-ac10-2fe87a2ec880",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set(\"admin_token\", jsonData.access_token);"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "event": []
+      },
+      {
+        "id": "fcd7d337-b0b4-4ebb-a699-0a7ef8454cdc",
+        "name": "Course",
+        "item": [
+          {
+            "id": "79585c88-4cd0-417f-9e38-64a410a99adf",
+            "name": "Create Course",
+            "request": {
+              "url": {
+                "path": [
+                  "courses"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{admin_token}}"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"portal_id\": \"{{portal_id}}\",\n    \"title\": \"Test Course\",\n    \"description\": \"Desc\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "7edb4c5d-6fa3-4102-aa02-449a1a0fca43",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set(\"course_id\", jsonData.course.id);"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "03287ff0-1384-4189-8323-82cb837bba08",
+            "name": "Create Chapter",
+            "request": {
+              "url": {
+                "path": [
+                  "courses",
+                  "{{course_id}}",
+                  "chapters"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{admin_token}}"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"title\": \"Chapter 1\",\n    \"position\": 1\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "bf94e9dc-a40f-4bc4-abd6-dc8d681989a2",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set(\"chapter_id\", jsonData.chapter.id);"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "84aefb03-f841-4769-b95b-a7bc94e6746b",
+            "name": "Create Lesson",
+            "request": {
+              "url": {
+                "path": [
+                  "chapters",
+                  "{{chapter_id}}",
+                  "lessons"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{admin_token}}"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"title\": \"Lesson 1\",\n    \"type\": \"PDF\",\n    \"position\": 1\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "5e31aa98-41f3-4418-a05d-a754f188a131",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set(\"lesson_id\", jsonData.lesson.id);"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "54d74a7f-8479-49ef-8bb2-af4d78dbe385",
+            "name": "Get Course",
+            "request": {
+              "url": {
+                "path": [
+                  "courses",
+                  "{{course_id}}"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{admin_token}}"
+                }
+              ],
+              "method": "GET"
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "93896205-e8e4-4e32-a526-f76f2fdc563e",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.test(\"Chapters array length >= 1\", function () {",
+                    "    pm.expect(jsonData.course.chapters.length).to.be.at.least(1);",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "event": []
+      },
+      {
+        "id": "ed771f2e-1aa5-487d-b07c-9904474b0878",
+        "name": "Student",
+        "item": [
+          {
+            "id": "12fe8c08-414a-4103-ac65-513028549851",
+            "name": "Create Student",
+            "request": {
+              "url": {
+                "path": [
+                  "students"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{admin_token}}"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"account_id\": \"{{account_id}}\",\n    \"email\": \"student@test.com\",\n    \"password\": \"Student1234!\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "98c1da0a-caf4-4a35-9d15-fe58909209b8",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set(\"student_id\", jsonData.student.id);"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "f696d57d-db6f-4026-961a-e257eecc58fa",
+            "name": "Create Group",
+            "request": {
+              "url": {
+                "path": [
+                  "students",
+                  "groups"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{admin_token}}"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"account_id\": \"{{account_id}}\",\n    \"name\": \"Group A\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "c82afc78-347e-4f46-ad13-47ee40999276",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set(\"group_id\", jsonData.group.id);"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "03abcd26-5773-4f19-8514-413546b090d5",
+            "name": "Add Member to Group",
+            "request": {
+              "url": {
+                "path": [
+                  "students",
+                  "groups",
+                  "{{group_id}}",
+                  "members"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{admin_token}}"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"student_id\": \"{{student_id}}\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "6ee61db6-aed4-4d1b-83ba-a9be7236f31f",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.test(\"Added is true\", function () {",
+                    "    pm.expect(jsonData.added).to.be.true;",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "2f103877-2ee7-4feb-b06c-60c311f0a4f6",
+            "name": "Get Student",
+            "request": {
+              "url": {
+                "path": [
+                  "students",
+                  "{{student_id}}"
+                ],
+                "host": [
+                  "{{base_url}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{admin_token}}"
+                }
+              ],
+              "method": "GET"
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "4efbd9f2-061e-4d46-8dea-c422a9eaddd3",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"Status code is 200\", function () {",
+                    "    pm.response.to.have.status(200);",
+                    "});",
+                    "",
+                    "var jsonData = pm.response.json();",
+                    "pm.test(\"Student ID matches\", function () {",
+                    "    pm.expect(jsonData.student.id).to.eql(pm.environment.get(\"student_id\"));",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "event": []
+      }
+    ],
+    "event": [],
+    "variable": [],
+    "info": {
+      "_postman_id": "a9d8c7b6-e5f4-4a3b-9c8d-7e6f5a4b3c2d",
+      "name": "e-learning",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    }
+  },
+  "environment": {
+    "_": {
+      "postman_variable_scope": "environment"
+    },
+    "id": "e3b6e8a4-783b-4e1b-9e1b-9e1b9e1b9e1b",
+    "name": "e-learning",
+    "values": [
+      {
+        "type": "any",
+        "value": "http://arch.homework:8080",
+        "key": "base_url"
+      },
+      {
+        "type": "any",
+        "value": null,
+        "key": "access_token"
+      },
+      {
+        "type": "any",
+        "value": null,
+        "key": "refresh_token"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "portal_id"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "account_id"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "admin_token"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "course_id"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "student_id"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "group_id"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "chapter_id"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "lesson_id"
+      }
+    ]
+  },
+  "globals": {
+    "id": "6963fccb-b9bc-4225-86d2-c3861242c49c",
+    "values": []
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 2,
+        "pending": 0,
+        "failed": 1
+      },
+      "prerequests": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 2,
+        "pending": 0,
+        "failed": 1
+      },
+      "testScripts": {
+        "total": 2,
+        "pending": 0,
+        "failed": 1
+      },
+      "prerequestScripts": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 348,
+      "responseMin": 13,
+      "responseMax": 683,
+      "responseSd": 335,
+      "dnsAverage": 0,
+      "dnsMin": 0,
+      "dnsMax": 0,
+      "dnsSd": 0,
+      "firstByteAverage": 0,
+      "firstByteMin": 0,
+      "firstByteMax": 0,
+      "firstByteSd": 0,
+      "started": 1778587533606,
+      "completed": 1778587534415
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 18,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "ec56b5a9-733b-48b5-8fe3-af20c6416879",
+          "httpRequestId": "aabae905-059d-4a57-b34e-60ce9d67f7d5"
+        },
+        "item": {
+          "id": "1f15e29e-3862-45ea-baf4-dab6afe41e8e",
+          "name": "Login (supervisor)",
+          "request": {
+            "url": {
+              "path": [
+                "auth",
+                "login"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"supervisor@test.com\",\n    \"password\": \"Supervisor123!\",\n    \"portal_id\": \"default\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "de1637b6-985d-4641-b99a-b50ab1afa953",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.environment.set(\"access_token\", jsonData.access_token);",
+                  "pm.environment.set(\"refresh_token\", jsonData.refresh_token);"
+                ],
+                "_lastExecutionId": "4934cfde-e8bc-4b4f-bd54-1432a1de20fa"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8080",
+            "path": [
+              "auth",
+              "login"
+            ],
+            "host": [
+              "arch",
+              "homework"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "e40b3ffb-bbec-4f9b-97ae-f7a912e09179",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "arch.homework:8080",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "100",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"email\": \"supervisor@test.com\",\n    \"password\": \"Supervisor123!\",\n    \"portal_id\": \"default\"\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": {
+          "id": "5aa23288-7d4c-4c16-b1e7-43b3fe140c99",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Length",
+              "value": "559"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 12 May 2026 12:05:34 GMT"
+            },
+            {
+              "key": "Grpc-Metadata-Content-Type",
+              "value": "application/grpc"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              97,
+              99,
+              99,
+              101,
+              115,
+              115,
+              84,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              101,
+              121,
+              74,
+              104,
+              98,
+              71,
+              99,
+              105,
+              79,
+              105,
+              74,
+              73,
+              85,
+              122,
+              73,
+              49,
+              78,
+              105,
+              73,
+              115,
+              73,
+              110,
+              82,
+              53,
+              99,
+              67,
+              73,
+              54,
+              73,
+              107,
+              112,
+              88,
+              86,
+              67,
+              74,
+              57,
+              46,
+              101,
+              121,
+              74,
+              49,
+              99,
+              50,
+              86,
+              121,
+              88,
+              50,
+              108,
+              107,
+              73,
+              106,
+              111,
+              105,
+              78,
+              68,
+              82,
+              108,
+              78,
+              87,
+              77,
+              49,
+              89,
+              84,
+              65,
+              116,
+              77,
+              87,
+              77,
+              119,
+              89,
+              83,
+              48,
+              48,
+              90,
+              84,
+              86,
+              104,
+              76,
+              87,
+              69,
+              120,
+              77,
+              68,
+              107,
+              116,
+              78,
+              122,
+              107,
+              50,
+              77,
+              84,
+              99,
+              50,
+              77,
+              109,
+              78,
+              107,
+              78,
+              87,
+              74,
+              104,
+              73,
+              105,
+              119,
+              105,
+              98,
+              71,
+              57,
+              110,
+              97,
+              87,
+              52,
+              105,
+              79,
+              105,
+              74,
+              122,
+              100,
+              88,
+              66,
+              108,
+              99,
+              110,
+              90,
+              112,
+              99,
+              50,
+              57,
+              121,
+              81,
+              72,
+              82,
+              108,
+              99,
+              51,
+              81,
+              117,
+              89,
+              50,
+              57,
+              116,
+              73,
+              105,
+              119,
+              105,
+              99,
+              71,
+              57,
+              121,
+              100,
+              71,
+              70,
+              115,
+              88,
+              50,
+              108,
+              107,
+              73,
+              106,
+              111,
+              105,
+              90,
+              71,
+              86,
+              109,
+              89,
+              88,
+              86,
+              115,
+              100,
+              67,
+              73,
+              115,
+              73,
+              110,
+              74,
+              118,
+              98,
+              71,
+              85,
+              105,
+              79,
+              105,
+              74,
+              122,
+              100,
+              88,
+              66,
+              108,
+              99,
+              110,
+              90,
+              112,
+              99,
+              50,
+              57,
+              121,
+              73,
+              105,
+              119,
+              105,
+              90,
+              88,
+              104,
+              119,
+              73,
+              106,
+              111,
+              120,
+              78,
+              122,
+              99,
+              52,
+              78,
+              84,
+              107,
+              120,
+              77,
+              84,
+              77,
+              48,
+              76,
+              67,
+              74,
+              112,
+              89,
+              88,
+              81,
+              105,
+              79,
+              106,
+              69,
+              51,
+              78,
+              122,
+              103,
+              49,
+              79,
+              68,
+              99,
+              49,
+              77,
+              122,
+              82,
+              57,
+              46,
+              55,
+              70,
+              79,
+              114,
+              104,
+              122,
+              106,
+              97,
+              109,
+              69,
+              113,
+              79,
+              109,
+              116,
+              114,
+              51,
+              99,
+              98,
+              53,
+              97,
+              88,
+              79,
+              113,
+              88,
+              54,
+              121,
+              106,
+              106,
+              53,
+              54,
+              98,
+              78,
+              118,
+              86,
+              52,
+              105,
+              84,
+              49,
+              114,
+              107,
+              110,
+              72,
+              56,
+              34,
+              44,
+              32,
+              34,
+              114,
+              101,
+              102,
+              114,
+              101,
+              115,
+              104,
+              84,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              115,
+              116,
+              117,
+              98,
+              45,
+              114,
+              101,
+              102,
+              114,
+              101,
+              115,
+              104,
+              45,
+              116,
+              111,
+              107,
+              101,
+              110,
+              45,
+              98,
+              52,
+              98,
+              49,
+              102,
+              57,
+              101,
+              53,
+              45,
+              52,
+              101,
+              50,
+              53,
+              45,
+              52,
+              55,
+              49,
+              54,
+              45,
+              98,
+              57,
+              57,
+              98,
+              45,
+              99,
+              56,
+              99,
+              51,
+              48,
+              53,
+              49,
+              55,
+              49,
+              51,
+              48,
+              57,
+              34,
+              44,
+              32,
+              34,
+              101,
+              120,
+              112,
+              105,
+              114,
+              101,
+              115,
+              65,
+              116,
+              34,
+              58,
+              34,
+              50,
+              48,
+              50,
+              54,
+              45,
+              48,
+              53,
+              45,
+              49,
+              50,
+              84,
+              49,
+              51,
+              58,
+              48,
+              53,
+              58,
+              51,
+              52,
+              46,
+              50,
+              56,
+              48,
+              54,
+              56,
+              57,
+              51,
+              52,
+              51,
+              90,
+              34,
+              44,
+              32,
+              34,
+              117,
+              115,
+              101,
+              114,
+              34,
+              58,
+              123,
+              34,
+              117,
+              115,
+              101,
+              114,
+              73,
+              100,
+              34,
+              58,
+              34,
+              52,
+              52,
+              101,
+              53,
+              99,
+              53,
+              97,
+              48,
+              45,
+              49,
+              99,
+              48,
+              97,
+              45,
+              52,
+              101,
+              53,
+              97,
+              45,
+              97,
+              49,
+              48,
+              57,
+              45,
+              55,
+              57,
+              54,
+              49,
+              55,
+              54,
+              50,
+              99,
+              100,
+              53,
+              98,
+              97,
+              34,
+              44,
+              32,
+              34,
+              101,
+              109,
+              97,
+              105,
+              108,
+              34,
+              58,
+              34,
+              115,
+              117,
+              112,
+              101,
+              114,
+              118,
+              105,
+              115,
+              111,
+              114,
+              64,
+              116,
+              101,
+              115,
+              116,
+              46,
+              99,
+              111,
+              109,
+              34,
+              44,
+              32,
+              34,
+              112,
+              111,
+              114,
+              116,
+              97,
+              108,
+              73,
+              100,
+              34,
+              58,
+              34,
+              100,
+              101,
+              102,
+              97,
+              117,
+              108,
+              116,
+              34,
+              44,
+              32,
+              34,
+              114,
+              111,
+              108,
+              101,
+              34,
+              58,
+              34,
+              115,
+              117,
+              112,
+              101,
+              114,
+              118,
+              105,
+              115,
+              111,
+              114,
+              34,
+              125,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 683,
+          "responseSize": 559
+        },
+        "id": "1f15e29e-3862-45ea-baf4-dab6afe41e8e",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "eef4c4f4-bc84-404e-81d7-320f62b45c2c",
+          "length": 18,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "dc81e983-373a-4755-b0a6-149f60c21cdd"
+        },
+        "item": {
+          "id": "69a28caf-2450-407b-81f3-77d4df9190e3",
+          "name": "Refresh Token",
+          "request": {
+            "url": {
+              "path": [
+                "auth",
+                "refresh"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b5893ed6-62c9-4caa-89ed-2294fb1dceee",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.environment.set(\"access_token\", jsonData.access_token);"
+                ],
+                "_lastExecutionId": "2ed61cec-6924-4bad-9086-4c330159521d"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8080",
+            "path": [
+              "auth",
+              "refresh"
+            ],
+            "host": [
+              "arch",
+              "homework"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer null"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "system": true
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "b9e29839-a58f-436c-acec-c6c864f2817a",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "arch.homework:8080",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "31",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"refresh_token\": \"null\"\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          }
+        },
+        "response": {
+          "id": "1ad1fe88-d3fa-445b-8b99-9dd79fc6f6e1",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Length",
+              "value": "54"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 12 May 2026 12:05:34 GMT"
+            },
+            {
+              "key": "Www-Authenticate",
+              "value": "not implemented"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              99,
+              111,
+              100,
+              101,
+              34,
+              58,
+              49,
+              54,
+              44,
+              32,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              110,
+              111,
+              116,
+              32,
+              105,
+              109,
+              112,
+              108,
+              101,
+              109,
+              101,
+              110,
+              116,
+              101,
+              100,
+              34,
+              44,
+              32,
+              34,
+              100,
+              101,
+              116,
+              97,
+              105,
+              108,
+              115,
+              34,
+              58,
+              91,
+              93,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 13,
+          "responseSize": 54
+        },
+        "id": "69a28caf-2450-407b-81f3-77d4df9190e3",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false,
+            "error": {
+              "name": "AssertionError",
+              "index": 0,
+              "test": "Status code is 200",
+              "message": "expected response to have status code 200 but got 401",
+              "stack": "AssertionError: expected response to have status code 200 but got 401\n   at Object.eval sandbox-script.js:1:2)"
+            }
+          }
+        ],
+        "testScript": [
+          {
+            "error": {
+              "name": "AssertionFailure",
+              "message": "Status code is 200",
+              "stack": "AssertionFailure: Status code is 200\n    at postProcessContext (/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/postman-runtime/lib/runner/extensions/event.command.js:41:17)\n    at PostmanCollectionRun.<anonymous> (/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/postman-runtime/lib/runner/extensions/event.command.js:513:39)\n    at PostmanSandbox.<anonymous> (/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/postman-sandbox/lib/postman-sandbox.js:139:13)\n    at Object.onceWrapper (node:events:631:12)\n    at PostmanSandbox.emit (node:events:509:20)\n    at context.__uvm_emit (/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/uvm/lib/bridge.js:71:21)\n    at Object.dispatch (evalmachine.<anonymous>:20:13)\n    at Object.<anonymous> (evalmachine.<anonymous>:66:7860)\n    at t.exports.terminate (evalmachine.<anonymous>:66:22105)\n    at Immediate._onImmediate (evalmachine.<anonymous>:66:5993)\n    at process.processImmediate (node:internal/timers:506:21)",
+              "checksum": "7f464ca4c44ca672e67abc1532f43d02",
+              "id": "51029f36-d165-41fb-8d2b-5c0693fc6a85",
+              "timestamp": 1778587534407,
+              "stacktrace": [
+                {
+                  "fileName": "/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/postman-runtime/lib/runner/extensions/event.command.js",
+                  "lineNumber": 41,
+                  "functionName": "postProcessContext",
+                  "typeName": "Object",
+                  "methodName": null,
+                  "columnNumber": 17,
+                  "native": false
+                },
+                {
+                  "fileName": "/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/postman-runtime/lib/runner/extensions/event.command.js",
+                  "lineNumber": 513,
+                  "functionName": "",
+                  "typeName": "PostmanCollectionRun",
+                  "methodName": null,
+                  "columnNumber": 39,
+                  "native": false
+                },
+                {
+                  "fileName": "/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/postman-sandbox/lib/postman-sandbox.js",
+                  "lineNumber": 139,
+                  "functionName": "",
+                  "typeName": "PostmanSandbox",
+                  "methodName": null,
+                  "columnNumber": 13,
+                  "native": false
+                },
+                {
+                  "fileName": "node:events",
+                  "lineNumber": 631,
+                  "functionName": "Object.onceWrapper",
+                  "typeName": "Object",
+                  "methodName": "onceWrapper",
+                  "columnNumber": 12,
+                  "native": false
+                },
+                {
+                  "fileName": "node:events",
+                  "lineNumber": 509,
+                  "functionName": "PostmanSandbox.emit",
+                  "typeName": "PostmanSandbox",
+                  "methodName": "emit",
+                  "columnNumber": 20,
+                  "native": false
+                },
+                {
+                  "fileName": "/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/uvm/lib/bridge.js",
+                  "lineNumber": 71,
+                  "functionName": "context.__uvm_emit",
+                  "typeName": "context",
+                  "methodName": "__uvm_emit",
+                  "columnNumber": 21,
+                  "native": false
+                },
+                {
+                  "fileName": "evalmachine.<anonymous>",
+                  "lineNumber": 20,
+                  "functionName": "Object.dispatch",
+                  "typeName": "Object",
+                  "methodName": "dispatch",
+                  "columnNumber": 13,
+                  "native": false
+                },
+                {
+                  "fileName": "evalmachine.<anonymous>",
+                  "lineNumber": 66,
+                  "functionName": "",
+                  "typeName": "Object",
+                  "methodName": null,
+                  "columnNumber": 7860,
+                  "native": false
+                },
+                {
+                  "fileName": "evalmachine.<anonymous>",
+                  "lineNumber": 66,
+                  "functionName": "t.exports.terminate",
+                  "typeName": "t",
+                  "methodName": "exports.terminate",
+                  "columnNumber": 22105,
+                  "native": false
+                },
+                {
+                  "fileName": "evalmachine.<anonymous>",
+                  "lineNumber": 66,
+                  "functionName": "Immediate._onImmediate",
+                  "typeName": "Immediate",
+                  "methodName": "_onImmediate",
+                  "columnNumber": 5993,
+                  "native": false
+                },
+                {
+                  "fileName": "node:internal/timers",
+                  "lineNumber": 506,
+                  "functionName": "process.processImmediate",
+                  "typeName": "process",
+                  "methodName": "processImmediate",
+                  "columnNumber": 21,
+                  "native": false
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "transfers": {
+      "responseTotal": 613
+    },
+    "failures": [
+      {
+        "error": {
+          "name": "AssertionError",
+          "index": 0,
+          "test": "Status code is 200",
+          "message": "expected response to have status code 200 but got 401",
+          "stack": "AssertionError: expected response to have status code 200 but got 401\n   at Object.eval sandbox-script.js:1:2)",
+          "checksum": "4cbbfd50d1523026b7122af68edf6046",
+          "id": "65305ba9-e7fa-4543-8402-1f07369ee2a7",
+          "timestamp": 1778587534401,
+          "stacktrace": [
+            {
+              "fileName": "sandbox-script.js",
+              "lineNumber": 1,
+              "functionName": "Object.eval",
+              "typeName": "Object",
+              "methodName": "eval",
+              "columnNumber": 2,
+              "native": false
+            }
+          ]
+        },
+        "at": "assertion:0 in test-script",
+        "source": {
+          "id": "69a28caf-2450-407b-81f3-77d4df9190e3",
+          "name": "Refresh Token",
+          "request": {
+            "url": {
+              "path": [
+                "auth",
+                "refresh"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b5893ed6-62c9-4caa-89ed-2294fb1dceee",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.environment.set(\"access_token\", jsonData.access_token);"
+                ],
+                "_lastExecutionId": "2ed61cec-6924-4bad-9086-4c330159521d"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "id": "6889ad40-8269-4e56-b571-92d48dc7b907",
+          "name": "Auth",
+          "item": [
+            {
+              "id": "1f15e29e-3862-45ea-baf4-dab6afe41e8e",
+              "name": "Login (supervisor)",
+              "request": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "login"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"supervisor@test.com\",\n    \"password\": \"Supervisor123!\",\n    \"portal_id\": \"default\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "de1637b6-985d-4641-b99a-b50ab1afa953",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "var jsonData = pm.response.json();",
+                      "pm.environment.set(\"access_token\", jsonData.access_token);",
+                      "pm.environment.set(\"refresh_token\", jsonData.refresh_token);"
+                    ],
+                    "_lastExecutionId": "4934cfde-e8bc-4b4f-bd54-1432a1de20fa"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "69a28caf-2450-407b-81f3-77d4df9190e3",
+              "name": "Refresh Token",
+              "request": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "refresh"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "b5893ed6-62c9-4caa-89ed-2294fb1dceee",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "var jsonData = pm.response.json();",
+                      "pm.environment.set(\"access_token\", jsonData.access_token);"
+                    ],
+                    "_lastExecutionId": "2ed61cec-6924-4bad-9086-4c330159521d"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "18a8275b-af04-4035-8d2b-f81abe0668d3",
+              "name": "Validate Token",
+              "request": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"access_token\": \"{{access_token}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "c2547ebf-dba6-43ec-b870-7be0bce4d0ab",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "var jsonData = pm.response.json();",
+                      "pm.test(\"Token is valid\", function () {",
+                      "    pm.expect(jsonData.valid).to.be.true;",
+                      "});",
+                      "pm.test(\"User ID not empty\", function () {",
+                      "    pm.expect(jsonData.user_id).to.not.be.empty;",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "c7037232-c9df-4fe3-8147-b24bbf5d2ec7",
+              "name": "Reset Password",
+              "request": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"supervisor@test.com\",\n    \"portal_id\": \"default\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "25cee2e5-e72a-4c36-a3d1-247db548baef",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "var jsonData = pm.response.json();",
+                      "pm.test(\"Sent is true\", function () {",
+                      "    pm.expect(jsonData.sent).to.be.true;",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "event": []
+        },
+        "cursor": {
+          "ref": "eef4c4f4-bc84-404e-81d7-320f62b45c2c",
+          "length": 18,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "dc81e983-373a-4755-b0a6-149f60c21cdd",
+          "scriptId": "b5893ed6-62c9-4caa-89ed-2294fb1dceee",
+          "execution": "2ed61cec-6924-4bad-9086-4c330159521d"
+        }
+      },
+      {
+        "error": {
+          "name": "AssertionFailure",
+          "message": "Status code is 200",
+          "stack": "AssertionFailure: Status code is 200\n    at postProcessContext (/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/postman-runtime/lib/runner/extensions/event.command.js:41:17)\n    at PostmanCollectionRun.<anonymous> (/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/postman-runtime/lib/runner/extensions/event.command.js:513:39)\n    at PostmanSandbox.<anonymous> (/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/postman-sandbox/lib/postman-sandbox.js:139:13)\n    at Object.onceWrapper (node:events:631:12)\n    at PostmanSandbox.emit (node:events:509:20)\n    at context.__uvm_emit (/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/uvm/lib/bridge.js:71:21)\n    at Object.dispatch (evalmachine.<anonymous>:20:13)\n    at Object.<anonymous> (evalmachine.<anonymous>:66:7860)\n    at t.exports.terminate (evalmachine.<anonymous>:66:22105)\n    at Immediate._onImmediate (evalmachine.<anonymous>:66:5993)\n    at process.processImmediate (node:internal/timers:506:21)",
+          "checksum": "7f464ca4c44ca672e67abc1532f43d02",
+          "id": "51029f36-d165-41fb-8d2b-5c0693fc6a85",
+          "timestamp": 1778587534407,
+          "stacktrace": [
+            {
+              "fileName": "/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/postman-runtime/lib/runner/extensions/event.command.js",
+              "lineNumber": 41,
+              "functionName": "postProcessContext",
+              "typeName": "Object",
+              "methodName": null,
+              "columnNumber": 17,
+              "native": false
+            },
+            {
+              "fileName": "/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/postman-runtime/lib/runner/extensions/event.command.js",
+              "lineNumber": 513,
+              "functionName": "",
+              "typeName": "PostmanCollectionRun",
+              "methodName": null,
+              "columnNumber": 39,
+              "native": false
+            },
+            {
+              "fileName": "/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/postman-sandbox/lib/postman-sandbox.js",
+              "lineNumber": 139,
+              "functionName": "",
+              "typeName": "PostmanSandbox",
+              "methodName": null,
+              "columnNumber": 13,
+              "native": false
+            },
+            {
+              "fileName": "node:events",
+              "lineNumber": 631,
+              "functionName": "Object.onceWrapper",
+              "typeName": "Object",
+              "methodName": "onceWrapper",
+              "columnNumber": 12,
+              "native": false
+            },
+            {
+              "fileName": "node:events",
+              "lineNumber": 509,
+              "functionName": "PostmanSandbox.emit",
+              "typeName": "PostmanSandbox",
+              "methodName": "emit",
+              "columnNumber": 20,
+              "native": false
+            },
+            {
+              "fileName": "/usr/local/Cellar/newman/6.2.2/libexec/lib/node_modules/newman/node_modules/uvm/lib/bridge.js",
+              "lineNumber": 71,
+              "functionName": "context.__uvm_emit",
+              "typeName": "context",
+              "methodName": "__uvm_emit",
+              "columnNumber": 21,
+              "native": false
+            },
+            {
+              "fileName": "evalmachine.<anonymous>",
+              "lineNumber": 20,
+              "functionName": "Object.dispatch",
+              "typeName": "Object",
+              "methodName": "dispatch",
+              "columnNumber": 13,
+              "native": false
+            },
+            {
+              "fileName": "evalmachine.<anonymous>",
+              "lineNumber": 66,
+              "functionName": "",
+              "typeName": "Object",
+              "methodName": null,
+              "columnNumber": 7860,
+              "native": false
+            },
+            {
+              "fileName": "evalmachine.<anonymous>",
+              "lineNumber": 66,
+              "functionName": "t.exports.terminate",
+              "typeName": "t",
+              "methodName": "exports.terminate",
+              "columnNumber": 22105,
+              "native": false
+            },
+            {
+              "fileName": "evalmachine.<anonymous>",
+              "lineNumber": 66,
+              "functionName": "Immediate._onImmediate",
+              "typeName": "Immediate",
+              "methodName": "_onImmediate",
+              "columnNumber": 5993,
+              "native": false
+            },
+            {
+              "fileName": "node:internal/timers",
+              "lineNumber": 506,
+              "functionName": "process.processImmediate",
+              "typeName": "process",
+              "methodName": "processImmediate",
+              "columnNumber": 21,
+              "native": false
+            }
+          ]
+        },
+        "at": "test-script:39:17",
+        "source": {
+          "id": "69a28caf-2450-407b-81f3-77d4df9190e3",
+          "name": "Refresh Token",
+          "request": {
+            "url": {
+              "path": [
+                "auth",
+                "refresh"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b5893ed6-62c9-4caa-89ed-2294fb1dceee",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.environment.set(\"access_token\", jsonData.access_token);"
+                ],
+                "_lastExecutionId": "2ed61cec-6924-4bad-9086-4c330159521d"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "id": "6889ad40-8269-4e56-b571-92d48dc7b907",
+          "name": "Auth",
+          "item": [
+            {
+              "id": "1f15e29e-3862-45ea-baf4-dab6afe41e8e",
+              "name": "Login (supervisor)",
+              "request": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "login"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"supervisor@test.com\",\n    \"password\": \"Supervisor123!\",\n    \"portal_id\": \"default\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "de1637b6-985d-4641-b99a-b50ab1afa953",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "var jsonData = pm.response.json();",
+                      "pm.environment.set(\"access_token\", jsonData.access_token);",
+                      "pm.environment.set(\"refresh_token\", jsonData.refresh_token);"
+                    ],
+                    "_lastExecutionId": "4934cfde-e8bc-4b4f-bd54-1432a1de20fa"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "69a28caf-2450-407b-81f3-77d4df9190e3",
+              "name": "Refresh Token",
+              "request": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "refresh"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "b5893ed6-62c9-4caa-89ed-2294fb1dceee",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "var jsonData = pm.response.json();",
+                      "pm.environment.set(\"access_token\", jsonData.access_token);"
+                    ],
+                    "_lastExecutionId": "2ed61cec-6924-4bad-9086-4c330159521d"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "18a8275b-af04-4035-8d2b-f81abe0668d3",
+              "name": "Validate Token",
+              "request": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"access_token\": \"{{access_token}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "c2547ebf-dba6-43ec-b870-7be0bce4d0ab",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "var jsonData = pm.response.json();",
+                      "pm.test(\"Token is valid\", function () {",
+                      "    pm.expect(jsonData.valid).to.be.true;",
+                      "});",
+                      "pm.test(\"User ID not empty\", function () {",
+                      "    pm.expect(jsonData.user_id).to.not.be.empty;",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "c7037232-c9df-4fe3-8147-b24bbf5d2ec7",
+              "name": "Reset Password",
+              "request": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"supervisor@test.com\",\n    \"portal_id\": \"default\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "25cee2e5-e72a-4c36-a3d1-247db548baef",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "var jsonData = pm.response.json();",
+                      "pm.test(\"Sent is true\", function () {",
+                      "    pm.expect(jsonData.sent).to.be.true;",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "event": []
+        },
+        "cursor": {
+          "ref": "eef4c4f4-bc84-404e-81d7-320f62b45c2c",
+          "length": 18,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "dc81e983-373a-4755-b0a6-149f60c21cdd",
+          "scriptId": "b5893ed6-62c9-4caa-89ed-2294fb1dceee"
+        }
+      }
+    ],
+    "error": null
+  }
+}

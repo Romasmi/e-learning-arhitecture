@@ -15,6 +15,7 @@ COPY services/auth-service/ .
 
 ARG LDFLAGS="-s -w"
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="${LDFLAGS}" -o auth ./cmd/api
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="${LDFLAGS}" -o seed ./cmd/seed
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
@@ -26,6 +27,7 @@ WORKDIR /app
 RUN chown -R appuser:appgroup /app
 
 COPY --from=builder --chown=appuser:appgroup /app/services/auth-service/auth .
+COPY --from=builder --chown=appuser:appgroup /app/services/auth-service/seed .
 COPY --from=builder --chown=appuser:appgroup /app/services/auth-service/migrations ./migrations
 COPY --from=builder --chown=appuser:appgroup /app/services/auth-service/config.yaml .
 USER appuser

@@ -31,6 +31,7 @@ type AuthService interface {
 	Login(ctx context.Context, email, password, portalID, ip string) (*LoginResult, error)
 	Validate(ctx context.Context, token string) (*JWTClaims, error)
 	Register(ctx context.Context, userID uuid.UUID, login, password, portalID, role string) (uuid.UUID, error)
+	Upsert(ctx context.Context, userID uuid.UUID, login, password, portalID, role string) (uuid.UUID, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*LoginResult, error)
 	ResetPassword(ctx context.Context, email, portalID string) (bool, error)
 }
@@ -121,6 +122,29 @@ func (s *authService) Register(ctx context.Context, userID uuid.UUID, login, pas
 	}
 
 	return userID, s.repo.Create(ctx, a)
+}
+
+func (s *authService) Upsert(ctx context.Context, userID uuid.UUID, login, password, portalID, role string) (uuid.UUID, error) {
+	if userID == uuid.Nil {
+		userID = uuid.New()
+	}
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	a := &auth.Auth{
+		UserID:       userID,
+		Login:        login,
+		PasswordHash: string(hashedPassword),
+		PortalID:     portalID,
+		Role:         role,
+	}
+
+	if err := s.repo.Upsert(ctx, a); err != nil {
+		return uuid.Nil, err
+	}
+	return a.UserID, nil
 }
 
 func (s *authService) RefreshToken(ctx context.Context, refreshToken string) (*LoginResult, error) {

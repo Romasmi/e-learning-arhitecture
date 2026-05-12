@@ -10,6 +10,7 @@ import (
 type AuthRepository interface {
 	GetByLogin(ctx context.Context, login string) (*auth.Auth, error)
 	Create(ctx context.Context, a *auth.Auth) error
+	Upsert(ctx context.Context, a *auth.Auth) error
 	LogAction(ctx context.Context, log *auth.AuthLog) error
 }
 
@@ -36,6 +37,21 @@ func (r *authRepository) GetByLogin(ctx context.Context, login string) (*auth.Au
 func (r *authRepository) Create(ctx context.Context, a *auth.Auth) error {
 	query := `INSERT INTO auth (user_id, login, password_hash, portal_id, role) VALUES ($1, $2, $3, $4, $5) RETURNING id, created_at, updated_at`
 	return r.db.QueryRow(ctx, query, a.UserID, a.Login, a.PasswordHash, a.PortalID, a.Role).Scan(&a.ID, &a.CreatedAt, &a.UpdatedAt)
+}
+
+func (r *authRepository) Upsert(ctx context.Context, a *auth.Auth) error {
+	query := `
+		INSERT INTO auth (user_id, login, password_hash, portal_id, role)
+		VALUES ($1, $2, $3, $4, $5)
+		ON CONFLICT (login) 
+		DO UPDATE SET 
+			password_hash = EXCLUDED.password_hash, 
+			portal_id = EXCLUDED.portal_id, 
+			role = EXCLUDED.role,
+			updated_at = CURRENT_TIMESTAMP
+		RETURNING id, user_id, created_at, updated_at
+	`
+	return r.db.QueryRow(ctx, query, a.UserID, a.Login, a.PasswordHash, a.PortalID, a.Role).Scan(&a.ID, &a.UserID, &a.CreatedAt, &a.UpdatedAt)
 }
 
 func (r *authRepository) LogAction(ctx context.Context, log *auth.AuthLog) error {

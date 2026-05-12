@@ -182,5 +182,8 @@ help:
 draw-puml:
 	plantuml -tsvg ./docs/puml/*.puml
 
-test-postman:
+test-postman: seed-supervisor
 	bash tests/postman/run.sh
+
+seed-supervisor:
+	$(MAKE) -C services/auth-service kube-seed
