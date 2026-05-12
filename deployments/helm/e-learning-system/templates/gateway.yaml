@@ -116,6 +116,15 @@ spec:
           port: 8000
 
     - kind: Rule
+      match: PathPrefix("/api/v1")
+      priority: 200
+      middlewares:
+        - name: user-auth
+      services:
+        - name: student-service
+          port: 8000
+
+    - kind: Rule
       match: PathPrefix("/internal/transcode-callback")
       priority: 200
       services:

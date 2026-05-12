@@ -56,6 +56,14 @@ services:
     config:
       DB_NAME: "course_service"
 
+  student-service:
+    enabled: true
+    image: student-service
+    replicas: 1
+    config:
+      DB_NAME: "student_service"
+      AUTH_SERVICE_ADDR: "auth-service:9000"
+
 # Shared resources
 sharedConfig:
   enabled: true

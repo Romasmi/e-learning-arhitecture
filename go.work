@@ -7,4 +7,5 @@ use (
 	./services/portal-service
 	./services/media-service
 	./services/course-service
+	./services/student-service
 )
