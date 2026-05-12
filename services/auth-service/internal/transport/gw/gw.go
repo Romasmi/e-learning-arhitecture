@@ -13,11 +13,22 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 func NewGatewayServer(authService services.AuthService, grpcAddr string, httpPort uint) (*http.Server, error) {
 	ctx := context.Background()
-	gwMux := runtime.NewServeMux()
+	gwMux := runtime.NewServeMux(
+		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
+			MarshalOptions: protojson.MarshalOptions{
+				UseProtoNames:   true,
+				EmitUnpopulated: true,
+			},
+			UnmarshalOptions: protojson.UnmarshalOptions{
+				DiscardUnknown: true,
+			},
+		}),
+	)
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	err := authapi.RegisterAuthServiceHandlerFromEndpoint(ctx, gwMux, grpcAddr, opts)

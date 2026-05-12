@@ -1260,7 +1260,7 @@ const file_student_student_proto_rawDesc = "" +
 	"\x1aSTUDENT_STATUS_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
 	"\x06ACTIVE\x10\x01\x12\f\n" +
-	"\bINACTIVE\x10\x022\xe2\b\n" +
+	"\bINACTIVE\x10\x022\xe1\b\n" +
 	"\x0eStudentService\x12d\n" +
 	"\rCreateStudent\x12\x1d.student.CreateStudentRequest\x1a\x1e.student.CreateStudentResponse\"\x14\x82\xd3\xe4\x93\x02\x0e:\x01*\"\t/students\x12z\n" +
 	"\x11DeactivateStudent\x12!.student.DeactivateStudentRequest\x1a\".student.DeactivateStudentResponse\"\x1e\x82\xd3\xe4\x93\x02\x18*\x16/students/{student_id}\x12e\n" +
@@ -1270,8 +1270,8 @@ const file_student_student_proto_rawDesc = "" +
 	"\rAssignLicense\x12\x1d.student.AssignLicenseRequest\x1a\x1e.student.AssignLicenseResponse\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/students/{student_id}/license\x12\\\n" +
 	"\bAddGroup\x12\x18.student.AddGroupRequest\x1a\x19.student.AddGroupResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/students/groups\x12p\n" +
 	"\vUpdateGroup\x12\x1b.student.UpdateGroupRequest\x1a\x1c.student.UpdateGroupResponse\"&\x82\xd3\xe4\x93\x02 :\x01*\x1a\x1b/students/groups/{group_id}\x12m\n" +
-	"\vDeleteGroup\x12\x1b.student.DeleteGroupRequest\x1a\x1c.student.DeleteGroupResponse\"#\x82\xd3\xe4\x93\x02\x1d*\x1b/students/groups/{group_id}\x12\x8b\x01\n" +
-	"\x11AddStudentToGroup\x12!.student.AddStudentToGroupRequest\x1a\".student.AddStudentToGroupResponse\"/\x82\xd3\xe4\x93\x02):\x01*\"$/students/groups/{group_id}/students\x12_\n" +
+	"\vDeleteGroup\x12\x1b.student.DeleteGroupRequest\x1a\x1c.student.DeleteGroupResponse\"#\x82\xd3\xe4\x93\x02\x1d*\x1b/students/groups/{group_id}\x12\x8a\x01\n" +
+	"\x11AddStudentToGroup\x12!.student.AddStudentToGroupRequest\x1a\".student.AddStudentToGroupResponse\".\x82\xd3\xe4\x93\x02(:\x01*\"#/students/groups/{group_id}/members\x12_\n" +
 	"\n" +
 	"ListGroups\x12\x1a.student.ListGroupsRequest\x1a\x1b.student.ListGroupsResponse\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/students/groupsB\x91\x01\n" +
 	"\vcom.studentB\fStudentProtoP\x01Z8github.com/elearning/student-service/gen/student;student\xa2\x02\x03SXX\xaa\x02\aStudent\xca\x02\aStudent\xe2\x02\x13Student\\GPBMetadata\xea\x02\aStudentb\x06proto3"

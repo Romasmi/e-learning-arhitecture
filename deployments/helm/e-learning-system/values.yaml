@@ -2,7 +2,7 @@ global:
   namespace: e-learning-system
   image:
     repository: ""
-    tag: v2
+    tag: v10
     pullPolicy: IfNotPresent
   db:
     host: postgresql

@@ -21,7 +21,7 @@ service PortalService {
   }
   rpc UpdatePortalConfig(UpdatePortalConfigRequest) returns (UpdatePortalConfigResponse) {
     option (google.api.http) = {
-      put: "/portals/{id}/config"
+      patch: "/portals/{id}/config"
       body: "*"
     };
   }
@@ -74,7 +74,8 @@ message GetPortalResponse {
 
 message UpdatePortalConfigRequest {
   string id = 1;
-  LMSConfig lms_config = 2;
+  string name = 2;
+  LMSConfig lms_config = 3;
 }
 
 message UpdatePortalConfigResponse {

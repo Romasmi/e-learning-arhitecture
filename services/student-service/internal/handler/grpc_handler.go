@@ -3,6 +3,8 @@ package handler
 import (
 	"context"
 
+	"log/slog"
+
 	studentpb "github.com/Romasmi/e-learning-arhitecture/gen/go/student"
 	"github.com/elearning/student-service/internal/domain"
 	"github.com/elearning/student-service/internal/usecase"
@@ -23,6 +25,7 @@ func NewGRPCHandler(u *usecase.StudentUsecase) *GRPCHandler {
 func (h *GRPCHandler) CreateStudent(ctx context.Context, req *studentpb.CreateStudentRequest) (*studentpb.CreateStudentResponse, error) {
 	student, err := h.usecase.CreateStudent(ctx, req.AccountId, req.Email, req.Password)
 	if err != nil {
+		slog.Error("failed to create student", "error", err)
 		return nil, status.Errorf(codes.Internal, "failed to create student: %v", err)
 	}
 

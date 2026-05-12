@@ -52,8 +52,8 @@ func (u *PortalUsecase) GetPortal(ctx context.Context, id string) (*domain.Porta
 	return u.repo.GetByID(ctx, id)
 }
 
-func (u *PortalUsecase) UpdatePortalConfig(ctx context.Context, id string, config domain.LMSConfig) (*domain.Portal, error) {
-	portal, err := u.repo.UpdateConfig(ctx, id, config)
+func (u *PortalUsecase) UpdatePortalConfig(ctx context.Context, id string, name string, config domain.LMSConfig) (*domain.Portal, error) {
+	portal, err := u.repo.Update(ctx, id, name, config)
 	if err != nil {
 		return nil, err
 	}
