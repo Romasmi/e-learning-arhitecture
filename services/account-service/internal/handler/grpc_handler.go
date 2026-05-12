@@ -111,5 +111,6 @@ func mapAdminToProto(a *domain.Admin) *accountpb.Admin {
 		AccountId: a.AccountID,
 		Email:     a.Email,
 		CreatedAt: timestamppb.New(a.CreatedAt),
+		UserId:    a.UserID,
 	}
 }

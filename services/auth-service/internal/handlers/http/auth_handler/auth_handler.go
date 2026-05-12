@@ -92,17 +92,24 @@ func (h *AuthHandler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := uuid.Parse(req.UserID)
-	if err != nil {
-		http_utils.JsonError(w, http.StatusBadRequest, err)
-		return
+	var userID uuid.UUID
+	var err error
+	if req.UserID != "" {
+		userID, err = uuid.Parse(req.UserID)
+		if err != nil {
+			http_utils.JsonError(w, http.StatusBadRequest, err)
+			return
+		}
 	}
 
-	err = h.authService.Register(r.Context(), userID, req.Login, req.Password, req.PortalID, req.Role)
+	resID, err := h.authService.Register(r.Context(), userID, req.Login, req.Password, req.PortalID, req.Role)
 	if err != nil {
 		http_utils.JsonError(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	http_utils.SuccessJsonResponse(w, map[string]string{"status": "registered"})
+	http_utils.SuccessJsonResponse(w, map[string]string{
+		"status":  "registered",
+		"user_id": resID.String(),
+	})
 }

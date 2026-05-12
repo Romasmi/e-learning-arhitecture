@@ -288,6 +288,9 @@
       "properties": {
         "success": {
           "type": "boolean"
+        },
+        "userId": {
+          "type": "string"
         }
       }
     },

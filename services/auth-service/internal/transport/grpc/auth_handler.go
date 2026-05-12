@@ -77,15 +77,22 @@ func (h *AuthHandler) ResetPassword(ctx context.Context, req *authapi.ResetPassw
 }
 
 func (h *AuthHandler) Register(ctx context.Context, req *authapi.RegisterRequest) (*authapi.RegisterResponse, error) {
-	userID, err := uuid.Parse(req.UserId)
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, "invalid user_id")
+	var userID uuid.UUID
+	var err error
+	if req.UserId != "" {
+		userID, err = uuid.Parse(req.UserId)
+		if err != nil {
+			return nil, status.Error(codes.InvalidArgument, "invalid user_id")
+		}
 	}
 
-	err = h.authService.Register(ctx, userID, req.Email, req.Password, req.PortalId, req.Role)
+	resID, err := h.authService.Register(ctx, userID, req.Email, req.Password, req.PortalId, req.Role)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &authapi.RegisterResponse{Success: true}, nil
+	return &authapi.RegisterResponse{
+		Success: true,
+		UserId:  resID.String(),
+	}, nil
 }

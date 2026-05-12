@@ -237,6 +237,9 @@
         "createdAt": {
           "type": "string",
           "format": "date-time"
+        },
+        "userId": {
+          "type": "string"
         }
       }
     }

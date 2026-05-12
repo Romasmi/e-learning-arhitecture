@@ -69,23 +69,22 @@ func (u *AccountUsecase) CreateAdmin(ctx context.Context, accountID, email, pass
 		return nil, err
 	}
 
-	admin := &domain.Admin{
-		ID:        uuid.New().String(),
-		AccountID: accountID,
-		Email:     email,
-		CreatedAt: time.Now(),
-	}
-
-	// Call auth-service via gRPC
-	_, err = u.authClient.Register(ctx, &authapi.RegisterRequest{
-		UserId:   admin.ID,
-		Email:    admin.Email,
+	resp, err := u.authClient.Register(ctx, &authapi.RegisterRequest{
+		Email:    email,
 		Password: password,
 		PortalId: account.PortalID,
 		Role:     "ADMIN",
 	})
 	if err != nil {
 		return nil, err
+	}
+
+	admin := &domain.Admin{
+		ID:        uuid.New().String(),
+		AccountID: accountID,
+		UserID:    resp.UserId,
+		Email:     email,
+		CreatedAt: time.Now(),
 	}
 
 	if err := u.repo.CreateAdmin(ctx, admin); err != nil {

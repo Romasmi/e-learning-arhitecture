@@ -56,6 +56,7 @@ message Admin {
   string account_id = 2;
   string email      = 3;
   google.protobuf.Timestamp created_at = 4;
+  string user_id    = 5;
 }
 
 message CreateAccountRequest  { string portal_id = 1; string name = 2; }

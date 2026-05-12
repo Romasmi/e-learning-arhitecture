@@ -77,10 +77,10 @@ func (r *accountRepository) UpdateAccountStatus(ctx context.Context, id string, 
 
 func (r *accountRepository) CreateAdmin(ctx context.Context, a *domain.Admin) error {
 	query := `
-		INSERT INTO admins (id, account_id, email, created_at)
-		VALUES ($1, $2, $3, $4)
+		INSERT INTO admins (id, account_id, user_id, email, created_at)
+		VALUES ($1, $2, $3, $4, $5)
 	`
-	_, err := r.pool.Exec(ctx, query, a.ID, a.AccountID, a.Email, a.CreatedAt)
+	_, err := r.pool.Exec(ctx, query, a.ID, a.AccountID, a.UserID, a.Email, a.CreatedAt)
 	if err != nil {
 		return fmt.Errorf("exec insert admin: %w", err)
 	}
