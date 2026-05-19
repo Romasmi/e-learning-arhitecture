@@ -1,0 +1,108 @@
+@startuml Authentication Flow
+
+skinparam defaultTextAlignment center
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 200
+
+skinparam participant {
+  BackgroundColor AliceBlue
+  BorderColor SteelBlue
+  FontStyle bold
+}
+skinparam actor {
+  BackgroundColor White
+  BorderColor DarkSlateGray
+}
+skinparam database {
+  BackgroundColor LemonChiffon
+  BorderColor Goldenrod
+}
+skinparam sequence {
+  ArrowColor DarkSlateGray
+  LifeLineBorderColor SteelBlue
+  GroupBorderColor Gray
+  GroupBackgroundColor WhiteSmoke
+  DividerBackgroundColor LightSteelBlue
+  DividerFontStyle bold
+  SeparatorBackgroundColor LightGray
+  SeparatorFontStyle bold
+  NoteBackgroundColor Cornsilk
+  NoteBorderColor Goldenrod
+}
+
+title Authentication Flow\n<size:11>Traefik ForwardAuth  ·  JWT HS256  ·  auth-service</size>
+
+actor       "Client"                        as client
+participant "Traefik\n(API Gateway)"        as gw
+participant "auth-service\nHTTP :8000"      as auth
+database    "Auth DB\n(PostgreSQL)"         as db
+participant "Target Service\n(e.g. course-service)" as svc
+
+' ─────────────────────────────────────
+== 1. Login — obtain tokens ==
+' ─────────────────────────────────────
+
+autonumber 1
+
+client  ->  gw   : POST /auth/login\n{ email, password, portal_id }
+note right of gw : Public route — no middleware.\nTraefik forwards as-is.
+gw      ->  auth : POST /auth/login
+
+auth    ->  db   : SELECT * FROM auth\nWHERE login = email AND portal_id = portal_id
+db      --> auth : user record\n(user_id, password_hash, role, portal_id)
+
+auth    ->  auth : bcrypt.CompareHashAndPassword\n(password_hash, password)
+
+alt #FFE4E4 invalid credentials
+  auth  --> gw   : 401 Unauthorized
+  gw    --> client : 401 Unauthorized
+else #E4FFE4 valid credentials
+  auth  ->  auth : GenerateToken(user_id, login, portal_id, role)\nHS256 · TTL = config.jwt.expiration
+  auth  ->  auth : GenerateToken(refresh)\nHS256 · TTL = 24 h
+
+  auth  ->  db   : INSERT INTO auth_logs\n(user_id, login, action="LOGIN_SUCCESS", ip)
+
+  auth  --> gw   : 200 OK\n{ access_token, refresh_token }
+  gw    --> client : 200 OK\n{ access_token, refresh_token }
+end
+
+' ─────────────────────────────────────
+== 2. Protected request — happy path ==
+' ─────────────────────────────────────
+
+autonumber 10
+
+client  ->  gw   : GET /courses\nAuthorization: Bearer <access_token>
+
+note right of gw
+  Route matched → **user-auth** middleware fires.
+  Traefik issues a ForwardAuth sub-request
+  to auth-service before forwarding the original.
+end note
+
+gw      ->  auth : GET /auth\nAuthorization: Bearer <access_token>\n<size:9>(Traefik ForwardAuth sub-request)</size>
+
+auth    ->  auth : jwt.ParseWithClaims(token, secret)\n— verify HS256 signature\n— verify exp claim
+
+alt #FFE4E4 token invalid / expired / missing
+  auth  --> gw   : 401 Unauthorized
+  gw    --> client : 401 Unauthorized\n<size:9>(original request dropped)</size>
+else #E4FFE4 token valid
+  auth  --> gw   : 200 OK\nX-Auth-User-ID: <user_id>\nX-Auth-User-Login: <login>
+
+  note right of gw
+    Traefik copies **authResponseHeaders**
+    (X-Auth-User-ID, X-Auth-User-Login)
+    into the original request headers,
+    then forwards to the target service.
+  end note
+
+  gw    ->  svc  : GET /courses\nX-Auth-User-ID: <user_id>\nX-Auth-User-Login: <login>
+
+  svc   ->  svc  : handle request\nusing user context from headers
+
+  svc   --> gw   : 200 OK · { ...payload }
+  gw    --> client : 200 OK · { ...payload }
+end
+
+@enduml
