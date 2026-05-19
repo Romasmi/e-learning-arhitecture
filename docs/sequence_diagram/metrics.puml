@@ -1,0 +1,71 @@
+@startuml Metrics & Monitoring Flow
+
+skinparam defaultTextAlignment center
+skinparam sequenceMessageAlign center
+
+skinparam participant {
+  BackgroundColor AliceBlue
+  BorderColor SteelBlue
+  FontStyle bold
+}
+skinparam database {
+  BackgroundColor LemonChiffon
+  BorderColor Goldenrod
+}
+skinparam sequence {
+  ArrowColor DarkSlateGray
+  LifeLineBorderColor SteelBlue
+  GroupBorderColor Gray
+  GroupBackgroundColor WhiteSmoke
+  DividerBackgroundColor LightSteelBlue
+  DividerFontStyle bold
+  NoteBackgroundColor Cornsilk
+  NoteBorderColor Goldenrod
+}
+
+title Metrics & Monitoring\n<size:11>Prometheus pull model  ·  Grafana dashboards</size>
+
+box "Services  (namespace: e-learning-system)" #F0F8FF
+  participant "auth-service\n:9090/metrics"     as s1
+  participant "course-service\n:9090/metrics"   as s2
+  participant "...\n:9090/metrics"              as sN
+  participant "PostgreSQL\nexporter :9187"      as pg
+end box
+
+database    "Prometheus\n(TSDB)"               as prom
+participant "Grafana"                          as graf
+actor       "Developer / Ops"                  as user
+
+note over s1, pg
+  Each service registers metrics on startup via **promauto**:
+  • **http_requests_total** {method, path, status_code}
+  • **http_request_duration_seconds** {method, path, status_code}
+  • **grpc_requests_total** {grpc_method, grpc_code}
+  • **grpc_request_duration_seconds** {grpc_method, grpc_code}
+  Exposed at **GET :9090/metrics** (Prometheus text format).
+end note
+
+== Scrape cycle (every ~15 s) ==
+
+prom  ->  s1 : GET :9090/metrics
+s1   --> prom : 200 OK · text/plain\n<size:9>(counter & histogram samples)</size>
+
+prom  ->  s2 : GET :9090/metrics
+s2   --> prom : 200 OK · text/plain
+
+prom  ->  sN : GET :9090/metrics
+sN   --> prom : 200 OK · text/plain
+
+prom  ->  pg  : GET :9187/metrics
+pg   --> prom : 200 OK · text/plain\n<size:9>(pg_up, pg_stat_* metrics)</size>
+
+prom  ->  prom : store samples\nin local TSDB
+
+== Dashboard query ==
+
+user  ->  graf : open dashboard
+graf  ->  prom : PromQL query\n<size:9>e.g. rate(http_requests_total[1m])</size>
+prom --> graf  : time-series result
+graf --> user  : rendered panel\n(graph / stat / table)
+
+@enduml
