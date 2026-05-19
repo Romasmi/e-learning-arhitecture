@@ -1,0 +1,171 @@
+@startuml E-Learning System - Deployment
+
+skinparam defaultTextAlignment center
+skinparam wrapWidth 160
+
+skinparam node {
+  BackgroundColor AliceBlue
+  BorderColor SteelBlue
+  FontStyle bold
+}
+skinparam component {
+  BackgroundColor LightSkyBlue
+  BorderColor SteelBlue
+}
+skinparam database {
+  BackgroundColor LemonChiffon
+  BorderColor Goldenrod
+}
+skinparam queue {
+  BackgroundColor Honeydew
+  BorderColor SeaGreen
+}
+skinparam cloud {
+  BackgroundColor LavenderBlush
+  BorderColor Purple
+}
+skinparam rectangle {
+  BackgroundColor WhiteSmoke
+  BorderColor Gray
+  RoundCorner 8
+}
+skinparam arrow {
+  Color DarkSlateGray
+}
+skinparam actor {
+  BackgroundColor White
+  BorderColor DarkSlateGray
+}
+
+title E-Learning System — Kubernetes Deployment\n<size:11>Namespace: e-learning-system | Helm chart: e-learning-system v0.1.0</size>
+
+actor "Client\n(Browser / Mobile)" as client
+
+' ─────────────────────────────────────────────
+' Kubernetes Cluster
+' ─────────────────────────────────────────────
+node "Kubernetes Cluster" as k8s {
+
+  ' Ingress
+  component "**Traefik**\nLoadBalancer\nHTTP :8080  |  HTTPS :8443\nDashboard: /dashboard [basicAuth]" as traefik
+
+  ' Application Services
+  node "Application Services" as app {
+
+    component "**auth-service**\nHTTP :8000  |  gRPC :9000  |  metrics :9090\nDB: auth_service" as auth
+
+    component "**portal-service**\nHTTP :8000  |  gRPC :9000  |  metrics :9090\nDB: portal_service" as portal
+
+    component "**account-service**\nHTTP :8000  |  gRPC :9000  |  metrics :9090\nDB: account_service" as account
+
+    component "**media-service**\nHTTP :8000  |  gRPC :9000  |  metrics :9090\nDB: media_service  |  S3: elearning-media" as media
+
+    component "**course-service**\nHTTP :8000  |  gRPC :9000  |  metrics :9090\nDB: course_service" as course
+
+    component "**student-service**\nHTTP :8000  |  gRPC :9000  |  metrics :9090\nDB: student_service" as student
+
+    component "**notification-service**\nHTTP :8000  |  gRPC :9000  |  metrics :9090" as notification
+  }
+
+  ' Data Layer
+  node "Data Layer" as data {
+
+    database "**PostgreSQL**\nPrimary (R/W)  +  2 Read Replicas\n:5432  |  metrics :9187\n─────────────────────────────\nauth_service  |  portal_service\naccount_service  |  media_service\ncourse_service  |  student_service" as pg
+
+    queue "**Redpanda (Kafka)**\nfullname: kafka\n:9092\nauto_create_topics: true" as kafka
+  }
+
+  ' Observability
+  node "Observability" as obs {
+
+    component "**Prometheus**\nScrape interval: default\nTargets: all services :9090\nPostgreSQL exporter :9187" as prometheus
+
+    component "**Grafana**\nDatasource: Prometheus\nDashboards: per-service\n(provisioned via ConfigMap)" as grafana
+  }
+}
+
+' External
+node "External" as ext {
+  cloud "**AWS S3**\nbucket: elearning-media\nregion: us-east-1" as s3
+
+  rectangle "**Transcoder Service**\nhttp://transcoder-service" as transcoder
+}
+
+' ─────────────────────────────────────────────
+' Connections — Ingress routing
+' ─────────────────────────────────────────────
+client          --> traefik       : HTTP / HTTPS
+
+traefik         --> auth          : "GET /auth\n<size:9>public, no auth</size>"
+traefik         --> account       : "/accounts\n<size:9>[user-auth middleware]</size>"
+traefik         --> portal        : "/portals\n<size:9>[user-auth middleware]</size>"
+traefik         --> media         : "/media\n<size:9>[user-auth middleware]</size>"
+traefik         --> course        : "/courses, /chapters\n<size:9>[user-auth middleware]</size>"
+traefik         --> student       : "/students\n<size:9>[user-auth middleware]</size>"
+traefik         --> notification  : "/notification\n<size:9>[user-auth middleware]</size>"
+traefik         --> media         : "/internal/transcode-callback\n<size:9>public, no auth</size>"
+
+traefik         ..> auth          : "ForwardAuth\n<size:9>validates bearer token\nfor user-auth middleware</size>"
+
+' ─────────────────────────────────────────────
+' Connections — Service-to-service (gRPC)
+' ─────────────────────────────────────────────
+account         --> auth          : "gRPC :9000\n<size:9>AUTH_SERVICE_ADDR</size>"
+student         --> auth          : "gRPC :9000\n<size:9>AUTH_SERVICE_ADDR</size>"
+
+' ─────────────────────────────────────────────
+' Connections — Databases (SQL)
+' ─────────────────────────────────────────────
+auth            --> pg            : "SQL — auth_service"
+portal          --> pg            : "SQL — portal_service"
+account         --> pg            : "SQL — account_service"
+media           --> pg            : "SQL — media_service"
+course          --> pg            : "SQL — course_service"
+student         --> pg            : "SQL — student_service"
+
+' ─────────────────────────────────────────────
+' Connections — Kafka (Redpanda)
+' ─────────────────────────────────────────────
+account         --> kafka         : "produce"
+portal          --> kafka         : "produce"
+media           --> kafka         : "produce"
+student         --> kafka         : "produce"
+course          --> kafka         : "produce / consume"
+
+' ─────────────────────────────────────────────
+' Connections — External
+' ─────────────────────────────────────────────
+media           --> s3            : "AWS SDK\n<size:9>upload / download assets</size>"
+media           --> transcoder    : "HTTP\n<size:9>submit transcode job</size>"
+transcoder      --> media         : "Webhook\n<size:9>transcode callback</size>"
+
+' ─────────────────────────────────────────────
+' Connections — Observability
+' ─────────────────────────────────────────────
+prometheus      --> auth          : "scrape :9090"
+prometheus      --> portal        : "scrape :9090"
+prometheus      --> account       : "scrape :9090"
+prometheus      --> media         : "scrape :9090"
+prometheus      --> course        : "scrape :9090"
+prometheus      --> student       : "scrape :9090"
+prometheus      --> pg            : "scrape :9187\n<size:9>pg_exporter</size>"
+grafana         --> prometheus    : "Prometheus\ndatasource"
+
+' ─────────────────────────────────────────────
+' Notes
+' ─────────────────────────────────────────────
+note right of traefik
+  **Middlewares**
+  • user-auth   — ForwardAuth → auth-service /auth
+  • internal-auth — basicAuth (admin dashboard)
+  • strip-auth-prefix — strip /auth prefix
+end note
+
+note right of pg
+  **Resource config (all services)**
+  requests: 100m CPU, 128Mi RAM
+  limits:   200m CPU, 256Mi RAM
+  replicas: 1 (dev)
+end note
+
+@enduml
